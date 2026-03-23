@@ -1,1162 +1,3 @@
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyB38xae3qLe1NM3v9F6WyIS9L1s4RujPzM",
-    authDomain: "trivox-ai.firebaseapp.com",
-    projectId: "trivox-ai",
-    storageBucket: "trivox-ai.firebasestorage.app",
-    messagingSenderId: "131013416793",
-    appId: "1:131013416793:web:63ee8877d568cb6312de48",
-    measurementId: "G-NQ13PN2WBR"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivox AI - Dashboard Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-blue: #2E61FE;
-            --cyan: #00F0FF;
-            --dark-bg: #0A0E27;
-            --card-bg: #0F1429;
-        }
-
-        body {
-            font-family: 'Sora', sans-serif;
-            background: var(--dark-bg);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Animated Background */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.3;
-        }
-
-        .login-container {
-            position: relative;
-            z-index: 1;
-            max-width: 450px;
-            width: 100%;
-            padding: 2rem;
-        }
-
-        .login-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(46, 97, 254, 0.2);
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .logo h1 {
-            font-size: 2rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        .logo p {
-            color: #A8B2C1;
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #A8B2C1;
-            font-size: 0.9rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: white;
-            font-family: 'Sora', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 20px rgba(46, 97, 254, 0.3);
-        }
-
-        input::placeholder {
-            color: #666;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-family: 'Sora', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(46, 97, 254, 0.4);
-        }
-
-        .login-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 2rem 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .signup-link {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-        .signup-link a {
-            color: var(--cyan);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
-
-        .error-message {
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid #FF4444;
-            color: #FF4444;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .success-message {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid #00FF88;
-            color: #00FF88;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .forgot-password {
-            text-align: right;
-            margin-top: 0.5rem;
-        }
-
-        .forgot-password a {
-            color: var(--cyan);
-            text-decoration: none;
-            font-size: 0.85rem;
-        }
-    </style>
-</head>
-<body>
-    <canvas class="bg-animation" id="bgCanvas"></canvas>
-
-    <div class="login-container">
-        <div class="login-card">
-            <div class="logo">
-                <h1>🚀 Trivox AI</h1>
-                <p>Admin Dashboard Access</p>
-            </div>
-
-            <div class="error-message" id="errorMessage"></div>
-            <div class="success-message" id="successMessage"></div>
-
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="admin@trivoxai.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password" required>
-                </div>
-
-                <button type="submit" class="login-btn" id="loginBtn">
-                    🔓 Login to Dashboard
-                </button>
-
-                <div class="divider">or</div>
-
-                <div class="signup-link">
-                    Don't have access? <a href="dashboard-signup.html">Request Access</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-    <script>
-        // Background Animation
-        const canvas = document.getElementById('bgCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particles = [];
-        for (let i = 0; i < 50; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5,
-                size: Math.random() * 2 + 1
-            });
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(46, 97, 254, 0.5)';
-                ctx.fill();
-            });
-            
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyB38xae3qLe1NM3v9F6WyIS9L1s4RujPzM",
-            authDomain: "trivox-ai.firebaseapp.com",
-            databaseURL: "https://trivox-ai-default-rtdb.firebaseio.com",
-            projectId: "trivox-ai",
-            storageBucket: "trivox-ai.firebasestorage.app",
-            messagingSenderId: "131013416793",
-            appId: "1:131013416793:web:63ee8877d568cb6312de48",
-            measurementId: "G-NQ13PN2WBR"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        // Login Form Handler
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const loginBtn = document.getElementById('loginBtn');
-            const errorMsg = document.getElementById('errorMessage');
-            const successMsg = document.getElementById('successMessage');
-            
-            // Clear messages
-            errorMsg.style.display = 'none';
-            successMsg.style.display = 'none';
-            
-            // Disable button
-            loginBtn.disabled = true;
-            loginBtn.textContent = '🔄 Checking credentials...';
-            
-            try {
-                // Check if user exists and is approved
-                const usersSnapshot = await db.ref('users').orderByChild('email').equalTo(email).once('value');
-                
-                if (!usersSnapshot.exists()) {
-                    throw new Error('User not found. Please request access first.');
-                }
-                
-                const userData = Object.values(usersSnapshot.val())[0];
-                const userId = Object.keys(usersSnapshot.val())[0];
-                
-                // Check status
-                if (userData.status === 'pending') {
-                    throw new Error('Your access request is pending admin approval.');
-                }
-                
-                if (userData.status === 'denied') {
-                    throw new Error('Your access request was denied. Please contact admin.');
-                }
-                
-                if (userData.status !== 'approved') {
-                    throw new Error('Account not active. Please contact admin.');
-                }
-                
-                // Verify password (simple hash check - in production use proper hashing)
-                if (userData.password !== btoa(password)) {
-                    throw new Error('Incorrect password.');
-                }
-                
-                // Success! Store session
-                sessionStorage.setItem('dashboardUser', JSON.stringify({
-                    userId: userId,
-                    email: userData.email,
-                    name: userData.name,
-                    role: userData.role
-                }));
-                
-                // Update last login
-                await db.ref(`users/${userId}`).update({
-                    lastLogin: Date.now()
-                });
-                
-                // Show success message
-                successMsg.textContent = '✅ Login successful! Redirecting...';
-                successMsg.style.display = 'block';
-                
-                // Redirect to dashboard
-                setTimeout(() => {
-                    window.location.href = 'trivox-admin-dashboard-WORKING.html';
-                }, 1500);
-                
-            } catch (error) {
-                errorMsg.textContent = '❌ ' + error.message;
-                errorMsg.style.display = 'block';
-                loginBtn.disabled = false;
-                loginBtn.textContent = '🔓 Login to Dashboard';
-            }
-        });
-    </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivox AI - Request Dashboard Access</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-blue: #2E61FE;
-            --cyan: #00F0FF;
-            --dark-bg: #0A0E27;
-            --card-bg: #0F1429;
-        }
-
-        body {
-            font-family: 'Sora', sans-serif;
-            background: var(--dark-bg);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .signup-container {
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .signup-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(46, 97, 254, 0.2);
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .logo h1 {
-            font-size: 2rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        .logo p {
-            color: #A8B2C1;
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #0c0c0c;
-            font-size: 0.9rem;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(246, 244, 244, 0.954);
-            border: 1px solid rgba(255, 255, 255, 0.911);
-            border-radius: 12px;
-            color: rgb(37, 36, 36);
-            font-family: 'Sora', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 20px rgba(46, 97, 254, 0.3);
-        }
-
-        select {
-            cursor: pointer;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-family: 'Sora', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(46, 97, 254, 0.4);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .login-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #A8B2C1;
-        }
-
-        .login-link a {
-            color: var(--cyan);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .error-message {
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid #FF4444;
-            color: #FF4444;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .success-message {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid #00FF88;
-            color: #00FF88;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .info-box {
-            background: rgba(0, 240, 255, 0.1);
-            border: 1px solid var(--cyan);
-            color: var(--cyan);
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="signup-container">
-        <div class="signup-card">
-            <div class="logo">
-                <h1>🚀 Trivox AI</h1>
-                <p>Request Dashboard Access</p>
-            </div>
-
-            <div class="info-box">
-                📋 Fill out this form to request access to the admin dashboard. An admin will review and approve your request.
-            </div>
-
-            <div class="error-message" id="errorMessage"></div>
-            <div class="success-message" id="successMessage"></div>
-
-            <form id="signupForm">
-                <div class="form-group">
-                    <label for="name">Full Name *</label>
-                    <input type="text" id="name" placeholder="John Doe" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" placeholder="john@company.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Choose Password *</label>
-                    <input type="password" id="password" placeholder="Min. 8 characters" required minlength="8">
-                </div>
-
-                <div class="form-group">
-                    <label for="company">Company/Organization</label>
-                    <input type="text" id="company" placeholder="Acme Corp">
-                </div>
-
-                <div class="form-group">
-                    <label for="role">Requested Role *</label>
-                    <select id="role" required>
-                        <option value="">Select a role</option>
-                        <option value="viewer">Viewer (Read-only access)</option>
-                        <option value="editor">Editor (Can manage leads)</option>
-                        <option value="admin">Admin (Full access)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="reason">Reason for Access *</label>
-                    <textarea id="reason" placeholder="Please explain why you need dashboard access..." required></textarea>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    📤 Submit Access Request
-                </button>
-
-                <div class="login-link">
-                    Already have access? <a href="dashboard-login.html">Login here</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-    <script>
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyB38xae3qLe1NM3v9F6WyIS9L1s4RujPzM",
-            authDomain: "trivox-ai.firebaseapp.com",
-            databaseURL: "https://trivox-ai-default-rtdb.firebaseio.com",
-            projectId: "trivox-ai",
-            storageBucket: "trivox-ai.firebasestorage.app",
-            messagingSenderId: "131013416793",
-            appId: "1:131013416793:web:63ee8877d568cb6312de48",
-            measurementId: "G-NQ13PN2WBR"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        // Signup Form Handler
-        document.getElementById('signupForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim().toLowerCase();
-            const password = document.getElementById('password').value;
-            const company = document.getElementById('company').value.trim();
-            const role = document.getElementById('role').value;
-            const reason = document.getElementById('reason').value.trim();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const errorMsg = document.getElementById('errorMessage');
-            const successMsg = document.getElementById('successMessage');
-            
-            // Clear messages
-            errorMsg.style.display = 'none';
-            successMsg.style.display = 'none';
-            
-            // Disable button
-            submitBtn.disabled = true;
-            submitBtn.textContent = '🔄 Submitting request...';
-            
-            try {
-                // Check if email already exists
-                const existingUser = await db.ref('users').orderByChild('email').equalTo(email).once('value');
-                
-                if (existingUser.exists()) {
-                    throw new Error('Email already registered. Please login or use a different email.');
-                }
-                
-                // Create user record
-                const userRef = db.ref('users').push();
-                await userRef.set({
-                    name: name,
-                    email: email,
-                    password: btoa(password), // Simple encoding (use proper hashing in production)
-                    company: company || 'N/A',
-                    role: role,
-                    reason: reason,
-                    status: 'pending',
-                    requestedAt: Date.now(),
-                    createdAt: Date.now()
-                });
-                
-                // Create admin notification
-                const notificationRef = db.ref('admin-notifications').push();
-                await notificationRef.set({
-                    type: 'access_request',
-                    userId: userRef.key,
-                    userName: name,
-                    userEmail: email,
-                    role: role,
-                    timestamp: Date.now(),
-                    read: false
-                });
-                
-                // Show success message
-                successMsg.innerHTML = `
-                    <strong>✅ Request Submitted Successfully!</strong><br><br>
-                    Your access request has been sent to the admin team. 
-                    You'll receive an email once your request is reviewed.<br><br>
-                    <strong>What happens next?</strong><br>
-                    1. Admin reviews your request<br>
-                    2. You receive approval notification<br>
-                    3. You can login with your email and password
-                `;
-                successMsg.style.display = 'block';
-                
-                // Clear form
-                document.getElementById('signupForm').reset();
-                submitBtn.textContent = '✅ Request Sent!';
-                
-                // Redirect to login after 5 seconds
-                setTimeout(() => {
-                    window.location.href = 'dashboard-login.html';
-                }, 5000);
-                
-            } catch (error) {
-                errorMsg.textContent = '❌ ' + error.message;
-                errorMsg.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.textContent = '📤 Submit Access Request';
-            }
-        });
-    </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management - Trivox AI Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-blue: #2E61FE;
-            --cyan: #00F0FF;
-            --dark-bg: #0A0E27;
-            --card-bg: #0F1429;
-            --success: #00FF88;
-            --warning: #FFB800;
-            --danger: #FF4444;
-        }
-
-        body {
-            font-family: 'Sora', sans-serif;
-            background: var(--dark-bg);
-            color: white;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-        }
-
-        .header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .tab {
-            padding: 1rem 2rem;
-            background: var(--card-bg);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .tab.active {
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-        }
-
-        .request-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .request-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .user-info h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .user-info p {
-            color: #A8B2C1;
-            margin-bottom: 0.25rem;
-        }
-
-        .status-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .status-pending {
-            background: rgba(255, 184, 0, 0.2);
-            color: var(--warning);
-        }
-
-        .status-approved {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--success);
-        }
-
-        .status-denied {
-            background: rgba(255, 68, 68, 0.2);
-            color: var(--danger);
-        }
-
-        .request-details {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
-        .detail-label {
-            color: #A8B2C1;
-        }
-
-        .actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Sora', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-approve {
-            background: var(--success);
-            color: var(--dark-bg);
-        }
-
-        .btn-deny {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-delete {
-            background: rgba(255, 68, 68, 0.2);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #A8B2C1;
-        }
-
-        .empty-state h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: #A8B2C1;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>👥 User Management</h1>
-            <p>Review and manage dashboard access requests</p>
-        </div>
-
-        <div class="stats" id="stats">
-            <div class="stat-card">
-                <div class="stat-value" id="totalUsers">0</div>
-                <div class="stat-label">Total Users</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="pendingRequests">0</div>
-                <div class="stat-label">Pending Requests</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="approvedUsers">0</div>
-                <div class="stat-label">Approved Users</div>
-            </div>
-        </div>
-
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('pending')">⏳ Pending Requests</button>
-            <button class="tab" onclick="showTab('approved')">✅ Approved Users</button>
-            <button class="tab" onclick="showTab('all')">📋 All Users</button>
-        </div>
-
-        <div id="requestsContainer"></div>
-    </div>
-
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-    <script>
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyB38xae3qLe1NM3v9F6WyIS9L1s4RujPzM",
-            authDomain: "trivox-ai.firebaseapp.com",
-            databaseURL: "https://trivox-ai-default-rtdb.firebaseio.com",
-            projectId: "trivox-ai",
-            storageBucket: "trivox-ai.firebasestorage.app",
-            messagingSenderId: "131013416793",
-            appId: "1:131013416793:web:63ee8877d568cb6312de48",
-            measurementId: "G-NQ13PN2WBR"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        let currentTab = 'pending';
-        let allUsers = {};
-
-        // Load users
-        async function loadUsers() {
-            try {
-                const snapshot = await db.ref('users').once('value');
-                allUsers = snapshot.val() || {};
-                
-                updateStats();
-                displayUsers(currentTab);
-            } catch (error) {
-                console.error('Error loading users:', error);
-            }
-        }
-
-        // Update statistics
-        function updateStats() {
-            const users = Object.values(allUsers);
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('pendingRequests').textContent = users.filter(u => u.status === 'pending').length;
-            document.getElementById('approvedUsers').textContent = users.filter(u => u.status === 'approved').length;
-        }
-
-        // Display users based on tab
-        function displayUsers(tab) {
-            currentTab = tab;
-            const container = document.getElementById('requestsContainer');
-            const users = Object.entries(allUsers);
-            
-            // Update active tab
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event?.target.classList.add('active');
-            
-            // Filter users
-            let filteredUsers = users;
-            if (tab === 'pending') {
-                filteredUsers = users.filter(([id, user]) => user.status === 'pending');
-            } else if (tab === 'approved') {
-                filteredUsers = users.filter(([id, user]) => user.status === 'approved');
-            }
-            
-            if (filteredUsers.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No ${tab === 'all' ? 'users' : tab + ' requests'} found</h3>
-                        <p>${tab === 'pending' ? 'All caught up! No pending access requests.' : ''}</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = filteredUsers.map(([userId, user]) => `
-                <div class="request-card">
-                    <div class="request-header">
-                        <div class="user-info">
-                            <h3>${user.name}</h3>
-                            <p>📧 ${user.email}</p>
-                            <p>🏢 ${user.company}</p>
-                            <p>🕐 Requested: ${new Date(user.requestedAt).toLocaleString()}</p>
-                        </div>
-                        <span class="status-badge status-${user.status}">${user.status.toUpperCase()}</span>
-                    </div>
-                    
-                    <div class="request-details">
-                        <div class="detail-row">
-                            <span class="detail-label">Requested Role:</span>
-                            <span><strong>${user.role.toUpperCase()}</strong></span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Reason:</span>
-                            <span>${user.reason}</span>
-                        </div>
-                        ${user.approvedBy ? `
-                            <div class="detail-row">
-                                <span class="detail-label">Approved By:</span>
-                                <span>${user.approvedBy} on ${new Date(user.approvedAt).toLocaleString()}</span>
-                            </div>
-                        ` : ''}
-                    </div>
-                    
-                    <div class="actions">
-                        ${user.status === 'pending' ? `
-                            <button class="btn btn-approve" onclick="approveUser('${userId}')">
-                                ✅ Approve
-                            </button>
-                            <button class="btn btn-deny" onclick="denyUser('${userId}')">
-                                ❌ Deny
-                            </button>
-                        ` : ''}
-                        ${user.status !== 'pending' ? `
-                            <button class="btn btn-delete" onclick="deleteUser('${userId}')">
-                                🗑️ Delete User
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Approve user
-        async function approveUser(userId) {
-            if (!confirm('Approve this user?')) return;
-            
-            try {
-                await db.ref(`users/${userId}`).update({
-                    status: 'approved',
-                    approvedBy: 'admin@trivoxai.com', // Email to be replaced.
-                    approvedAt: Date.now()
-                });
-                
-                alert('✅ User approved! They can now login.');
-                loadUsers();
-            } catch (error) {
-                alert('Error approving user: ' + error.message);
-            }
-        }
-
-        // Deny user
-        async function denyUser(userId) {
-            const reason = prompt('Enter reason for denial (optional):');
-            
-            try {
-                await db.ref(`users/${userId}`).update({
-                    status: 'denied',
-                    deniedBy: 'admin@trivoxai.com',
-                    deniedAt: Date.now(),
-                    denialReason: reason || 'No reason provided'
-                });
-                
-                alert('❌ User denied.');
-                loadUsers();
-            } catch (error) {
-                alert('Error denying user: ' + error.message);
-            }
-        }
-
-        // Delete user
-        async function deleteUser(userId) {
-            if (!confirm('⚠️ Are you sure you want to delete this user? This cannot be undone.')) return;
-            
-            try {
-                await db.ref(`users/${userId}`).remove();
-                alert('🗑️ User deleted.');
-                loadUsers();
-            } catch (error) {
-                alert('Error deleting user: ' + error.message);
-            }
-        }
-
-        // Show tab
-        function showTab(tab) {
-            displayUsers(tab);
-        }
-
-        // Load on page load
-        loadUsers();
-
-        //To be Reloaded every 30 seconds
-        setInterval(loadUsers, 30000);
-    </script>
-</body>
-</html>
-
-{
-  "users": {
-    "admin001": {
-      "name": "Admin",
-      "email": "daniel@trivox.ca",
-      "password": "YWRtaW4xMjM=",
-      "role": "admin",
-      "status": "approved",
-      "createdAt": 1708531200000,
-      "company": "Trivox AI",
-      "requestedAt": 1708531200000
-    }
-  }
-}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1212,9 +53,11 @@
             top: 0;
             left: 0;
             pointer-events: none;
-            z-index: 99999;
+            z-index: 2147483647;
             will-change: transform;
-            transform: translate(-200px, -200px);
+            transform: translate3d(-200px,-200px,0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         #cursor-svg {
@@ -1781,6 +624,7 @@
             margin: 3rem auto;
             max-width: 1200px;
             perspective: 1000px;
+            isolation: isolate;
         }
 
         .image-grid-item {
@@ -1795,8 +639,8 @@
                 0 0 40px rgba(46, 97, 254, 0.3),
                 inset 0 0 0 1px rgba(255, 255, 255, 0.1);
             background: linear-gradient(135deg, rgba(46, 97, 254, 0.1), rgba(0, 240, 255, 0.05));
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform;
+            transition: box-shadow 0.3s ease;
         }
 
         .image-grid-item::before {
@@ -1956,7 +800,7 @@
         }
 
         .image-grid-item:hover {
-            transform: scale(1.05) !important;
+            animation-play-state: paused;
             z-index: 10;
             border-color: var(--cyan);
             box-shadow: 
@@ -2541,23 +1385,7 @@
         .cs-featured-play-btn {
             display: none;
         }
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 72px;
-            height: 72px;
-            background: rgba(0,240,255,0.18);
-            backdrop-filter: blur(12px);
-            border: 2px solid var(--cyan);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 3;
-            transition: all 0.3s;
-            pointer-events: none;
-        }
+            
 
         .cs-featured-video:hover .cs-featured-play-btn {
             background: rgba(0,240,255,0.35);
@@ -2708,6 +1536,21 @@
             color: var(--cyan);
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        /* Lock hover overlay text + icon to dark-mode colors in light mode */
+        body.light-mode .cs-strip-card-overlay {
+            background: linear-gradient(to top, rgba(10,14,39,0.75) 0%, transparent 55%) !important;
+        }
+        body.light-mode .cs-strip-card-overlay span {
+            color: var(--cyan) !important;
+        }
+        body.light-mode .cs-strip-zoom-icon {
+            background: rgba(0,240,255,0.18) !important;
+            border-color: rgba(0,240,255,0.4) !important;
+        }
+        body.light-mode .cs-strip-zoom-icon svg {
+            stroke: var(--cyan) !important;
         }
 
         .cs-strip-zoom-icon {
@@ -3013,13 +1856,11 @@
             width: 100%; height: 100%;
             border-radius: 12px;
             pointer-events: auto;
-            cursor: auto;
         }
-
-        .cs-demo-overlay, .cs-demo-container, .cs-demo-close {
-            cursor: auto;
+        .cs-demo-overlay, .cs-demo-container {
+            pointer-events: auto;
         }
-        .cs-demo-close { cursor: pointer; }
+        .cs-demo-close { pointer-events: auto; }
 
         /* Responsive film strip */
         @media (max-width: 768px) {
@@ -3316,10 +2157,6 @@
                 height: 180px !important;
             }
 
-            .image-grid-item:nth-child(5) {
-                display: none;
-            }
-
             /* About section grid to single column on mobile */
             #about > div:first-of-type {
                 grid-template-columns: 1fr !important;
@@ -3344,10 +2181,6 @@
                 height: 150px !important;
             }
 
-            .image-grid-item:nth-child(4),
-            .image-grid-item:nth-child(5) {
-                display: none;
-            }
         }
 
         /* ========== UTILITY CLASSES ========== */
@@ -3770,26 +2603,57 @@ body.light-mode h3 {
     color: transparent !important;
 }
 
+        /* Keep image overlay text colors identical in light and dark mode */
+        body.light-mode .image-overlay h3 {
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+            color: var(--cyan) !important;
+        }
+        body.light-mode .image-overlay p {
+            color: var(--text-gray) !important;
+        }
 
-        /* light mode only: floating service card */
+        /* 1. Resting state: deep blue outer glow buffers dark card against white bg */
         body.light-mode .image-grid-item {
             box-shadow:
-                0 20px 60px rgba(46, 97, 254, 0.15),
-                0 0 40px rgba(46, 97, 254, 0.2),
-                inset 0 0 0 1px rgba(46, 97, 254, 0.15);
+                0 0  35px 8px  rgba(46, 97, 254, 0.35),
+                0 0  80px 20px rgba(46, 97, 254, 0.18),
+                0 20px 60px    rgba(46, 97, 254, 0.15),
+                inset 0 0 0 1px rgba(46, 97, 254, 0.20);
             background: linear-gradient(135deg, rgba(46, 97, 254, 0.08), rgba(0, 180, 255, 0.05));
         }
+
+        /* 2. Hover state: glow intensifies, border snaps to cyan */
         body.light-mode .image-grid-item:hover {
             box-shadow:
-                0 30px 80px rgba(46, 97, 254, 0.25),
-                0 0 60px rgba(46, 97, 254, 0.4),
-                inset 0 0 0 1px rgba(46, 97, 254, 0.35);
+                0 0  50px 12px rgba(46, 97, 254, 0.55),
+                0 0 110px 30px rgba(46, 97, 254, 0.28),
+                0 30px 80px    rgba(46, 97, 254, 0.25),
+                inset 0 0 0 1px rgba(46, 97, 254, 0.45);
         }
+
+        /* 3. Radial shimmer stays blue-toned in light mode */
         body.light-mode .image-grid-item::after {
-            background: radial-gradient(circle, rgba(46, 97, 254, 0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(46, 97, 254, 0.22) 0%, transparent 70%);
         }
+
+        /* 4. Caption overlay uses deep dark gradient so text is readable in any mode */
         body.light-mode .image-grid-caption {
-            background: linear-gradient(to top, rgba(29, 53, 180, 0.93), rgba(46, 97, 254, 0.4), transparent);
+            background: linear-gradient(to top, rgba(10, 14, 39, 0.97), rgba(10, 14, 39, 0.6), transparent);
+        }
+
+        /* 5. Cyan text locked in both dark and light mode.
+              Caption always sits on a dark overlay so #00F0FF is legible either way. */
+        .image-grid-caption h3,
+        body.light-mode .image-grid-caption h3 {
+            color: #00F0FF !important;
+            -webkit-text-fill-color: #00F0FF !important;
+        }
+        .image-grid-caption p,
+        body.light-mode .image-grid-caption p {
+            color: rgba(0, 240, 255, 0.75) !important;
+            -webkit-text-fill-color: rgba(0, 240, 255, 0.75) !important;
         }
 
         /* light mode only: footer */
@@ -4011,6 +2875,12 @@ body.light-mode h3 {
             .section-title { font-size: clamp(1.4rem, 7vw, 1.8rem) !important; }
         }
 
+        /* light mode only: video label text locked white (dark bg) */
+        body.light-mode #csDemoThumb .cs-featured-video-label span,
+        body.light-mode #csDemoThumb .cs-featured-video-label p {
+            color: #ffffff !important;
+        }
+
         /* light mode only: notification toasts */
         body.light-mode .notification {
             background: #ffffff;
@@ -4040,6 +2910,210 @@ body.light-mode h3 {
             color: #00b359;
         }
 
+    /* ================================================
+       MOBILE LIGHT MODE
+       All desktop light-mode rules re-enforced for
+       screens up to 968px wide.
+    ================================================ */
+    @media (max-width: 968px) {
+
+        /* Base */
+        body.light-mode { background: #f0f4ff !important; color: #1a1a1a; }
+        body.light-mode .content-wrapper { background: transparent; }
+
+        /* Nav */
+        body.light-mode nav {
+            background: rgba(255,255,255,0.92) !important;
+            border-bottom: 1px solid rgba(46,97,254,0.12) !important;
+            backdrop-filter: blur(40px);
+        }
+
+        /* Headings - solid colour, no gradient clip */
+        body.light-mode .section-title,
+        body.light-mode .case-study-title,
+        body.light-mode .feature-title,
+        body.light-mode h1, body.light-mode h2,
+        body.light-mode h3, body.light-mode h4, body.light-mode h5 {
+            color: #0f172a !important;
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+            -webkit-text-fill-color: #0f172a !important;
+        }
+
+        /* Body text */
+        body.light-mode p, body.light-mode li,
+        body.light-mode span, body.light-mode .section-subtitle {
+            color: #1e293b !important;
+        }
+
+        /* Hero */
+        body.light-mode .hero-title {
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+        }
+        body.light-mode .hero-subtitle { color: #1e293b !important; }
+        body.light-mode .stat-label,
+        body.light-mode .stat-value { color: #334155 !important; }
+
+        /* Service cards */
+        body.light-mode .service-card {
+            background: rgba(255,255,255,0.97) !important;
+            border-color: rgba(46,97,254,0.2) !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
+        }
+        body.light-mode .service-icon { color: var(--primary-blue) !important; }
+
+        /* Floating service image grid cards */
+        body.light-mode .image-grid-item {
+            background: linear-gradient(135deg,rgba(46,97,254,0.08),rgba(0,180,255,0.05)) !important;
+            box-shadow: 0 8px 24px rgba(46,97,254,0.15),
+                        inset 0 0 0 1px rgba(46,97,254,0.15) !important;
+        }
+        body.light-mode .image-grid-caption {
+            background: linear-gradient(to top,rgba(29,53,180,0.93),rgba(46,97,254,0.4),transparent) !important;
+        }
+
+        /* Video label locked white */
+        body.light-mode #csDemoThumb .cs-featured-video-label span,
+        body.light-mode #csDemoThumb .cs-featured-video-label p {
+            color: #ffffff !important;
+        }
+
+        /* Inputs */
+        body.light-mode input, body.light-mode textarea, body.light-mode select {
+            background: rgba(255,255,255,0.95) !important;
+            border-color: rgba(46,97,254,0.2) !important;
+            color: #0f172a !important;
+        }
+        body.light-mode input::placeholder,
+        body.light-mode textarea::placeholder { color: #64748b !important; }
+
+        /* Contact form */
+        body.light-mode .contact-form {
+            background: rgba(255,255,255,0.97) !important;
+            border-color: rgba(46,97,254,0.2) !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
+        }
+        body.light-mode #contact h2, body.light-mode #contact h3,
+        body.light-mode #contact p, body.light-mode #contact label,
+        body.light-mode .contact-form h2, body.light-mode .contact-form label {
+            color: #0f172a !important;
+        }
+
+        /* ROI Calculator */
+        body.light-mode .roi-calculator {
+            background: rgba(255,255,255,0.95) !important;
+            border-color: rgba(46,97,254,0.2) !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
+        }
+        body.light-mode .roi-results {
+            background: rgba(240,245,255,0.9) !important;
+        }
+        body.light-mode .slider-group label { color: #0f172a !important; }
+
+        /* Testimonials */
+        body.light-mode .testimonial-card {
+            background: rgba(255,255,255,0.97) !important;
+            border-color: rgba(46,97,254,0.2) !important;
+        }
+        body.light-mode .testimonial-card p,
+        body.light-mode .testimonial-name,
+        body.light-mode .testimonial-role { color: #1e293b !important; }
+
+        /* Case study cards */
+        body.light-mode .cs-hero, body.light-mode .cs-built,
+        body.light-mode .cs-media, body.light-mode .cs-stat-card {
+            background: rgba(255,255,255,0.95) !important;
+            border-color: rgba(46,97,254,0.2) !important;
+        }
+        body.light-mode .cs-hero h3, body.light-mode .cs-built h4,
+        body.light-mode .cs-hero p, body.light-mode .cs-built p,
+        body.light-mode .cs-bullets li, body.light-mode .cs-stat-label {
+            color: #0f172a !important;
+        }
+
+        /* Section badge */
+        body.light-mode .section-badge {
+            background: linear-gradient(135deg,var(--primary-blue),var(--cyan)) !important;
+            color: white !important;
+        }
+
+        /* Buttons */
+        body.light-mode .cta-btn,
+        body.light-mode .submit-btn { color: white !important; }
+
+        /* Footer */
+        body.light-mode .footer {
+            background: rgba(241,245,255,0.97) !important;
+            border-top: 1px solid rgba(46,97,254,0.15) !important;
+        }
+        body.light-mode .footer-section h4 { color: #0f172a !important; }
+        body.light-mode .footer-section ul li a { color: #334155 !important; }
+        body.light-mode .footer-section ul li a:hover { color: #2e61fe !important; }
+        body.light-mode .footer-bottom { color: #475569 !important; }
+
+        /* Notifications */
+        body.light-mode .notification {
+            background: #ffffff !important;
+            border-color: #00b359 !important;
+        }
+        body.light-mode .notification-title,
+        body.light-mode .notification-message,
+        body.light-mode .notification-close { color: #00b359 !important; }
+
+        /* Service modal in light mode */
+        body.light-mode #svc-modal-overlay {
+            background: rgba(240,245,255,0.92) !important;
+        }
+        body.light-mode #svc-modal-box {
+            background: rgba(255,255,255,0.99) !important;
+            border-color: rgba(46,97,254,0.25) !important;
+        }
+        body.light-mode #svc-modal-title { color: #0f172a !important; }
+        body.light-mode #svc-modal-desc { color: #334155 !important; }
+        body.light-mode #svc-modal-features li { color: #334155 !important; }
+
+        /* CS modal in light mode */
+        body.light-mode #cs-modal-overlay {
+            background: rgba(240,245,255,0.92) !important;
+        }
+        body.light-mode #cs-modal-box {
+            background: rgba(255,255,255,0.98) !important;
+            border-color: rgba(46,97,254,0.2) !important;
+        }
+    }
+
+    /* NEON CURSOR: global suppression */
+    html, body, *, *::before, *::after {
+        cursor: none !important;
+    }
+    a, button, select, input, textarea, label,
+    video, audio, canvas, img, svg, iframe,
+    [role="button"], [tabindex], [onclick],
+    summary, details {
+        cursor: none !important;
+    }
+    [style*="cursor"] {
+        cursor: none !important;
+    }
+    /* EXCEPTION: cs-demo popup video native controls */
+    body.cs-video-open #csDemoFull {
+        cursor: auto !important;
+        pointer-events: auto !important;
+    }
+    /* Hide neon SVG when mouse is over the video */
+    body.cs-video-open.cursor-over-video #cursor-svg {
+        opacity: 0;
+    }
+    @media (hover: none) and (pointer: coarse) {
+        html, body, *, *::before, *::after,
+        a, button, select, input, textarea, label,
+        video, audio, canvas, img, svg, iframe,
+        [role="button"], [tabindex], [onclick] {
+            cursor: auto !important;
+        }
+    }
     </style>
 </head>
 <body>
@@ -4614,7 +3688,7 @@ body.light-mode h3 {
                     <a href="#home" class="nav-link active">Home</a>
                     <a href="#services" class="nav-link">Services</a>
                     <a href="#about" class="nav-link">About</a>
-                    <a href="#pricing" class="nav-link">Case Studies</a>
+                    <a href="#pricing" class="nav-link">Built & Deployed</a>
                     <a href="#contact" class="nav-link">Contact</a>
                     <a href="https://calendly.com/trivoxinternal/intro-call" class="cta-btn-nav" target="_blank">Book a Call</a>
                     <div class="theme-toggle-wrapper">
@@ -4636,7 +3710,7 @@ body.light-mode h3 {
             <a href="#home" class="mobile-nav-link">Home</a>
             <a href="#services" class="mobile-nav-link">Services</a>
             <a href="#about" class="mobile-nav-link">About</a>
-            <a href="#pricing" class="mobile-nav-link">Case Studies</a>
+            <a href="#pricing" class="mobile-nav-link">Built & Deployed</a>
             <a href="#contact" class="mobile-nav-link">Contact</a>
             <a href="https://calendly.com/trivoxinternal/intro-call" class="mobile-nav-link" style="font-size:1.5rem; background:linear-gradient(135deg, var(--primary-blue), var(--secondary-blue)); color:white;">Book a Call</a>
         </div>
@@ -4705,9 +3779,9 @@ body.light-mode h3 {
             <div class="image-grid">
                 <!-- Messenger Bot Image -->
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('chatbots')">
-                    <img src="messanger.jpg.jpeg" alt="AI Messenger Bot" class="ai-image">
+                    <img src="AI Messaging Assistant.png" alt="AI Messaging Assistant" class="ai-image">
                     <div class="image-grid-caption">
-                        <h3 style="color: var(--cyan);">AI Messenger Bot</h3>
+                        <h3 style="color: var(--cyan);">AI Messenging Assistant</h3>
                         <p style="color: var(--text-gray);">Multi-channel communication automation</p>
                     </div>
                     <span class="img-explore-hint">Tap to explore</span>
@@ -4715,9 +3789,9 @@ body.light-mode h3 {
 
                 <!-- Voice AI Bot Image -->
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('voice')">
-                    <img src="womanBot.jpg.jpeg" alt="Voice AI Assistant" class="ai-image">
+                    <img src="AI Voice Assistant.png" alt="AI Voice Assistant" class="ai-image">
                     <div class="image-grid-caption">
-                        <h3 style="color: var(--cyan);">Voice AI Assistant</h3>
+                        <h3 style="color: var(--cyan);">AI Voice Assistant</h3>
                         <p style="color: var(--text-gray);">Human-like voice interactions</p>
                     </div>
                     <span class="img-explore-hint">Tap to explore</span>
@@ -4725,7 +3799,7 @@ body.light-mode h3 {
 
                 <!-- Workflow Automation Image -->
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('workflow')">
-                    <img src="WORKFLOW.jpg.jpeg" alt="Workflow Automation" class="ai-image">
+                    <img src="Workflow Automation.png" alt="Workflow Automation" class="ai-image">
                     <div class="image-grid-caption">
                         <h3 style="color: var(--cyan);">Workflow Automation</h3>
                         <p style="color: var(--text-gray);">End-to-end process optimization</p>
@@ -4735,9 +3809,9 @@ body.light-mode h3 {
 
                 <!-- Appointment Automation Image -->
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('appointment')">
-                    <img src="APPOINTMENT.jpg.jpeg" alt="Appointment Automation" class="ai-image">
+                    <img src="AI Appointment Scheduling.png" alt="AI Appointment Scheduling" class="ai-image">
                     <div class="image-grid-caption">
-                        <h3 style="color: var(--cyan);">Appointment Booking</h3>
+                        <h3 style="color: var(--cyan);">AI Appointment Scheduling</h3>
                         <p style="color: var(--text-gray);">Automated scheduling 24/7</p>
                     </div>
                     <span class="img-explore-hint">Tap to explore</span>
@@ -4745,7 +3819,7 @@ body.light-mode h3 {
 
                 <!-- CRM Intelligence Image -->
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('crm')">
-                    <img src="CRM.jpg.jpeg" alt="CRM Intelligence" class="ai-image">
+                    <img src="Intelligent CRM.png" alt="Intelligent CRM" class="ai-image">
                     <div class="image-grid-caption">
                         <h3 style="color: var(--cyan);">Intelligent CRM</h3>
                         <p style="color: var(--text-gray);">Automated lead tracking</p>
@@ -4755,7 +3829,7 @@ body.light-mode h3 {
 
                 <!-- AI Customer Support Image -->
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('support')">
-                    <img src="43654.jpg" alt="AI Customer Support" class="ai-image">
+                    <img src="AI Customer Support.png" alt="AI Customer Support" class="ai-image">
                     <div class="image-grid-caption">
                         <h3 style="color: var(--cyan);">AI Customer Support</h3>
                         <p style="color: var(--text-gray);">24/7 intelligent assistance</p>
@@ -4765,7 +3839,7 @@ body.light-mode h3 {
 
                 <!-- Custom AI Solutions Image -->
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('custom')">
-                    <img src="43654.jpg" alt="Custom AI Solutions" class="ai-image">
+                    <img src="Custom AI Architecture.png" alt="Custom AI Architecture" class="ai-image">
                     <div class="image-grid-caption">
                         <h3 style="color: var(--cyan);">Custom AI Solutions</h3>
                         <p style="color: var(--text-gray);">Built around your workflow</p>
@@ -4775,7 +3849,7 @@ body.light-mode h3 {
 
                 <!-- Industry-Agnostic AI Image -->
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('industry')">
-                    <img src="43654.jpg" alt="Industry-Agnostic AI" class="ai-image">
+                    <img src="Agonstic AI Systems.png" alt="Agnostic AI Systems" class="ai-image">
                     <div class="image-grid-caption">
                         <h3 style="color: var(--cyan);">Industry-Agnostic AI</h3>
                         <p style="color: var(--text-gray);">Works across every sector</p>
@@ -4969,49 +4043,49 @@ body.light-mode h3 {
         <script>
         const svcData = {
             voice: {
-                img: 'womanBot.jpg.jpeg',
+                img: 'AI Voice Assistant.png',
                 title: 'AI Voice Agents',
                 desc: '24/7 AI phone agents that answer calls, book appointments, qualify leads, and provide human-like customer interactions.',
                 features: ['Natural conversation flow', 'Appointment scheduling', 'Lead qualification & routing', 'Replaces front desk staff']
             },
             chatbots: {
-                img: 'messanger.jpg.jpeg',
+                img: 'AI Messaging Assistant.png',
                 title: 'AI Chatbots',
                 desc: 'Intelligent chatbots for websites, WhatsApp, Instagram, and SMS that capture leads and answer questions instantly.',
                 features: ['Multi-channel deployment', 'Instant lead capture', 'Multilingual support', 'Auto-booking capability']
             },
             appointment: {
-                img: 'APPOINTMENT.jpg.jpeg',
+                img: 'AI Appointment Scheduling.png',
                 title: 'Appointment Automation',
                 desc: 'Fully automated scheduling with calendar sync, confirmations, and smart reminders that reduce no-shows.',
                 features: ['Google Calendar integration', 'SMS & email reminders', 'Auto-rescheduling', 'No-show reduction']
             },
             crm: {
-                img: 'CRM.jpg.jpeg',
+                img: 'Intelligent CRM.png',
                 title: 'CRM & Lead Automation',
                 desc: 'Every interaction becomes a lead automatically. Organized, tracked, and followed up without manual work.',
                 features: ['Automatic lead capture', 'Smart tagging & organization', 'Automated follow-ups', 'Zero leads lost']
             },
             workflow: {
-                img: 'WORKFLOW.jpg.jpeg',
+                img: 'Workflow Automation.png',
                 title: 'Workflow Automation',
                 desc: 'Automate repetitive business tasks end-to-end. Connect CRM, calendars, email, forms, and payments seamlessly.',
                 features: ['Custom workflow design', 'System integrations', 'Error reduction', 'Time efficiency']
             },
             support: {
-                img: '43654.jpg',
+                img: 'AI Customer Support.png',
                 title: 'AI Customer Support',
                 desc: '24/7 AI-powered support that handles common questions, reduces tickets, and scales without hiring.',
                 features: ['Always available support', 'Instant responses', 'Ticket reduction', 'Scalable solution']
             },
             custom: {
-                img: '43654.jpg',
+                img: 'Custom AI Architecture.png',
                 title: 'Custom AI Solutions',
                 desc: 'Solutions to general problems solved by customisable AI — built specifically around your business, not a template.',
                 features: ['Custom built AI systems based on client workflow', 'Not templates — designed per business', 'Scalable and adaptable as the business grows']
             },
             industry: {
-                img: '43654.jpg',
+                img: 'Agonstic AI Systems.png',
                 title: 'Industry-Agnostic AI Systems',
                 desc: 'Versatile artificial intelligence frameworks designed to function across multiple sectors without industry-specific limitations.',
                 features: ['Works for any business, not just one niche', 'Clinics, service businesses, real estate, agencies, etc.', 'Same core tech, different workflows']
@@ -5204,368 +4278,105 @@ body.light-mode h3 {
         </section>
 
     
-        <!-- Case Studies Section -->
+        <!-- Built & Deployed Section -->
         <section id="pricing">
             <div class="section-header fade-in">
-                <span class="section-badge">Real Results</span>
-                <h2 class="section-title">Case Studies</h2>
-                <p class="section-subtitle">See how we've transformed real businesses with AI automation</p>
+                <span class="section-badge">Live Systems</span>
+                <h2 class="section-title">Built & Deployed</h2>
+                <p class="section-subtitle">AI systems we've built and deployed for real businesses</p>
             </div>
 
-            <!-- Case Study Buttons -->
-            <div class="cs-buttons fade-in" style="display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem;margin-bottom:1rem;">
-                <button class="cs-open-btn" onclick="openCsModal('cs-src-1')">
-                    <span class="cs-btn-num">01</span>
-                    <span class="cs-btn-label">Code Clinic</span>
-                    <span class="cs-btn-sub">AI Front Desk System</span>
-                    <svg class="cs-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-                <button class="cs-open-btn" onclick="openCsModal('cs-src-2')">
-                    <span class="cs-btn-num">02</span>
-                    <span class="cs-btn-label">OralDNA</span>
-                    <span class="cs-btn-sub">Quiz Funnel &amp; WhatsApp Automation</span>
-                    <svg class="cs-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-            </div>
+            <div class="fade-in" style="display:flex;justify-content:center;flex-wrap:wrap;gap:2rem;margin-top:2.5rem;margin-bottom:1rem;">
 
+                <!-- Real Estate AI Agent Card -->
+                <div style="
+                    position:relative;
+                    max-width:480px;
+                    width:100%;
+                    background:linear-gradient(135deg, rgba(46,97,254,0.08) 0%, rgba(0,240,255,0.04) 100%);
+                    border:1.5px solid rgba(46,97,254,0.3);
+                    border-radius:20px;
+                    padding:40px 36px;
+                    transition:all 0.3s ease;
+                    overflow:hidden;
+                " onmouseenter="this.style.borderColor='#00F0FF';this.style.boxShadow='0 0 40px rgba(0,240,255,0.15)';this.style.transform='translateY(-4px)'" onmouseleave="this.style.borderColor='rgba(46,97,254,0.3)';this.style.boxShadow='none';this.style.transform='translateY(0)'">
+
+                    <!-- Icon -->
+                    <div style="
+                        width:56px;height:56px;
+                        border-radius:14px;
+                        background:linear-gradient(135deg,#2E61FE,#00F0FF);
+                        display:flex;align-items:center;justify-content:center;
+                        margin-bottom:24px;
+                        box-shadow:0 0 24px rgba(46,97,254,0.3);
+                    ">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </div>
+
+                    <!-- Badge -->
+                    <div style="
+                        display:inline-flex;align-items:center;gap:6px;
+                        padding:5px 14px;
+                        background:rgba(34,197,94,0.1);
+                        border:1px solid rgba(34,197,94,0.3);
+                        border-radius:20px;
+                        font-size:0.72rem;font-weight:700;
+                        color:#22C55E;
+                        letter-spacing:0.06em;
+                        text-transform:uppercase;
+                        margin-bottom:18px;
+                    ">
+                        <span style="width:6px;height:6px;border-radius:50%;background:#22C55E;"></span>
+                        Live
+                    </div>
+
+                    <!-- Title -->
+                    <h3 style="
+                        font-size:1.5rem;font-weight:800;
+                        background:linear-gradient(135deg,#fff,#00F0FF);
+                        -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+                        background-clip:text;
+                        margin-bottom:12px;line-height:1.3;
+                    ">Real Estate Lead Qualifier</h3>
+
+                    <!-- Description -->
+                    <p style="
+                        color:rgba(255,255,255,0.6);
+                        font-size:0.95rem;line-height:1.75;
+                        margin-bottom:28px;
+                    ">AI agent that qualifies investors, buyers and tenants 24/7. Asks intelligent questions, captures leads and books calls automatically.</p>
+
+                    <!-- Tags -->
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;">
+                        <span style="padding:5px 12px;background:rgba(46,97,254,0.12);border:1px solid rgba(46,97,254,0.3);border-radius:8px;color:rgba(255,255,255,0.7);font-size:0.8rem;">Claude AI</span>
+                        <span style="padding:5px 12px;background:rgba(46,97,254,0.12);border:1px solid rgba(46,97,254,0.3);border-radius:8px;color:rgba(255,255,255,0.7);font-size:0.8rem;">Lead Qualification</span>
+                        <span style="padding:5px 12px;background:rgba(46,97,254,0.12);border:1px solid rgba(46,97,254,0.3);border-radius:8px;color:rgba(255,255,255,0.7);font-size:0.8rem;">Calendly Integration</span>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <a href="https://trivox-real-state-agent.onrender.com" target="_blank" rel="noopener" style="
+                        display:inline-flex;align-items:center;gap:10px;
+                        padding:14px 28px;
+                        background:linear-gradient(135deg,#2E61FE,#00F0FF);
+                        border:none;border-radius:12px;
+                        color:#fff;
+                        font-family:'Sora',sans-serif;
+                        font-size:0.95rem;font-weight:700;
+                        text-decoration:none;
+                        transition:opacity 0.2s,transform 0.2s,box-shadow 0.2s;
+                        box-shadow:0 4px 20px rgba(46,97,254,0.3);
+                    " onmouseenter="this.style.opacity='0.9';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(46,97,254,0.4)'" onmouseleave="this.style.opacity='1';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(46,97,254,0.3)'">
+                        Try Live Demo
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+            </div>
         </section>
 
-        <!-- ===== CASE STUDY MODAL ===== -->
-        <style>
-            .cs-open-btn {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-                padding: 28px 40px;
-                min-width: 280px;
-                background: linear-gradient(135deg, rgba(46,97,254,0.1), rgba(0,240,255,0.05));
-                border: 1.5px solid rgba(46,97,254,0.35);
-                border-radius: 16px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                text-align: left;
-                overflow: hidden;
-            }
-            .cs-open-btn::before {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(135deg, rgba(46,97,254,0.18), rgba(0,240,255,0.1));
-                opacity: 0;
-                transition: opacity 0.3s;
-                pointer-events: none;
-            }
-            .cs-open-btn:hover { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0,240,255,0.2); transform: translateY(-3px); }
-            .cs-open-btn:hover::before { opacity: 1; }
-            .cs-btn-num { font-size: 0.7rem; font-weight: 700; letter-spacing: 3px; color: var(--cyan); text-transform: uppercase; }
-            .cs-btn-label { font-size: 1.35rem; font-weight: 700; color: #fff; }
-            .cs-btn-sub { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
-            .cs-btn-arrow { width: 18px; height: 18px; color: var(--cyan); margin-top: 8px; transition: transform 0.3s; }
-            .cs-open-btn:hover .cs-btn-arrow { transform: translateX(5px); }
-
-            #cs-modal-overlay {
-                position: fixed;
-                inset: 0;
-                z-index: 500000;
-                background: rgba(5, 8, 22, 0.85);
-                backdrop-filter: blur(14px);
-                -webkit-backdrop-filter: blur(14px);
-                display: flex;
-                align-items: flex-start;
-                justify-content: center;
-                padding: 40px 20px;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.3s ease;
-                overflow-y: auto;
-            }
-            #cs-modal-overlay.cs-modal-open {
-                opacity: 1;
-                pointer-events: all;
-            }
-            #cs-modal-box {
-                position: relative;
-                z-index: 2;
-                width: 100%;
-                max-width: 980px;
-                background: rgba(10, 14, 35, 0.99);
-                border: 1.5px solid rgba(0,240,255,0.25);
-                border-radius: 22px;
-                box-shadow: 0 40px 100px rgba(0,0,0,0.9), 0 0 80px rgba(0,240,255,0.07);
-                padding: 50px 50px 46px;
-                transform: scale(0.94) translateY(24px);
-                transition: transform 0.38s cubic-bezier(0.34,1.4,0.64,1);
-                flex-shrink: 0;
-            }
-            #cs-modal-overlay.cs-modal-open #cs-modal-box {
-                transform: scale(1) translateY(0);
-            }
-            #cs-modal-close {
-                position: absolute;
-                top: 18px;
-                right: 18px;
-                width: 40px; height: 40px;
-                border-radius: 50%;
-                background: rgba(10,14,35,0.95);
-                border: 1.5px solid rgba(0,240,255,0.4);
-                color: #00F0FF;
-                font-size: 1.1rem;
-                cursor: pointer;
-                display: flex; align-items: center; justify-content: center;
-                transition: all 0.2s;
-                z-index: 10;
-            }
-            #cs-modal-close:hover { background: rgba(0,240,255,0.18); box-shadow: 0 0 16px rgba(0,240,255,0.4); }
-            #cs-modal-backdrop { position: absolute; inset: 0; z-index: 1; cursor: pointer; }
-            #cs-modal-overlay, #cs-modal-overlay * { cursor: auto; }
-            #cs-modal-close, #cs-modal-backdrop { cursor: pointer; }
-            /* Force panels visible inside modal */
-            #cs-modal-content .cs-panel { display: block !important; opacity: 1 !important; pointer-events: all !important; }
-
-            /* light mode only: case study popup */
-            body.light-mode #cs-modal-overlay {
-                background: rgba(220, 230, 255, 0.25);
-            }
-            body.light-mode #cs-modal-box {
-                background: rgba(255, 255, 255, 0.35);
-                backdrop-filter: blur(24px);
-                -webkit-backdrop-filter: blur(24px);
-                border: 1.5px solid rgba(46, 97, 254, 0.18);
-                box-shadow: 0 40px 100px rgba(46, 97, 254, 0.08), 0 0 80px rgba(46, 97, 254, 0.05);
-            }
-            body.light-mode #cs-modal-close {
-                background: rgba(255, 255, 255, 0.7);
-                border-color: rgba(46, 97, 254, 0.35);
-                color: #2e61fe;
-            }
-            body.light-mode #cs-modal-close:hover {
-                background: rgba(255, 255, 255, 0.9);
-                box-shadow: 0 0 16px rgba(46, 97, 254, 0.25);
-            }
-        </style>
-
-        <div id="cs-modal-overlay">
-            <div id="cs-modal-backdrop" onclick="closeCsModal()"></div>
-            <div id="cs-modal-box">
-                <button id="cs-modal-close" onclick="closeCsModal()">&#10005;</button>
-                <div id="cs-modal-content"></div>
-            </div>
-        </div>
-
-        <!-- Hidden source panels — IDs used by openCsModal() -->
-        <div style="display:none;">
-            <div id="cs-src-1"><div id="cs1" class="cs-panel active fade-in">
-
-                <!-- 1. Hero -->
-                <div class="cs-hero">
-                    <p class="cs-section-label">Case Study 01</p>
-                    <h3>Code Clinic – AI Front Desk System</h3>
-                    <p class="cs-subtitle">30% less admin work. Up to 20% more bookings.</p>
-                    <p>Before AI, the clinic manually answered WhatsApp messages with 2–4 hour delays. Leads were lost after hours, and the front desk was overloaded with repetitive questions.</p>
-                </div>
-
-                <!-- 2. What We Built -->
-                <div class="cs-built">
-                    <h4>What We Built</h4>
-                    <p>We implemented a 24/7 AI Front Desk integrated with WhatsApp, CRM, and booking calendar. It handles most inquiries automatically and escalates only complex cases to staff.</p>
-                    <ul class="cs-bullets">
-                        <li>15–25 chats per day (40+ in campaigns)</li>
-                        <li>Under 5-second response time</li>
-                        <li>80% automated handling</li>
-                    </ul>
-                </div>
-
-                <!-- 3. Impact Stats -->
-                <div class="cs-stats">
-                    <div class="cs-stat-card">
-                        <div class="cs-stat-number">15–25</div>
-                        <div class="cs-stat-label">Daily Conversations</div>
-                    </div>
-                    <div class="cs-stat-card">
-                        <div class="cs-stat-number">&lt;5s</div>
-                        <div class="cs-stat-label">Response Time</div>
-                    </div>
-                    <div class="cs-stat-card">
-                        <div class="cs-stat-number">30%</div>
-                        <div class="cs-stat-label">Admin Workload Reduction</div>
-                    </div>
-                    <div class="cs-stat-card">
-                        <div class="cs-stat-number">+20%</div>
-                        <div class="cs-stat-label">Increase in Bookings</div>
-                    </div>
-                </div>
-
-                <!-- 4. Live System -->
-                <div class="cs-media">
-                    <h4>Live System in Action</h4>
-
-                    <!-- Featured Video -->
-                    <div style="display:flex; justify-content:center; margin-bottom:2.5rem;">
-                        <div class="cs-featured-video" id="csDemoThumb" style="width:25%; margin-bottom:0; cursor:pointer;" onclick="openCsDemoPopup()">
-                            <video autoplay muted loop playsinline preload="auto" style="pointer-events:none;">
-                                <source src="code clinic.mp4" type="video/mp4">
-                            </video>
-                            <div class="cs-featured-video-overlay" style="pointer-events:none;"></div>
-                            <div class="cs-featured-video-badge">🎬 Demo Video</div>
-                            <div class="cs-featured-play-btn" style="pointer-events:none;">
-                                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                            </div>
-                            <div class="cs-featured-video-label" style="pointer-events:none;">
-                                <span>Live System</span>
-                                <p>Code Clinic — AI Front Desk in Action</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Film Strip -->
-                    <div class="cs-strip-wrapper">
-                        <div class="cs-strip-label-row">
-                            <p class="cs-section-label">Screenshots Gallery</p>
-                            <span class="cs-strip-hint">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                Scroll or click to expand
-                            </span>
-                        </div>
-                        <div class="cs-strip-arrow prev" onclick="scrollStrip('cs1-strip', -1)">&#8592;</div>
-                        <div class="cs-film-strip" id="cs1-strip">
-
-                            <div class="cs-strip-card" onclick="openLightbox('cs1-lb', 0)">
-                                <img src="5520dbc1-9a8f-4892-bc94-71ced6882dc4.jpg" alt="WhatsApp pricing enquiry">
-                                <div class="cs-strip-zoom-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
-                                <div class="cs-strip-card-overlay"><span>WhatsApp Chat 1</span></div>
-                            </div>
-
-                            <div class="cs-strip-card" onclick="openLightbox('cs1-lb', 1)">
-                                <img src="62447f98-78ae-4d76-840f-2cf09e9b70b5.jpg" alt="WhatsApp booking notification">
-                                <div class="cs-strip-zoom-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
-                                <div class="cs-strip-card-overlay"><span>WhatsApp Chat 2</span></div>
-                            </div>
-
-                            <div class="cs-strip-card" onclick="openLightbox('cs1-lb', 2)">
-                                <img src="57917e3d-509d-4d22-ba44-f65c449d8379.jpg" alt="Automation workflow">
-                                <div class="cs-strip-zoom-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
-                                <div class="cs-strip-card-overlay"><span>Automation Workflow</span></div>
-                            </div>
-
-                        </div>
-                        <div class="cs-strip-arrow next" onclick="scrollStrip('cs1-strip', 1)">&#8594;</div>
-                    </div>
-                </div>
-
-            </div><!-- end cs1 --></div>
-            <div id="cs-src-2"><div id="cs2" class="cs-panel fade-in">
-
-                <!-- 1. Hero -->
-                <div class="cs-hero">
-                    <p class="cs-section-label">Case Study 02</p>
-                    <h3>OralDNA – Quiz Funnel & WhatsApp Automation System</h3>
-                    <p class="cs-subtitle">200 leads per month. +25% appointment growth.</p>
-                    <p>We implemented a quiz-based lead qualification system integrated with WhatsApp automation and booking logic. The system filters high-intent prospects, follows up instantly, and drives them directly to the clinic's calendar.</p>
-                </div>
-
-                <!-- 2. What We Built -->
-                <div class="cs-built">
-                    <h4>What We Built</h4>
-                    <p>We built a multi-step quiz funnel connected to n8n automation, WhatsApp follow-up, and GoHighLevel booking. Once a lead completes the quiz, the system analyzes responses and sends a personalized WhatsApp message within 30 seconds. A 12-week nurture sequence continues engagement and pushes toward booking.</p>
-                    <ul class="cs-bullets">
-                        <li>40–60 leads per week (~200 per month)</li>
-                        <li>70% Meta Ads traffic, 30% organic</li>
-                        <li>12-week automated nurture sequence</li>
-                        <li>80% reduction in manual follow-up</li>
-                    </ul>
-                </div>
-
-                <!-- 3. Impact Stats -->
-                <div class="cs-stats">
-                    <div class="cs-stat-card">
-                        <div class="cs-stat-number">200/mo</div>
-                        <div class="cs-stat-label">Qualified Leads</div>
-                    </div>
-                    <div class="cs-stat-card">
-                        <div class="cs-stat-number">15–20%</div>
-                        <div class="cs-stat-label">WhatsApp Engagement</div>
-                    </div>
-                    <div class="cs-stat-card">
-                        <div class="cs-stat-number">8–12%</div>
-                        <div class="cs-stat-label">Conversion to Booking</div>
-                    </div>
-                    <div class="cs-stat-card">
-                        <div class="cs-stat-number">+25%</div>
-                        <div class="cs-stat-label">Increase in Appointment Volume</div>
-                    </div>
-                </div>
-
-                <!-- 4. Live System -->
-                <div class="cs-media">
-                    <h4>Quiz Funnel &amp; Automation Flow</h4>
-
-                    <!-- Film Strip -->
-                    <div class="cs-strip-wrapper">
-                        <div class="cs-strip-label-row">
-                            <p class="cs-section-label">Screenshots Gallery</p>
-                            <span class="cs-strip-hint">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                Scroll or click to expand
-                            </span>
-                        </div>
-                        <div class="cs-strip-arrow prev" onclick="scrollStrip('cs2-strip', -1)">&#8592;</div>
-                        <div class="cs-film-strip" id="cs2-strip">
-
-                            <div class="cs-strip-card" onclick="openLightbox('cs2-lb', 0)">
-                                <img src="9e107e50-53a4-4ed6-b4ea-45b45b4215ed.jpg" alt="OralDNA quiz funnel form">
-                                <div class="cs-strip-zoom-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
-                                <div class="cs-strip-card-overlay"><span>Quiz Form</span></div>
-                            </div>
-
-                            <div class="cs-strip-card" onclick="openLightbox('cs2-lb', 1)">
-                                <img src="8daba75b-0d20-47f9-ade1-dcd7d292e7d1.jpg" alt="WhatsApp nurture automation workflow">
-                                <div class="cs-strip-zoom-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
-                                <div class="cs-strip-card-overlay"><span>Automation Workflow</span></div>
-                            </div>
-
-                            <div class="cs-strip-card" onclick="openLightbox('cs2-lb', 2)">
-                                <img src="a5da5db7-0c30-42df-9672-4bc3379fdef8.jpg" alt="GoHighLevel tag branching logic">
-                                <div class="cs-strip-zoom-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
-                                <div class="cs-strip-card-overlay"><span>Tag &amp; Branching Logic</span></div>
-                            </div>
-
-                            <div class="cs-strip-card" onclick="openLightbox('cs2-lb', 3)">
-                                <img src="e4b02b6d-e817-42f2-869a-2c7b0aaa6edb.jpg" alt="Quiz submissions dashboard">
-                                <div class="cs-strip-zoom-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
-                                <div class="cs-strip-card-overlay"><span>Submissions Dashboard</span></div>
-                            </div>
-
-                        </div>
-                        <div class="cs-strip-arrow next" onclick="scrollStrip('cs2-strip', 1)">&#8594;</div>
-                    </div>
-                </div>
-
-            </div><!-- end cs2 --></div>
-        </div>
-
-        <script>
-        function openCsModal(srcId) {
-            var src = document.getElementById(srcId);
-            if (!src) { console.warn('openCsModal: no element with id', srcId); return; }
-            document.getElementById('cs-modal-content').innerHTML = src.innerHTML;
-            var overlay = document.getElementById('cs-modal-overlay');
-            overlay.scrollTop = 0;
-            overlay.classList.add('cs-modal-open');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeCsModal() {
-            document.getElementById('cs-modal-overlay').classList.remove('cs-modal-open');
-            document.getElementById('cs-modal-content').innerHTML = '';
-            document.body.style.overflow = '';
-        }
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeCsModal();
-        });
-        </script>
-
-        </section>
 
         <!-- ===== GLOBAL LIGHTBOX ===== -->
         <style>
@@ -5891,10 +4702,10 @@ body.light-mode h3 {
             'cs1-lb': [
                 { src: '5520dbc1-9a8f-4892-bc94-71ced6882dc4.jpg', caption: 'WhatsApp Chat — Pricing Enquiry' },
                 { src: '62447f98-78ae-4d76-840f-2cf09e9b70b5.jpg', caption: 'WhatsApp Chat — Booking Notification' },
-                { src: '57917e3d-509d-4d22-ba44-f65c449d8379.jpg', caption: 'n8n Automation Workflow' }
+                { src: '9e107e50-53a4-4ed6-b4ea-45b45b4215ed.jpg', caption: 'n8n Automation Workflow' }
             ],
             'cs2-lb': [
-                { src: '9e107e50-53a4-4ed6-b4ea-45b45b4215ed.jpg',  caption: 'OralDNA — Quiz Funnel Form' },
+                { src: '57917e3d-509d-4d22-ba44-f65c449d8379.jpg',  caption: 'OralDNA — Quiz Funnel Form' },
                 { src: '8daba75b-0d20-47f9-ade1-dcd7d292e7d1.jpg',  caption: 'WhatsApp Nurture Automation Workflow' },
                 { src: 'a5da5db7-0c30-42df-9672-4bc3379fdef8.jpg',  caption: 'GoHighLevel — Tag & Branching Logic' },
                 { src: 'e4b02b6d-e817-42f2-869a-2c7b0aaa6edb.jpg',  caption: 'Quiz Submissions Dashboard' }
@@ -5991,7 +4802,7 @@ body.light-mode h3 {
             function applyTransform() {
                 img.style.transform = `scale(${scale}) translate(${panX / scale}px, ${panY / scale}px)`;
                 document.getElementById('lb-zoom-label').textContent = Math.round(scale * 100) + '%';
-                wrap.style.cursor = scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default';
+                wrap.style.cursor = 'none'; /* neon cursor override */
             }
 
             // expose to buttons
@@ -6180,7 +4991,7 @@ body.light-mode h3 {
                     <h4>Company</h4>
                     <ul>
                         <li><a href="#about">About Us</a></li>
-                        <li><a href="#pricing">Case Studies</a></li>
+                        <li><a href="#pricing">Built & Deployed</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
@@ -6211,27 +5022,51 @@ body.light-mode h3 {
         // TRIVOX AI - COMPLETE JAVASCRIPT
         // ========================================
 
-        // Neon cursor — hardware-rate pointermove (pointerrawupdate where supported)
-        const wrapper = document.getElementById('cursor-wrapper');
-        if (wrapper) {
-            function moveNeonCursor(x, y) {
-                wrapper.style.transform = `translate(${x}px,${y}px)`;
+        // Neon cursor: zero-lag synchronous engine
+        (function() {
+            var wrapper = document.getElementById('cursor-wrapper');
+            if (!wrapper) return;
+            // MutationObserver: stamp cursor:none on dynamic elements, skip csDemoFull
+            var mo = new MutationObserver(function(muts) {
+                muts.forEach(function(m) {
+                    m.addedNodes.forEach(function(n) {
+                        if (n.nodeType !== 1 || n.id === 'csDemoFull') return;
+                        if (n.style) n.style.setProperty('cursor', 'none', 'important');
+                        if (n.querySelectorAll) {
+                            n.querySelectorAll('*').forEach(function(c) {
+                                if (c.id !== 'csDemoFull' && c.style)
+                                    c.style.setProperty('cursor', 'none', 'important');
+                            });
+                        }
+                    });
+                });
+            });
+            mo.observe(document.body, { childList: true, subtree: true });
+            // Synchronous write: no rAF deferral, cursor matches mouse 1:1
+            function move(x, y) {
+                wrapper.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
             }
             if (window.PointerEvent && 'onpointerrawupdate' in window) {
-                document.addEventListener('pointerrawupdate', e => {
+                document.addEventListener('pointerrawupdate', function(e) {
                     if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
-                    moveNeonCursor(e.clientX, e.clientY);
-                });
+                    var evts = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+                    var last = evts[evts.length - 1];
+                    move(last.clientX, last.clientY);
+                }, { passive: true });
             } else {
-                document.addEventListener('pointermove', e => {
-                    const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
-                    const last = events[events.length - 1];
-                    moveNeonCursor(last.clientX, last.clientY);
-                });
+                document.addEventListener('pointermove', function(e) {
+                    var evts = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+                    var last = evts[evts.length - 1];
+                    move(last.clientX, last.clientY);
+                }, { passive: true });
             }
-            document.addEventListener('pointerdown', () => document.body.classList.add('clicking'));
-            document.addEventListener('pointerup',   () => document.body.classList.remove('clicking'));
-        }
+            document.addEventListener('pointerdown', function() {
+                document.body.classList.add('clicking');
+            }, { passive: true });
+            document.addEventListener('pointerup', function() {
+                document.body.classList.remove('clicking');
+            }, { passive: true });
+        })();
         // Neural Network Canvas
         const neuralCanvas = document.getElementById('neural-canvas');
         if (neuralCanvas) {
@@ -6773,7 +5608,6 @@ body.light-mode h3 {
 
         // ---- Code Clinic demo video popup ----
         function openCsDemoPopup() {
-            // pause any thumbnail videos (works whether in modal clone or original)
             document.querySelectorAll('#csDemoThumb video').forEach(v => v.pause());
             var overlay = document.getElementById('csDemoOverlay');
             var full    = document.getElementById('csDemoFull');
@@ -6782,6 +5616,13 @@ body.light-mode h3 {
             full.currentTime = 0;
             full.play();
             document.body.style.overflow = 'hidden';
+            document.body.classList.add('cs-video-open');
+            full.addEventListener('mouseenter', function onVidEnter() {
+                document.body.classList.add('cursor-over-video');
+            });
+            full.addEventListener('mouseleave', function onVidLeave() {
+                document.body.classList.remove('cursor-over-video');
+            });
         }
         function closeCsDemo() {
             var overlay = document.getElementById('csDemoOverlay');
@@ -6791,7 +5632,7 @@ body.light-mode h3 {
             full.pause();
             full.currentTime = 0;
             document.body.style.overflow = '';
-            // resume thumbnail previews
+            document.body.classList.remove('cs-video-open', 'cursor-over-video');
             document.querySelectorAll('#csDemoThumb video').forEach(v => { try { v.play(); } catch(e){} });
         }
         var csDemoClose   = document.getElementById('csDemoClose');
@@ -6976,845 +5817,3 @@ body.light-mode h3 {
     </script>
     </body>
 </html>
-
-<?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 549.53 142.4">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: url(#linear-gradient);
-      }
-
-      .cls-1, .cls-2, .cls-3 {
-        stroke-width: 0px;
-      }
-
-      .cls-2 {
-        fill: url(#linear-gradient-2);
-        opacity: .98;
-      }
-
-      .cls-3 {
-        fill: #fff;
-      }
-    </style>
-    <linearGradient id="linear-gradient" x1="438.3" y1="46.39" x2="481.46" y2="148.63" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#fff"/>
-      <stop offset=".25" stop-color="#fcfcfd"/>
-      <stop offset=".4" stop-color="#f4f4f7"/>
-      <stop offset=".51" stop-color="#e7e6ed"/>
-      <stop offset=".61" stop-color="#d3d2df"/>
-      <stop offset=".7" stop-color="#bab9cd"/>
-      <stop offset=".79" stop-color="#9b99b7"/>
-      <stop offset=".86" stop-color="#76749c"/>
-      <stop offset=".94" stop-color="#4d4a7e"/>
-      <stop offset="1" stop-color="#262262"/>
-    </linearGradient>
-    <linearGradient id="linear-gradient-2" x1="509.06" y1="65.04" x2="502.19" y2="152.36" gradientUnits="userSpaceOnUse">
-      <stop offset=".21" stop-color="#fff"/>
-      <stop offset=".33" stop-color="#fbfcfe"/>
-      <stop offset=".42" stop-color="#f1f6fa"/>
-      <stop offset=".51" stop-color="#dfecf5"/>
-      <stop offset=".6" stop-color="#c7ddee"/>
-      <stop offset=".68" stop-color="#a7c9e5"/>
-      <stop offset=".76" stop-color="#80b2d9"/>
-      <stop offset=".84" stop-color="#5296cc"/>
-      <stop offset=".91" stop-color="#1e76bc"/>
-      <stop offset=".91" stop-color="#1c75bc"/>
-    </linearGradient>
-  </defs>
-  <polygon class="cls-3" points="0 40.44 0 58.5 28.18 58.5 28.18 140.4 48 140.4 48 58.05 75.74 58.05 75.74 40.44 0 40.44"/>
-  <path class="cls-3" d="M77.94,66.42h14.53v17.17s6.61-22.46,27.74-17.17v15.41s-18.94-3.96-23.78,12.77l-.44,45.8h-18.06v-73.98Z"/>
-  <rect class="cls-3" x="134.31" y="65.62" width="18.94" height="74.79"/>
-  <polygon class="cls-3" points="163.82 65.62 184.07 65.62 200.37 123.67 204 123.67 219.19 65.62 237.03 65.62 216.88 140.4 186.83 140.4 163.82 65.62"/>
-  <circle class="cls-3" cx="144.61" cy="47.02" r="11.64"/>
-  <path class="cls-3" d="M319.74,86.28c-3.87-9.06-12.72-21.47-32.35-22.5-25.91-1.37-36.34,9.32-41.97,22.25-1.98,4.55-2.94,9.49-2.94,14.45v5.12c0,15.03,9.05,28.73,23.06,34.19.45.18.92.35,1.39.51,3.76,1.32,7.74,1.91,11.72,1.91h7.76c7.25,0,14.42-2.03,20.39-6.15,5.02-3.46,10.11-8.85,13.38-17.21,1.63-4.16,2.39-8.61,2.39-13.08v-5.33c0-4.86-.92-9.69-2.83-14.17ZM303.41,104.35c0,2.6-.41,5.19-1.27,7.61-1.73,4.86-4.43,7.99-7.09,10.01-3.16,2.4-6.96,3.58-10.8,3.58h-4.11c-2.11,0-4.22-.34-6.21-1.11-.25-.1-.49-.2-.73-.3-7.42-3.17-12.22-11.14-12.22-19.88v-2.98c0-2.89.51-5.76,1.56-8.41,2.98-7.52,8.51-13.74,22.24-12.94,10.4.6,15.09,7.82,17.14,13.09,1.01,2.6,1.5,5.41,1.5,8.24v3.1Z"/>
-  <polygon class="cls-3" points="375.58 101.27 401.01 140.4 379.71 140.4 361.54 111.01 343.54 140.4 324.22 140.4 347.01 102.69 325.87 65.62 346.68 65.62 361.87 92.68 376.73 65.62 396.71 65.62 375.58 101.27"/>
-  <path class="cls-3" d="M327.91.56c-.8.02-1.57.23-2.26.64-.96.56-2.18,1.56-2.91,3.24-.91,2.08-.52,3.99-.28,4.83.06.21.14.41.23.61,5.8,12.45,11.59,24.9,17.39,37.35.29.63.71,1.18,1.24,1.62.86.71,2.31,1.59,4.37,1.72,3.52.22,65.61,0,65.61,0l-19.49-42.48c-.06-.14-.12-.27-.16-.41-.35-1-2.29-5.9-7.43-7.09-5.27-1.22-49.32-.19-56.31-.02Z"/>
-  <path class="cls-3" d="M534.26,0h-81.09c-2.65,0-5.22,1.1-6.88,3.17-1.21,1.51-2.03,3.58-1.3,6.23,1.76,6.38,19.13,41.23,19.16,41.27,0,0,0,0,0,0h54.38c.19,0,.37,0,.55-.02,2.13-.19,3.96-1.61,4.89-3.53,2.69-5.57,12.7-26.33,17.05-35.63,1.26-2.68.87-5.84-.98-8.15l-.73-.91C538.08.89,536.22,0,534.26,0Z"/>
-  <path class="cls-1" d="M411.3,50.57l52.84.1,43.38,91.55h-44.92s-6.11,1.49-9.91-4.13c-3.8-5.61-41.39-87.52-41.39-87.52Z"/>
-  <path class="cls-2" d="M461.94,142.23s4.46-4.6,5.45-6.44,30.39-65.39,30.39-65.39c0,0,1.32-3.92,5.45-4.77,3.47-.71,31.38-.23,40.15-.05,3.14.06,5.78,2.42,6.11,5.54,0,.05.01.1.02.16.15,1.66-.23,3.32-.95,4.82l-28.57,59.8c-.9,1.88-2.1,3.6-3.55,5.1l-.06.06c-.84.87-2,1.36-3.21,1.35l-51.22-.17Z"/>
-</svg>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivox AI - Admin Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-blue: #2E61FE;
-            --cyan: #00F0FF;
-            --dark-bg: #0A0E27;
-            --card-bg: #0F1429;
-            --text-light: #E8EAED;
-            --text-gray: #A8B2C1;
-            --success: #00FF88;
-            --warning: #FFB800;
-            --danger: #FF4444;
-        }
-
-        body {
-            font-family: 'Sora', sans-serif;
-            background: var(--dark-bg);
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Header */
-        .dashboard-header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 40px rgba(46, 97, 254, 0.3);
-        }
-
-        .dashboard-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .dashboard-header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            border: 2px solid rgba(46, 97, 254, 0.3);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            border-color: var(--cyan);
-            transform: translateY(-5px);
-        }
-
-        .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--cyan);
-        }
-
-        /* Controls */
-        .controls {
-            background: var(--card-bg);
-            border: 2px solid rgba(46, 97, 254, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 250px;
-            padding: 0.8rem 1.2rem;
-            background: rgba(10, 14, 39, 0.8);
-            border: 1px solid rgba(46, 97, 254, 0.3);
-            border-radius: 8px;
-            color: var(--text-light);
-            font-family: 'Sora', sans-serif;
-            font-size: 1rem;
-        }
-
-        .search-box:focus {
-            outline: none;
-            border-color: var(--cyan);
-        }
-
-        .filter-select {
-            padding: 0.8rem 1.2rem;
-            background: rgba(10, 14, 39, 0.8);
-            border: 1px solid rgba(46, 97, 254, 0.3);
-            border-radius: 8px;
-            color: var(--text-light);
-            font-family: 'Sora', sans-serif;
-            cursor: pointer;
-        }
-
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Sora', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 240, 255, 0.4);
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: var(--dark-bg);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        /* Table */
-        .table-container {
-            background: var(--card-bg);
-            border: 2px solid rgba(46, 97, 254, 0.2);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background: rgba(46, 97, 254, 0.1);
-        }
-
-        th {
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: var(--cyan);
-            border-bottom: 2px solid rgba(46, 97, 254, 0.3);
-        }
-
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid rgba(46, 97, 254, 0.1);
-        }
-
-        tbody tr {
-            transition: background 0.2s ease;
-        }
-
-        tbody tr:hover {
-            background: rgba(46, 97, 254, 0.05);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .status-pending {
-            background: rgba(255, 184, 0, 0.2);
-            color: var(--warning);
-        }
-
-        .status-contacted {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--success);
-        }
-
-        .status-closed {
-            background: rgba(168, 178, 193, 0.2);
-            color: var(--text-gray);
-        }
-
-        .action-btn {
-            padding: 0.4rem 0.8rem;
-            margin: 0 0.2rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.05);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            border: 2px solid var(--cyan);
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-header h2 {
-            color: var(--cyan);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-gray);
-            font-size: 2rem;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .modal-field {
-            margin-bottom: 1rem;
-        }
-
-        .modal-field label {
-            display: block;
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .modal-field-value {
-            color: var(--text-light);
-            font-size: 1rem;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 3rem;
-            font-size: 1.2rem;
-            color: var(--cyan);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-gray);
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <div class="dashboard-header">
-            <h1>📊 Trivox AI Admin Dashboard</h1>
-            <p>Manage contact form submissions and track analytics</p>
-        </div>
-
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">📧</div>
-                <div class="stat-label">Total Submissions</div>
-                <div class="stat-value" id="totalSubmissions">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">⏳</div>
-                <div class="stat-label">Pending</div>
-                <div class="stat-value" id="pendingCount">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">✅</div>
-                <div class="stat-label">Contacted</div>
-                <div class="stat-value" id="contactedCount">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🎯</div>
-                <div class="stat-label">Most Popular Service</div>
-                <div class="stat-value" id="popularService" style="font-size: 1.2rem;">-</div>
-            </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="controls">
-            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search by name, email, or company...">
-            
-            <select class="filter-select" id="statusFilter">
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="contacted">Contacted</option>
-                <!-- <option value="closed">Closed</option> -->
-            </select>
-
-            <select class="filter-select" id="serviceFilter">
-                <option value="all">All Services</option>
-                <option value="voice-agent">AI Voice Agent</option>
-                <option value="chatbot">AI Chatbot</option>
-                <option value="crm">CRM & Lead Automation</option>
-                <option value="workflow">Workflow Automation</option>
-                <option value="custom">Custom Solution</option>
-                <option value="consultation">General Consultation</option>
-            </select>
-
-            <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh</button>
-            <button class="btn btn-success" onclick="exportToCSV()">📥 Export CSV</button>
-        </div>
-
-        <!-- Table -->
-        <div class="table-container">
-            <div id="loadingState" class="loading">
-                Loading submissions...
-            </div>
-            <div id="emptyState" class="empty-state" style="display: none;">
-                <div class="empty-state-icon">📭</div>
-                <h3>No submissions yet</h3>
-                <p>Contact form submissions will appear here</p>
-            </div>
-            <table id="submissionsTable" style="display: none;">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Company</th>
-                        <th>Service</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Detail Modal -->
-    <div class="modal" id="detailModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Submission Details</h2>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            <div id="modalBody"></div>
-        </div>
-    </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
-    <script>
-        // Firebase Configuration (SAME AS YOUR MAIN SITE)
-        const firebaseConfig = {
-            apiKey: "AIzaSyB38xae3qLe1NM3v9F6WyIS9L1s4RujPzM",
-            authDomain: "trivox-ai.firebaseapp.com",
-            databaseURL: "https://trivox-ai-default-rtdb.firebaseio.com",
-            projectId: "trivox-ai",
-            storageBucket: "trivox-ai.firebasestorage.app",
-            messagingSenderId: "131013416793",
-            appId: "1:131013416793:web:63ee8877d568cb6312de48",
-            measurementId: "G-NQ13PN2WBR"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        let allSubmissions = [];
-        let filteredSubmissions = [];
-
-        // Load all submissions
-        async function loadSubmissions() {
-            try {
-                const snapshot = await db.ref('contacts').once('value');
-                allSubmissions = [];
-                
-                if (snapshot.exists()) {
-                    snapshot.forEach((child) => {
-                        allSubmissions.push({
-                            id: child.key,
-                            ...child.val()
-                        });
-                    });
-                    
-                    // Sort by timestamp (newest first)
-                    allSubmissions.sort((a, b) => b.timestamp - a.timestamp);
-                }
-                
-                filteredSubmissions = [...allSubmissions];
-                updateStats();
-                renderTable();
-                
-                document.getElementById('loadingState').style.display = 'none';
-                
-                if (allSubmissions.length === 0) {
-                    document.getElementById('emptyState').style.display = 'block';
-                } else {
-                    document.getElementById('submissionsTable').style.display = 'table';
-                }
-            } catch (error) {
-                console.error('Error loading submissions:', error);
-                alert('Error loading data. Please check your Firebase configuration.');
-            }
-        }
-
-        // Update statistics
-        function updateStats() {
-            document.getElementById('totalSubmissions').textContent = allSubmissions.length;
-            
-            const pending = allSubmissions.filter(s => s.status === 'pending').length;
-            const contacted = allSubmissions.filter(s => s.status === 'contacted').length;
-            
-            document.getElementById('pendingCount').textContent = pending;
-            document.getElementById('contactedCount').textContent = contacted;
-            
-            // Most popular service
-            const services = {};
-            allSubmissions.forEach(s => {
-                const service = s.service || 'unspecified';
-                services[service] = (services[service] || 0) + 1;
-            });
-            
-            let maxService = 'None';
-            let maxCount = 0;
-            for (let service in services) {
-                if (services[service] > maxCount) {
-                    maxCount = services[service];
-                    maxService = service.replace('-', ' ').toUpperCase();
-                }
-            }
-            
-            document.getElementById('popularService').textContent = maxService;
-        }
-
-        // Render table
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-            
-            filteredSubmissions.forEach(submission => {
-                const row = document.createElement('tr');
-                const date = new Date(submission.timestamp).toLocaleDateString();
-                const status = submission.status || 'pending';
-                
-                row.innerHTML = `
-                    <td>${date}</td>
-                    <td>${submission.name}</td>
-                    <td>${submission.email}</td>
-                    <td>${submission.company || '-'}</td>
-                    <td>${submission.service || '-'}</td>
-                    <td><span class="status-badge status-${status}">${status}</span></td>
-                    <td>
-                        <button class="action-btn btn-primary" onclick="viewDetails('${submission.id}')">👁️ View</button>
-                        <button class="action-btn btn-success" onclick="markAsContacted('${submission.id}')">✓</button>
-                        <button class="action-btn btn-danger" onclick="deleteSubmission('${submission.id}')">🗑️</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Filter submissions
-        function applyFilters() {
-            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
-            const statusFilter = document.getElementById('statusFilter').value;
-            const serviceFilter = document.getElementById('serviceFilter').value;
-            
-            filteredSubmissions = allSubmissions.filter(submission => {
-                const matchesSearch = 
-                    submission.name.toLowerCase().includes(searchTerm) ||
-                    submission.email.toLowerCase().includes(searchTerm) ||
-                    (submission.company && submission.company.toLowerCase().includes(searchTerm));
-                
-                const matchesStatus = statusFilter === 'all' || submission.status === statusFilter;
-                const matchesService = serviceFilter === 'all' || submission.service === serviceFilter;
-                
-                return matchesSearch && matchesStatus && matchesService;
-            });
-            
-            renderTable();
-        }
-
-        // View details
-        function viewDetails(id) {
-            const submission = allSubmissions.find(s => s.id === id);
-            if (!submission) return;
-            
-            const modal = document.getElementById('detailModal');
-            const modalBody = document.getElementById('modalBody');
-            
-            modalBody.innerHTML = `
-                <div class="modal-field">
-                    <label>Name:</label>
-                    <div class="modal-field-value">${submission.name}</div>
-                </div>
-                <div class="modal-field">
-                    <label>Email:</label>
-                    <div class="modal-field-value">${submission.email}</div>
-                </div>
-                <div class="modal-field">
-                    <label>Company:</label>
-                    <div class="modal-field-value">${submission.company || 'Not provided'}</div>
-                </div>
-                <div class="modal-field">
-                    <label>Service:</label>
-                    <div class="modal-field-value">${submission.service || 'Not specified'}</div>
-                </div>
-                <div class="modal-field">
-                    <label>Message:</label>
-                    <div class="modal-field-value">${submission.message}</div>
-                </div>
-                <div class="modal-field">
-                    <label>Date:</label>
-                    <div class="modal-field-value">${new Date(submission.timestamp).toLocaleString()}</div>
-                </div>
-                <div class="modal-field">
-                    <label>IP Address:</label>
-                    <div class="modal-field-value">${submission.ipAddress || 'Unknown'}</div>
-                </div>
-                <div class="modal-field">
-                    <label>Status:</label>
-                    <div class="modal-field-value">
-                        <span class="status-badge status-${submission.status || 'pending'}">${submission.status || 'pending'}</span>
-                    </div>
-                </div>
-            `;
-            
-            modal.classList.add('active');
-        }
-
-        // Close modal
-        function closeModal() {
-            document.getElementById('detailModal').classList.remove('active');
-        }
-
-        // Mark as contacted
-        async function markAsContacted(id) {
-            try {
-                await db.ref(`contacts/${id}/status`).set('contacted');
-                await loadSubmissions();
-                alert('Status updated to "Contacted"');
-            } catch (error) {
-                console.error('Error updating status:', error);
-                alert('Error updating status');
-            }
-        }
-
-        // Delete submission
-        async function deleteSubmission(id) {
-            if (!confirm('Are you sure you want to delete this submission?')) return;
-            
-            try {
-                await db.ref(`contacts/${id}`).remove();
-                await loadSubmissions();
-                alert('Submission deleted');
-            } catch (error) {
-                console.error('Error deleting submission:', error);
-                alert('Error deleting submission');
-            }
-        }
-
-        // Refresh data
-        function refreshData() {
-            document.getElementById('loadingState').style.display = 'block';
-            document.getElementById('submissionsTable').style.display = 'none';
-            loadSubmissions();
-        }
-
-        // Export to CSV
-        function exportToCSV() {
-            if (filteredSubmissions.length === 0) {
-                alert('No data to export');
-                return;
-            }
-            
-            const headers = ['Date', 'Name', 'Email', 'Company', 'Service', 'Message', 'Status', 'IP Address'];
-            const csvData = filteredSubmissions.map(s => [
-                new Date(s.timestamp).toLocaleString(),
-                s.name,
-                s.email,
-                s.company || '',
-                s.service || '',
-                s.message.replace(/"/g, '""'),
-                s.status || 'pending',
-                s.ipAddress || ''
-            ]);
-            
-            let csv = headers.join(',') + '\n';
-            csvData.forEach(row => {
-                csv += row.map(field => `"${field}"`).join(',') + '\n';
-            });
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `trivox-submissions-${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-        }
-
-        // Event listeners
-        document.getElementById('searchBox').addEventListener('input', applyFilters);
-        document.getElementById('statusFilter').addEventListener('change', applyFilters);
-        document.getElementById('serviceFilter').addEventListener('change', applyFilters);
-
-        // Close modal on click outside
-        document.getElementById('detailModal').addEventListener('click', (e) => {
-            if (e.target.id === 'detailModal') closeModal();
-        });
-
-        // ===========================================
-        // AUTHENTICATION CHECK
-        // ===========================================
-        
-        // Check if user is logged in
-        const dashboardUser = sessionStorage.getItem('dashboardUser');
-        
-        if (!dashboardUser) {
-            // Not logged in - redirect to login page
-            window.location.href = 'dashboard-login.html';
-        } else {
-            // User is logged in - show dashboard
-            const user = JSON.parse(dashboardUser);
-            console.log('✅ Dashboard accessed by:', user.email);
-            
-            // Optional: Add logout button or user info to header
-            // You can customize this based on your needs
-        }
-
-        // Initialize
-        loadSubmissions();
-    </script>
-</body>
-</html>
-
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-	 viewBox="0 0 549.53 142.4" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:url(#SVGID_1_);}
-	.st1{fill:url(#SVGID_2_);}
-	.st2{fill:url(#SVGID_3_);}
-	.st3{fill:url(#SVGID_4_);}
-</style>
-<defs>
-	<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="9163.7373" y1="592.6118" x2="9263.6211" y2="711.6495" gradientTransform="matrix(-0.5540856031 0 0 0.5540856031 5600.8154 -344.0872)">
-		<stop offset="0" style="stop-color:#3137FD"/>
-		<stop offset="0.3694" style="stop-color:#2F54FE"/>
-		<stop offset="0.7598" style="stop-color:#2D6CFF"/>
-		<stop offset="1" style="stop-color:#2C75FF"/>
-	</linearGradient>
-	<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="9360.1172" y1="666.2391" x2="9521.4443" y2="666.2391" gradientTransform="matrix(-0.5540856031 0 0 0.5540856031 5600.8154 -344.0872)">
-		<stop offset="0" style="stop-color:#2C75FF"/>
-		<stop offset="0.2402" style="stop-color:#2D6CFF"/>
-		<stop offset="0.6306" style="stop-color:#2F54FE"/>
-		<stop offset="1" style="stop-color:#3137FD"/>
-	</linearGradient>
-	<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="9231.2383" y1="730.2106" x2="9306.8271" y2="861.1342" gradientTransform="matrix(-0.5540856031 0 0 0.5540856031 5600.8154 -344.0872)">
-		<stop offset="0" style="stop-color:#2C75FF"/>
-		<stop offset="0.2402" style="stop-color:#2D6CFF"/>
-		<stop offset="0.6306" style="stop-color:#2F54FE"/>
-		<stop offset="1" style="stop-color:#3137FD"/>
-	</linearGradient>
-	<linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="9174.5322" y1="728.5507" x2="9203.1426" y2="890.807" gradientTransform="matrix(-0.5540856031 0 0 0.5540856031 5600.8154 -344.0872)">
-		<stop offset="0.2626" style="stop-color:#00F0FF"/>
-		<stop offset="0.4506" style="stop-color:#01EDFF"/>
-		<stop offset="0.5791" style="stop-color:#04E4FF"/>
-		<stop offset="0.6898" style="stop-color:#0AD5FF"/>
-		<stop offset="0.7905" style="stop-color:#11BFFF"/>
-		<stop offset="0.8844" style="stop-color:#1BA3FF"/>
-		<stop offset="0.9721" style="stop-color:#2881FF"/>
-		<stop offset="1" style="stop-color:#2C75FF"/>
-	</linearGradient>
-</defs>
-<g transform="translate(-331.95873540856036,-344.08715953307393) scale(0.5540856031128405)">
-	<g>
-		<path d="M652.1,874V724.8H600v-30.8h139.2v30.8h-52.1V874H652.1z"/>
-		<path d="M740.5,874v-134h27.1v43.7c3.6-30.3,19.6-45.4,47.9-45.4h4.9v29.9h-9.4c-11.7,0-20.6,3.1-26.9,9.4
-			c-6.3,6.3-9.4,15.1-9.4,26.6V874H740.5z"/>
-		<g>
-			<path d="M876.5,692c-3.2-3.5-8.1-5.2-14.7-5.2c-6.7,0-11.7,1.7-14.9,5.2c-3.2,3.5-4.8,7.9-4.8,13.3c0,5.4,1.6,9.9,4.8,13.5
-				c3.2,3.5,8.2,5.3,14.9,5.3c6.6,0,11.5-1.8,14.7-5.3c3.2-3.5,4.8-8,4.8-13.5C881.3,699.8,879.7,695.4,876.5,692z"/>
-			<rect x="844.5" y="740.1" width="34.3" height="134"/>
-		</g>
-		<path d="M939.8,874l-41.9-134h35.3l31.6,105.9h5.9l27.4-105.9h33.1l-36.3,134H939.8z"/>
-		<path d="M1113.2,878.7c-15.8,0-29.1-3.2-40-9.7c-10.9-6.5-19.1-15-24.8-25.5c-5.7-10.5-8.5-21.7-8.5-33.6v-5.2
-			c0-12.3,2.9-23.8,8.8-34.3c5.8-10.5,14.2-19,25.2-25.4c10.9-6.4,24.1-9.6,39.4-9.6c15.1,0,28.2,3.2,39.1,9.6
-			c10.9,6.4,19.3,14.9,25.2,25.4c5.8,10.5,8.8,22,8.8,34.3v5.2c0,11.8-2.8,23-8.5,33.6c-5.7,10.5-13.9,19-24.8,25.5
-			C1142.1,875.5,1128.8,878.7,1113.2,878.7z M1113.2,849.4c12.5,0,22.1-4,28.7-12c6.7-8,10-18.1,10-30.2c0-12.2-3.5-22.3-10.4-30.3
-			c-6.9-8.1-16.4-12.1-28.4-12.1c-12.2,0-21.7,4-28.6,12.1c-6.9,8.1-10.4,18.2-10.4,30.3c0,12.2,3.3,22.3,10,30.2
-			C1090.9,845.4,1100.5,849.4,1113.2,849.4z"/>
-		<path d="M1189.8,874l41.5-67.9l-39.7-66.1h37.3l26.9,47.1h3.7l25.4-47.1h35l-37.3,64.6l45.2,69.3h-37.3l-31.8-50.6h-3.7
-			l-30.1,50.6H1189.8z"/>
-	</g>
-	<g>
-		<path class="st0" d="M1411.2,642.1l32.4,69.1h96.4c5.7,0,10.8-3.3,13.3-8.4l30.9-65.9c3.4-7.3-1.9-15.6-9.9-15.6h-149.7
-			C1413.7,621.3,1406.7,632.4,1411.2,642.1z"/>
-		<path style="fill:url(#SVGID_2_);" d="M1187.3,636.9l30.9,65.9
-			c2.4,5.1,7.6,8.4,13.2,8.4h116.2l-36.2-77.3c-3.6-7.7-11.4-12.6-19.9-12.6h-94.3C1189.2,621.3,1183.9,629.6,1187.3,636.9z"/>
-		<path style="fill:url(#SVGID_3_);" d="M1443.6,711.2l39.8,84.9l34.7,74.2
-			c2.5,5.4,7.4,8.2,12.5,8.4H1436c-5.5,0.2-11.2-2.6-13.9-8.4l-74.5-159.1H1443.6z"/>
-		<path style="fill:url(#SVGID_4_);" d="M1448.6,870.3l24.2-51.7l10.5-22.5
-			l23-49.1c2.4-5.1,7.6-8.4,13.2-8.4h69.4c8,0,13.3,8.4,9.9,15.6l-54.4,116.1c-2.8,5.9-8.4,8.7-14,8.4H1436
-			C1441.1,878.5,1446.1,875.7,1448.6,870.3z"/>
-	</g>
-</g>
-</svg>
