@@ -15,16 +15,16 @@
            ======================================== */
         
         :root {
-            --primary-blue: #2E61FE;
-            --secondary-blue: #5F7CFF;
-            --light-blue: #8B9EFF;
-            --cyan: #00F0FF;
-            --dark-bg: #0A0E27;
-            --dark-blue: #1A2035;
-            --card-bg: #0F1429;
+            --primary-blue: #1845B0;
+            --secondary-blue: #2A55C8;
+            --light-blue: #5580E0;
+            --cyan: #00B4C8;
+            --dark-bg: #030308;
+            --dark-blue: #0A0D1A;
+            --card-bg: #080B16;
             --text-light: #E8EAED;
             --text-gray: #A8B2C1;
-            --border-color: rgba(46, 97, 254, 0.2);
+            --border-color: rgba(24, 69, 176, 0.15);
         }
 
         * {
@@ -151,25 +151,36 @@
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            background: rgba(10, 14, 39, 0.08);
-            backdrop-filter: blur(22px) saturate(180%);
-            -webkit-backdrop-filter: blur(22px) saturate(180%);
+            width: 100%;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
             z-index: 1000;
-            transition: background 0.4s ease, box-shadow 0.4s ease;
-            border-bottom: 1px solid rgba(46, 97, 254, 0.06);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        background 0.3s ease,
+                        backdrop-filter 0.3s ease,
+                        -webkit-backdrop-filter 0.3s ease,
+                        border-color 0.3s ease;
+            border-bottom: 1px solid transparent;
+            transform: translateY(0);
         }
 
-        nav.scrolled {
-            background: rgba(10, 14, 39, 0.15);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
-            border-bottom: 1px solid rgba(46, 97, 254, 0.1);
+        nav.nav-hidden {
+            transform: translateY(-100%);
+        }
+
+        nav.nav-frosted {
+            background: rgba(5, 10, 21, 0.85);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.08);
         }
 
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0.8rem 2rem;
+            padding: 12px 24px;
+            max-height: 70px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -184,9 +195,10 @@
         }
 
         .nav-logo-img {
-            height: 40px;
+            height: 44px;
             width: auto;
             display: block;
+            object-fit: contain;
             filter: drop-shadow(0 0 15px rgba(46, 97, 254, 0.5))
                     drop-shadow(0 0 30px rgba(0, 240, 255, 0.3));
             transition: all 0.3s ease;
@@ -196,16 +208,9 @@
             display: none;
         }
 
-        body.light-mode .nav-logo-dark {
-            display: none;
-        }
-
-        body.light-mode .nav-logo-light {
-            display: block;
-        }
 
         .nav-logo-img:hover {
-            filter: drop-shadow(0 0 20px rgba(46, 97, 254, 0.8)) 
+            filter: drop-shadow(0 0 20px rgba(46, 97, 254, 0.8))
                     drop-shadow(0 0 40px rgba(0, 240, 255, 0.5));
             transform: scale(1.05);
         }
@@ -248,21 +253,17 @@
         }
 
         .cta-btn-nav {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(46, 97, 254, 0.3);
-
+            background: linear-gradient(135deg, #2E61FE 0%, #00F0FF 100%);
+            color: #000;
+            border: none;
+            padding: 10px 24px;
+            font-size: 11px;
+            box-shadow: 0 0 25px rgba(46, 97, 254, 0.4), 0 0 50px rgba(0, 240, 255, 0.15);
         }
 
         .cta-btn-nav:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(46, 97, 254, 0.5);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 35px rgba(46, 97, 254, 0.6), 0 0 70px rgba(0, 240, 255, 0.3);
         }
 
         .mobile-menu-toggle {
@@ -351,7 +352,7 @@
             }
             
             .nav-logo-img {
-                height: 40px;
+                height: 38px;
             }
             
             .nav-container {
@@ -827,6 +828,10 @@
             margin: 0 auto;
         }
 
+        #services {
+            padding-top: 1.25rem;
+        }
+
         .section-header {
             text-align: center;
             margin-bottom: 2.5rem;
@@ -862,53 +867,81 @@
 
         /* ========== HERO SECTION ========== */
         .hero {
-            min-height: auto;
+            position: relative;
+            width: 100vw;
+            max-width: 100vw;
+            min-height: 100svh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 5rem 2rem 1.5rem;
+            padding: 5rem 2rem 0;
             text-align: center;
+            overflow: hidden;
+            margin: 0;
+            margin-left: calc(-50vw + 50%);
+            margin-bottom: 0;
+            background: #030810;
+        }
+
+        #hero-fractal-canvas,
+        #hero-particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #hero-particle-canvas {
+            z-index: 1;
         }
 
         .hero-split {
+            position: relative;
+            z-index: 2;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 2rem;
-            max-width: 1100px;
+            max-width: 850px;
             width: 100%;
             margin: 0 auto;
-            text-align: left;
+            text-align: center;
         }
 
         .hero-left {
-            flex: 0 0 55%;
+            flex: 1;
         }
 
         .hero-right {
-            flex: 0 0 45%;
+            display: none;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(46, 97, 254, 0.1);
-            border: 1px solid rgba(46, 97, 254, 0.3);
+            background: rgba(0, 240, 255, 0.06);
+            border: 1px solid rgba(0, 240, 255, 0.25);
             padding: 0.5rem 1rem;
             border-radius: 50px;
-            color: var(--cyan);
+            color: #00F0FF;
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
+            backdrop-filter: blur(8px);
         }
 
         .badge-dot {
             width: 8px;
             height: 8px;
-            background: var(--cyan);
+            background: #00F0FF;
             border-radius: 50%;
             animation: pulse 2s infinite;
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
         }
 
         @keyframes pulse {
@@ -922,13 +955,15 @@
             line-height: 1.1;
             margin-bottom: 1.5rem;
             max-width: 900px;
+            text-shadow: 0 0 40px rgba(46, 97, 254, 0.3), 0 0 80px rgba(0, 240, 255, 0.15);
         }
 
         .gradient-text {
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
+            background: linear-gradient(135deg, #2E61FE, #00F0FF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.4)) drop-shadow(0 0 40px rgba(46, 97, 254, 0.3));
             animation: gradientShift 3s ease infinite;
         }
 
@@ -946,14 +981,18 @@
         }
 
         .hero-stats {
+            position: relative;
+            z-index: 2;
             display: flex;
             gap: 3rem;
             justify-content: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0;
             padding: 1.2rem 0;
-            border-top: 1px solid rgba(46, 97, 254, 0.2);
-            border-bottom: 1px solid rgba(46, 97, 254, 0.2);
+            border-top: 1px solid rgba(0, 240, 255, 0.12);
+            border-bottom: none;
             flex-wrap: wrap;
+            background: rgba(5, 10, 21, 0.7);
+            backdrop-filter: blur(12px);
         }
 
         .stat-item {
@@ -963,8 +1002,9 @@
         .stat-number {
             font-size: 2.5rem;
             font-weight: 800;
-            color: #38BDF8;
+            color: #00F0FF;
             font-family: 'Space Mono', monospace;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
         }
 
         .stat-label {
@@ -976,45 +1016,83 @@
         .hero-cta {
             display: flex;
             gap: 1rem;
-            justify-content: flex-start;
+            justify-content: center;
             margin-bottom: 0;
             flex-wrap: wrap;
         }
 
+        /* ── Futuristic Button Shimmer Animation ── */
+        @keyframes btnShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
         .cta-primary,
-        .cta-secondary {
+        .cta-secondary,
+        .cta-btn-nav,
+        .submit-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
-            padding: 1rem 2rem;
-            border-radius: 10px;
+            padding: 14px 36px;
+            border-radius: 3px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            width: auto;
+        }
 
+        /* Shimmer sweep overlay */
+        .cta-primary::before,
+        .cta-btn-nav::before,
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+            transition: none;
+            pointer-events: none;
+        }
+
+        .cta-primary:hover::before,
+        .cta-btn-nav:hover::before,
+        .submit-btn:hover::before {
+            animation: btnShimmer 0.6s ease forwards;
         }
 
         .cta-primary {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: white;
-            box-shadow: 0 8px 25px rgba(46, 97, 254, 0.4);
+            background: linear-gradient(135deg, #2E61FE 0%, #00F0FF 100%);
+            color: #000;
+            border: none;
+            box-shadow: 0 0 25px rgba(46, 97, 254, 0.4), 0 0 50px rgba(0, 240, 255, 0.15);
         }
 
         .cta-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(46, 97, 254, 0.6);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 35px rgba(46, 97, 254, 0.6), 0 0 70px rgba(0, 240, 255, 0.3);
         }
 
         .cta-secondary {
-            background: rgba(46, 97, 254, 0.1);
-            border: 2px solid var(--primary-blue);
-            color: var(--text-light);
+            background: transparent;
+            border: 1px solid rgba(0, 240, 255, 0.5);
+            color: #fff;
         }
 
         .cta-secondary:hover {
-            background: rgba(46, 97, 254, 0.2);
-            border-color: var(--cyan);
+            background: rgba(0, 240, 255, 0.06);
+            border-color: #00F0FF;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
         }
 
         /* ========== SERVICES GRID ========== */
@@ -1530,20 +1608,6 @@
             letter-spacing: 1px;
         }
 
-        /* Lock hover overlay text + icon to dark-mode colors in light mode */
-        body.light-mode .cs-strip-card-overlay {
-            background: linear-gradient(to top, rgba(10,14,39,0.75) 0%, transparent 55%) !important;
-        }
-        body.light-mode .cs-strip-card-overlay span {
-            color: var(--cyan) !important;
-        }
-        body.light-mode .cs-strip-zoom-icon {
-            background: rgba(0,240,255,0.18) !important;
-            border-color: rgba(0,240,255,0.4) !important;
-        }
-        body.light-mode .cs-strip-zoom-icon svg {
-            stroke: var(--cyan) !important;
-        }
 
         .cs-strip-zoom-icon {
             position: absolute;
@@ -1932,21 +1996,16 @@
         }
 
         .submit-btn {
-            width: 100%;
-            padding: 0.9rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: white;
+            width: auto;
+            background: linear-gradient(135deg, #2E61FE 0%, #00F0FF 100%);
+            color: #000;
             border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            box-shadow: 0 0 25px rgba(46, 97, 254, 0.4), 0 0 50px rgba(0, 240, 255, 0.15);
         }
 
         .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(46, 97, 254, 0.4);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 35px rgba(46, 97, 254, 0.6), 0 0 70px rgba(0, 240, 255, 0.3);
         }
 
         /* ========== ROI CALCULATOR ========== */
@@ -2352,322 +2411,19 @@
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
         }
 
-        .submit-btn {
-            position: relative;
-            overflow: hidden;
-        }
-
         .submit-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
 
-        .submit-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .submit-btn:active::after {
-            width: 300px;
-            height: 300px;
-        }
-
-        /* ========== THEME TOGGLE BUTTON ========== */
-        .theme-toggle-wrapper {
-            display: flex;
-            align-items: center;
-            margin-left: 1rem;
-        }
-
-        .theme-toggle {
-            position: relative;
-            width: 40px;
-            height: 20px;
-            background: rgba(46, 97, 254, 0.2);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(46, 97, 254, 0.4);
-        }
-
-        .theme-toggle:hover {
-            border-color: var(--cyan);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
-        }
-
-        .theme-toggle-slider {
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-
-        body.light-mode .theme-toggle {
-            background: rgba(255, 184, 0, 0.2);
-            border-color: rgba(255, 184, 0, 0.4);
-        }
-
-        body.light-mode .theme-toggle-slider {
-            transform: translateX(18px);
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-        }
-
-        /* ========== LIGHT MODE ANIMATED CANVAS ========== */
-        #lightModeCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.6s ease;
-        }
-
-        body.light-mode #lightModeCanvas {
-            opacity: 1;
-        }
-
-        /* ========== LIGHT MODE THEME STYLES ========== */
-        body.light-mode {
-            background: #ffffff;
-            color: #1a1a1a;
-        }
-
-        body.light-mode .content-wrapper {
-            background: transparent;
-        }
-
-        body.light-mode nav {
-            background: rgba(255, 255, 255, 0.35);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-            backdrop-filter: blur(80px) saturate(200%);
-            -webkit-backdrop-filter: blur(80px) saturate(200%);
-        }
-
-        body.light-mode .nav-link {
-            color: #0f172a;
-        }
-
-        body.light-mode .nav-link:hover,
-        body.light-mode .nav-link.active {
-            color: var(--primary-blue);
-        }
-
-        body.light-mode .section-title,
-        body.light-mode h1, 
-        body.light-mode h2, 
-        body.light-mode h3,
-        body.light-mode h4,
-        body.light-mode h5 {
-            color: #0f172a !important;
-        }
-
-        body.light-mode .section-subtitle,
-        body.light-mode p,
-        body.light-mode li,
-        body.light-mode span {
-            color: #1e293b !important;
-        }
-
-        body.light-mode .service-card,
-        body.light-mode .testimonial-card,
-        body.light-mode .cs-hero,
-        body.light-mode .cs-built,
-        body.light-mode .cs-media,
-        body.light-mode .cs-stat-card,
-        body.light-mode .contact-form {
-            background: rgba(255, 255, 255, 0.95);
-            border-color: rgba(46, 97, 254, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        body.light-mode .hero h1,
-        body.light-mode .hero-title {
-            color: #0f172a !important;
-        }
-
-        body.light-mode .hero p,
-        body.light-mode .hero-subtitle {
-            color: #1e293b !important;
-        }
-
-        body.light-mode input,
-        body.light-mode textarea,
-        body.light-mode select {
-            background: rgba(255, 255, 255, 0.9);
-            border-color: rgba(46, 97, 254, 0.2);
-            color: #0f172a;
-        }
-
-        body.light-mode input::placeholder,
-        body.light-mode textarea::placeholder {
-            color: #64748b;
-        }
-
-        body.light-mode .stat-label,
-        body.light-mode .stat-value {
-            color: #334155 !important;
-        }
-
-        body.light-mode .service-icon,
-        body.light-mode .feature-icon {
-            color: var(--primary-blue) !important;
-        }
-
-        body.light-mode .testimonial-card p,
-        body.light-mode .testimonial-name,
-        body.light-mode .testimonial-role {
-            color: #1e293b !important;
-        }
-
-        /* Contact Section - Dark Text in Light Mode */
-        body.light-mode #contact h2,
-        body.light-mode #contact h3,
-        body.light-mode #contact p,
-        body.light-mode #contact label,
-        body.light-mode #contact .section-title,
-        body.light-mode #contact .section-subtitle,
-        body.light-mode .contact-form h2,
-        body.light-mode .contact-form h3,
-        body.light-mode .contact-form p,
-        body.light-mode .contact-form label {
-            color: #0f172a !important;
-        }
-
-        body.light-mode .cs-hero h3,
-        body.light-mode .cs-built h4,
-        body.light-mode .cs-media h4,
-        body.light-mode .cs-hero p,
-        body.light-mode .cs-built p,
-        body.light-mode .cs-bullets li,
-        body.light-mode .cs-stat-label {
-            color: #0f172a !important;
-        }
-
-        body.light-mode .section-badge {
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            color: white;
-        }
-
-        body.light-mode .cta-btn,
-        body.light-mode .submit-btn {
-            color: white !important;
-        }
-
-        @media (max-width: 768px) {
-            .theme-toggle-wrapper {
-                margin-left: 0;
-                margin-right: 1rem;
-            }
-        }
-      
-body.light-mode {
-    --text-light: #fbfcff;          /* dark gray for main text */
-    --text-gray:  #fefeff;          /* slightly lighter gray for secondary text */
-}
-
-/* Case Study / Feature headings  */
-body.light-mode .section-title,
-body.light-mode .case-study-title,
-body.light-mode .feature-title,
-body.light-mode h2, 
-body.light-mode h3 {
-    background: linear-gradient(135deg, #111827, #374151) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    color: transparent !important;
-}
-
-        /* Keep image overlay text colors identical in light and dark mode */
-        body.light-mode .image-overlay h3 {
-            background: none !important;
-            -webkit-background-clip: unset !important;
-            background-clip: unset !important;
-            color: var(--cyan) !important;
-        }
-        body.light-mode .image-overlay p {
-            color: var(--text-gray) !important;
-        }
-
-        /* 1. Resting state: deep blue outer glow buffers dark card against white bg */
-        body.light-mode .image-grid-item {
-            box-shadow:
-                0 0  35px 8px  rgba(46, 97, 254, 0.35),
-                0 0  80px 20px rgba(46, 97, 254, 0.18),
-                0 20px 60px    rgba(46, 97, 254, 0.15),
-                inset 0 0 0 1px rgba(46, 97, 254, 0.20);
-            background: linear-gradient(135deg, rgba(46, 97, 254, 0.08), rgba(0, 180, 255, 0.05));
-        }
-
-        /* 2. Hover state: glow intensifies, border snaps to cyan */
-        body.light-mode .image-grid-item:hover {
-            box-shadow:
-                0 0  50px 12px rgba(46, 97, 254, 0.55),
-                0 0 110px 30px rgba(46, 97, 254, 0.28),
-                0 30px 80px    rgba(46, 97, 254, 0.25),
-                inset 0 0 0 1px rgba(46, 97, 254, 0.45);
-        }
-
-        /* 3. Radial shimmer stays blue-toned in light mode */
-        body.light-mode .image-grid-item::after {
-            background: radial-gradient(circle, rgba(46, 97, 254, 0.22) 0%, transparent 70%);
-        }
-
-        /* 4. Caption overlay uses deep dark gradient so text is readable in any mode */
-        body.light-mode .image-grid-caption {
-            background: linear-gradient(to top, rgba(10, 14, 39, 0.97), rgba(10, 14, 39, 0.6), transparent);
-        }
-
-        /* 5. Cyan text locked in both dark and light mode.
-              Caption always sits on a dark overlay so #00F0FF is legible either way. */
-        .image-grid-caption h3,
-        body.light-mode .image-grid-caption h3 {
+        /* Caption text colors */
+        .image-grid-caption h3 {
             color: #38BDF8 !important;
             -webkit-text-fill-color: #38BDF8 !important;
         }
-        .image-grid-caption p,
-        body.light-mode .image-grid-caption p {
+        .image-grid-caption p {
             color: rgba(0, 240, 255, 0.75) !important;
             -webkit-text-fill-color: rgba(0, 240, 255, 0.75) !important;
-        }
-
-        /* light mode only: footer */
-        body.light-mode .footer {
-            background: rgba(241, 245, 255, 0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(46, 97, 254, 0.15);
-        }
-        body.light-mode .footer-section h4 {
-            color: #0f172a;
-        }
-        body.light-mode .footer-section ul li a {
-            color: #334155;
-        }
-        body.light-mode .footer-section ul li a:hover {
-            color: #2e61fe;
-        }
-        body.light-mode .footer-bottom {
-            border-top: 1px solid rgba(46, 97, 254, 0.12);
-            color: #475569;
         }
 
 
@@ -2686,34 +2442,14 @@ body.light-mode h3 {
         /* ── NAV ── */
         @media (max-width: 768px) {
             .nav-container { padding: 0.6rem 1rem; }
-            .theme-toggle { transform: scale(0.85); }
-        }
-        @media (max-width: 968px) {
-            body.light-mode .mobile-nav-overlay {
-                background: rgba(240, 245, 255, 0.97);
-                backdrop-filter: blur(24px);
-                -webkit-backdrop-filter: blur(24px);
-                border-left: 2px solid rgba(46, 97, 254, 0.15);
-            }
-            body.light-mode .mobile-nav-link {
-                color: #0f172a;
-                background: rgba(46, 97, 254, 0.06);
-                border-color: rgba(46, 97, 254, 0.15);
-            }
-            body.light-mode .mobile-nav-link:hover {
-                color: #2e61fe;
-                border-color: rgba(46, 97, 254, 0.5);
-                box-shadow: 0 0 20px rgba(46, 97, 254, 0.15);
-            }
         }
 
         /* ── HERO ── */
         @media (max-width: 768px) {
-            .hero { padding: 4.5rem 1.25rem 1.5rem; }
+            .hero { padding: 4.5rem 1.25rem 0; min-height: auto; }
             .hero-split { flex-direction: column; text-align: center; }
             .hero-left, .hero-right { flex: 1 1 100%; }
             .hero-cta { justify-content: center; }
-            .hero-right canvas { height: 220px !important; }
             .hero-title { font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1.15; }
             .hero-subtitle { font-size: 1rem; }
             .hero-stats {
@@ -2722,8 +2458,7 @@ body.light-mode h3 {
                 gap: 1rem;
                 text-align: center;
             }
-            .hero-cta { flex-direction: column; gap: 0.75rem; width: 100%; }
-            .hero-cta .btn { width: 100%; text-align: center; }
+            .hero-cta { flex-direction: column; align-items: center; gap: 0.75rem; }
             .hero-image-wrapper { max-width: 100%; }
         }
         @media (max-width: 480px) {
@@ -2868,214 +2603,6 @@ body.light-mode h3 {
             .section-title { font-size: clamp(1.4rem, 7vw, 1.8rem) !important; }
         }
 
-        /* light mode only: video label text locked white (dark bg) */
-        body.light-mode #csDemoThumb .cs-featured-video-label span,
-        body.light-mode #csDemoThumb .cs-featured-video-label p {
-            color: #ffffff !important;
-        }
-
-        /* light mode only: notification toasts */
-        body.light-mode .notification {
-            background: #ffffff;
-            border-color: #00b359;
-            box-shadow: 0 10px 40px rgba(0, 179, 89, 0.15),
-                        0 0 20px rgba(0, 179, 89, 0.08);
-        }
-        body.light-mode .notification.success {
-            border-color: #00b359;
-            box-shadow: 0 10px 40px rgba(0, 179, 89, 0.2);
-        }
-        body.light-mode .notification.error {
-            border-color: #e03131;
-            box-shadow: 0 10px 40px rgba(224, 49, 49, 0.15);
-        }
-        body.light-mode .notification.warning {
-            border-color: #e67700;
-            box-shadow: 0 10px 40px rgba(230, 119, 0, 0.15);
-        }
-        body.light-mode .notification-title {
-            color: #00b359;
-        }
-        body.light-mode .notification-message {
-            color: #00b359;
-        }
-        body.light-mode .notification-close {
-            color: #00b359;
-        }
-
-    /* ================================================
-       MOBILE LIGHT MODE
-       All desktop light-mode rules re-enforced for
-       screens up to 968px wide.
-    ================================================ */
-    @media (max-width: 968px) {
-
-        /* Base */
-        body.light-mode { background: #f0f4ff !important; color: #1a1a1a; }
-        body.light-mode .content-wrapper { background: transparent; }
-
-        /* Nav */
-        body.light-mode nav {
-            background: rgba(255,255,255,0.92) !important;
-            border-bottom: 1px solid rgba(46,97,254,0.12) !important;
-            backdrop-filter: blur(40px);
-        }
-
-        /* Headings - solid colour, no gradient clip */
-        body.light-mode .section-title,
-        body.light-mode .case-study-title,
-        body.light-mode .feature-title,
-        body.light-mode h1, body.light-mode h2,
-        body.light-mode h3, body.light-mode h4, body.light-mode h5 {
-            color: #0f172a !important;
-            background: none !important;
-            -webkit-background-clip: unset !important;
-            background-clip: unset !important;
-            -webkit-text-fill-color: #0f172a !important;
-        }
-
-        /* Body text */
-        body.light-mode p, body.light-mode li,
-        body.light-mode span, body.light-mode .section-subtitle {
-            color: #1e293b !important;
-        }
-
-        /* Hero */
-        body.light-mode .hero-title {
-            color: #0f172a !important;
-            -webkit-text-fill-color: #0f172a !important;
-        }
-        body.light-mode .hero-subtitle { color: #1e293b !important; }
-        body.light-mode .stat-label,
-        body.light-mode .stat-value { color: #334155 !important; }
-
-        /* Service cards */
-        body.light-mode .service-card {
-            background: rgba(255,255,255,0.97) !important;
-            border-color: rgba(46,97,254,0.2) !important;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
-        }
-        body.light-mode .service-icon { color: var(--primary-blue) !important; }
-
-        /* Floating service image grid cards */
-        body.light-mode .image-grid-item {
-            background: linear-gradient(135deg,rgba(46,97,254,0.08),rgba(0,180,255,0.05)) !important;
-            box-shadow: 0 8px 24px rgba(46,97,254,0.15),
-                        inset 0 0 0 1px rgba(46,97,254,0.15) !important;
-        }
-        body.light-mode .image-grid-caption {
-            background: linear-gradient(to top,rgba(29,53,180,0.93),rgba(46,97,254,0.4),transparent) !important;
-        }
-
-        /* Video label locked white */
-        body.light-mode #csDemoThumb .cs-featured-video-label span,
-        body.light-mode #csDemoThumb .cs-featured-video-label p {
-            color: #ffffff !important;
-        }
-
-        /* Inputs */
-        body.light-mode input, body.light-mode textarea, body.light-mode select {
-            background: rgba(255,255,255,0.95) !important;
-            border-color: rgba(46,97,254,0.2) !important;
-            color: #0f172a !important;
-        }
-        body.light-mode input::placeholder,
-        body.light-mode textarea::placeholder { color: #64748b !important; }
-
-        /* Contact form */
-        body.light-mode .contact-form {
-            background: rgba(255,255,255,0.97) !important;
-            border-color: rgba(46,97,254,0.2) !important;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
-        }
-        body.light-mode #contact h2, body.light-mode #contact h3,
-        body.light-mode #contact p, body.light-mode #contact label,
-        body.light-mode .contact-form h2, body.light-mode .contact-form label {
-            color: #0f172a !important;
-        }
-
-        /* ROI Calculator */
-        body.light-mode .roi-calculator {
-            background: rgba(255,255,255,0.95) !important;
-            border-color: rgba(46,97,254,0.2) !important;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
-        }
-        body.light-mode .roi-results {
-            background: rgba(240,245,255,0.9) !important;
-        }
-        body.light-mode .slider-group label { color: #0f172a !important; }
-
-        /* Testimonials */
-        body.light-mode .testimonial-card {
-            background: rgba(255,255,255,0.97) !important;
-            border-color: rgba(46,97,254,0.2) !important;
-        }
-        body.light-mode .testimonial-card p,
-        body.light-mode .testimonial-name,
-        body.light-mode .testimonial-role { color: #1e293b !important; }
-
-        /* Case study cards */
-        body.light-mode .cs-hero, body.light-mode .cs-built,
-        body.light-mode .cs-media, body.light-mode .cs-stat-card {
-            background: rgba(255,255,255,0.95) !important;
-            border-color: rgba(46,97,254,0.2) !important;
-        }
-        body.light-mode .cs-hero h3, body.light-mode .cs-built h4,
-        body.light-mode .cs-hero p, body.light-mode .cs-built p,
-        body.light-mode .cs-bullets li, body.light-mode .cs-stat-label {
-            color: #0f172a !important;
-        }
-
-        /* Section badge */
-        body.light-mode .section-badge {
-            background: linear-gradient(135deg,var(--primary-blue),var(--cyan)) !important;
-            color: white !important;
-        }
-
-        /* Buttons */
-        body.light-mode .cta-btn,
-        body.light-mode .submit-btn { color: white !important; }
-
-        /* Footer */
-        body.light-mode .footer {
-            background: rgba(241,245,255,0.97) !important;
-            border-top: 1px solid rgba(46,97,254,0.15) !important;
-        }
-        body.light-mode .footer-section h4 { color: #0f172a !important; }
-        body.light-mode .footer-section ul li a { color: #334155 !important; }
-        body.light-mode .footer-section ul li a:hover { color: #2e61fe !important; }
-        body.light-mode .footer-bottom { color: #475569 !important; }
-
-        /* Notifications */
-        body.light-mode .notification {
-            background: #ffffff !important;
-            border-color: #00b359 !important;
-        }
-        body.light-mode .notification-title,
-        body.light-mode .notification-message,
-        body.light-mode .notification-close { color: #00b359 !important; }
-
-        /* Service modal in light mode */
-        body.light-mode #svc-modal-overlay {
-            background: rgba(240,245,255,0.92) !important;
-        }
-        body.light-mode #svc-modal-box {
-            background: rgba(255,255,255,0.99) !important;
-            border-color: rgba(46,97,254,0.25) !important;
-        }
-        body.light-mode #svc-modal-title { color: #0f172a !important; }
-        body.light-mode #svc-modal-desc { color: #334155 !important; }
-        body.light-mode #svc-modal-features li { color: #334155 !important; }
-
-        /* CS modal in light mode */
-        body.light-mode #cs-modal-overlay {
-            background: rgba(240,245,255,0.92) !important;
-        }
-        body.light-mode #cs-modal-box {
-            background: rgba(255,255,255,0.98) !important;
-            border-color: rgba(46,97,254,0.2) !important;
-        }
-    }
 
     /* cs-demo popup video controls */
     body.cs-video-open #csDemoFull {
@@ -3087,8 +2614,6 @@ body.light-mode h3 {
     <!-- Notification Container -->
     <div class="notification-container" id="notificationContainer"></div>
 
-    <!-- Light Mode Animated Background Canvas -->
-    <canvas id="lightModeCanvas"></canvas>
 
     <!-- Loading Overlay feature -->
     <div class="loading-overlay" id="loadingOverlay">
@@ -3153,7 +2678,6 @@ body.light-mode h3 {
                 <!-- Logo in navbar -->
                 <a href="#home" class="navbar-logo">
                     <img src="TRIVOX LOGO.svg" alt="Trivox AI" class="nav-logo-img nav-logo-dark">
-                    <img src="Untitled-1_resized.svg" alt="Trivox AI" class="nav-logo-img nav-logo-light">
                 </a>
                 
                 <div class="nav-links">
@@ -3163,11 +2687,6 @@ body.light-mode h3 {
                     <a href="#pricing" class="nav-link">Built & Deployed</a>
                     <a href="#contact" class="nav-link">Contact</a>
                     <a href="https://calendly.com/trivoxinternal/intro-call" class="cta-btn-nav" target="_blank">Book a Call</a>
-                    <div class="theme-toggle-wrapper">
-                        <div class="theme-toggle" id="themeToggle">
-                            <div class="theme-toggle-slider">🌙</div>
-                        </div>
-                    </div>
                 </div>
                 <div class="mobile-menu-toggle" id="mobileMenuToggle">
                     <span></span>
@@ -3189,6 +2708,8 @@ body.light-mode h3 {
 
         <!-- Hero Section with AI Image -->
         <section class="hero" id="home">
+            <canvas id="hero-fractal-canvas"></canvas>
+            <canvas id="hero-particle-canvas"></canvas>
             <div class="hero-split">
               <div class="hero-left">
                 <div class="hero-badge">
@@ -3215,9 +2736,6 @@ body.light-mode h3 {
                 </div>
               </div>
               <div class="hero-right">
-                <div class="hero-image-wrapper fade-in">
-                    <canvas id="heroCanvas" style="width:100%;height:340px;opacity:0.8;"></canvas>
-                </div>
               </div>
             </div>
 
@@ -3472,38 +2990,6 @@ body.light-mode h3 {
             #svc-modal-overlay, #svc-modal-overlay * { cursor: auto; }
             #svc-modal-close, #svc-modal-backdrop { cursor: pointer; }
 
-            /* light mode only */
-            body.light-mode #svc-modal-overlay {
-                background: rgba(200, 215, 245, 0.6);
-            }
-            body.light-mode #svc-modal-box {
-                background: #ffffff;
-                border: 1.5px solid rgba(46, 97, 254, 0.25);
-                box-shadow: 0 30px 90px rgba(46, 97, 254, 0.15), 0 0 60px rgba(46, 97, 254, 0.08);
-            }
-            body.light-mode #svc-modal-title {
-                color: #0f172a;
-            }
-            body.light-mode #svc-modal-desc {
-                color: #334155;
-            }
-            body.light-mode #svc-modal-features li {
-                color: #475569;
-            }
-            body.light-mode #svc-modal-close {
-                background: rgba(46, 97, 254, 0.08);
-                border-color: rgba(46, 97, 254, 0.35);
-                color: #2e61fe;
-            }
-            body.light-mode #svc-modal-close:hover {
-                background: rgba(46, 97, 254, 0.15);
-                box-shadow: 0 0 14px rgba(46, 97, 254, 0.25);
-            }
-            body.light-mode .img-explore-hint {
-                background: rgba(255, 255, 255, 0.9);
-                border-color: rgba(46, 97, 254, 0.35);
-                color: #2e61fe;
-            }
         </style>
 
         <div id="svc-modal-overlay">
@@ -4422,14 +3908,12 @@ body.light-mode h3 {
 
                 <div class="fade-in">
                     <div class="service-card" style="margin-bottom: 2rem;">
-                        <div class="service-icon">📧</div>
                         <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Email Us</h3>
                         <p style="color: var(--text-gray);"><a href="mailto:daniel@trivox.ca" style="color:inherit;text-decoration:none;">daniel@trivox.ca</a></p>
                         <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.5rem;">We respond within 24 hours</p>
                     </div>
 
                     <div class="service-card" style="margin-bottom: 2rem;">
-                        <div class="service-icon">📅</div>
                         <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Schedule a Call</h3>
                         <p style="color: var(--text-gray); margin-bottom: 1rem;">Book a free 30-minute consultation</p>
                         <a href="https://calendly.com/trivoxinternal/intro-call" class="cta-primary" target="_blank" style="display: inline-flex;">
@@ -4441,7 +3925,6 @@ body.light-mode h3 {
                     </div>
 
                     <div class="service-card">
-                        <div class="service-icon">⏰</div>
                         <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Business Hours</h3>
                         <p style="color: var(--text-gray);">Monday - Friday: 9AM - 6PM EST</p>
                         <p style="color: var(--text-gray);">Weekend: By appointment</p>
@@ -4634,11 +4117,24 @@ body.light-mode h3 {
         }, observerOptions);
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Nav scroll effect
+        // Nav hide-on-scroll-down / show-on-scroll-up
         const nav = document.querySelector('nav');
+        let lastScrollY = window.pageYOffset;
         window.addEventListener('scroll', () => {
-            nav.classList.toggle('scrolled', window.pageYOffset > 100);
-        });
+            const currentScrollY = window.pageYOffset;
+            if (currentScrollY < 50) {
+                // At top — always visible, fully transparent
+                nav.classList.remove('nav-hidden', 'nav-frosted');
+            } else if (currentScrollY > lastScrollY + 10) {
+                // Scrolling down past threshold — hide
+                nav.classList.add('nav-hidden');
+            } else if (currentScrollY < lastScrollY) {
+                // Scrolling up — show with frosted glass
+                nav.classList.remove('nav-hidden');
+                nav.classList.add('nav-frosted');
+            }
+            lastScrollY = currentScrollY;
+        }, { passive: true });
 
         // Active nav link
         const navLinks = document.querySelectorAll('.nav-link');
@@ -5088,166 +4584,10 @@ body.light-mode h3 {
     })();
 </script>
 
-<script>
-    // ========================================
-    // LIGHT MODE THEME TOGGLE & ANIMATION
-    // ========================================
-    
-    (function() {
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        const canvas = document.getElementById('lightModeCanvas');
-        
-        if (!themeToggle || !canvas) {
-            console.log('Theme toggle elements not found');
-            return;
-        }
-        
-        const ctx = canvas.getContext('2d');
-        let animationId = null;
-        
-        // Set canvas size
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        
-        // Particle class for animated AI design
-        class Particle {
-            constructor() {
-                this.reset();
-                this.y = Math.random() * canvas.height;
-                this.angle = Math.random() * Math.PI * 2;
-            }
-            
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = (Math.random() - 0.5) * 0.5;
-                this.angle = Math.random() * Math.PI * 2;
-                this.angleSpeed = (Math.random() - 0.5) * 0.02;
-                this.pulse = Math.random() * Math.PI * 2;
-                this.pulseSpeed = 0.02 + Math.random() * 0.02;
-            }
-            
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.angle += this.angleSpeed;
-                this.pulse += this.pulseSpeed;
-                
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            
-            draw() {
-                const pulseSize = this.size + Math.sin(this.pulse) * 0.5;
-                
-                // Outer glow
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, pulseSize * 1.8, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(59, 130, 246, 0.05)';
-                ctx.fill();
-                
-                // Middle glow
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, pulseSize * 1.2, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(59, 130, 246, 0.1)';
-                ctx.fill();
-                
-                // Core particle
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, pulseSize, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(59, 130, 246, 0.6)';
-                ctx.fill();
-                
-                // Bright center
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, pulseSize * 0.4, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(147, 197, 253, 0.8)';
-                ctx.fill();
-            }
-        }
-        
-        // Create particles
-        const particles = [];
-        const particleCount = 80;
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-        
-        // Animation loop
-        function animate() {
-            if (!body.classList.contains('light-mode')) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-                return;
-            }
-            
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw connections
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 150) {
-                        const opacity = (1 - distance / 150) * 0.3;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
-                        ctx.lineWidth = 1.5;
-                        ctx.stroke();
-                    }
-                }
-            }
-            
-            // Update and draw particles
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            
-            animationId = requestAnimationFrame(animate);
-        }
-        
-        // Theme toggle functionality
-        themeToggle.addEventListener('click', function() {
-            body.classList.toggle('light-mode');
-            const slider = themeToggle.querySelector('.theme-toggle-slider');
-            
-            if (body.classList.contains('light-mode')) {
-                slider.textContent = '☀️';
-                localStorage.setItem('theme', 'light');
-                if (!animationId) {
-                    animate();
-                }
-            } else {
-                slider.textContent = '🌙';
-                localStorage.setItem('theme', 'dark');
-                if (animationId) {
-                    cancelAnimationFrame(animationId);
-                    animationId = null;
-                }
-            }
-                });
-
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            body.classList.add('light-mode');
-            const slider = themeToggle.querySelector('.theme-toggle-slider');
-            if (slider) slider.textContent = '☀️';
-            animate();
-        }
-
-    })();
+    <script>
+    // Force dark mode, clear any stale light-mode preference
+    localStorage.removeItem('theme');
+    document.body.classList.remove('light-mode');
 
     // ── Stat Count-Up on Scroll ────────────────────────
     (function() {
@@ -5288,49 +4628,413 @@ body.light-mode h3 {
         triggerCount();
     })();
     </script>
+    <!-- Shattered Glass Fractal Hero Background -->
     <script>
-    const canvas = document.getElementById('heroCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = 300;
-    const nodes = Array.from({length: 18}, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: (Math.random() - 0.5) * 0.6,
-      r: Math.random() * 3 + 2
-    }));
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < nodes.length; i++) {
-        const n = nodes[i];
-        n.x += n.vx; n.y += n.vy;
-        if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
-        if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
-        for (let j = i + 1; j < nodes.length; j++) {
-          const m = nodes[j];
-          const dx = n.x - m.x, dy = n.y - m.y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < 160) {
-            ctx.beginPath();
-            ctx.moveTo(n.x, n.y);
-            ctx.lineTo(m.x, m.y);
-            ctx.strokeStyle = `rgba(0,240,255,${0.15 * (1 - dist/160)})`;
-            ctx.lineWidth = 0.8;
-            ctx.stroke();
-          }
+    (function() {
+        const fractalCanvas = document.getElementById('hero-fractal-canvas');
+        const fCtx = fractalCanvas.getContext('2d');
+        const particleCanvas = document.getElementById('hero-particle-canvas');
+        const pCtx = particleCanvas.getContext('2d');
+
+        let W, H, dpr;
+        let mouseX = 0.5, mouseY = 0.5;
+        let targetMouseX = 0.5, targetMouseY = 0.5;
+
+        // Impact point — upper-left area for radial shatter
+        let impactX, impactY;
+
+        function resize() {
+            dpr = Math.min(window.devicePixelRatio, 2);
+            W = window.innerWidth;
+            const hero = document.getElementById('home');
+            H = hero.offsetHeight;
+            impactX = W * 0.3;
+            impactY = H * 0.35;
+
+            fractalCanvas.width = W * dpr;
+            fractalCanvas.height = H * dpr;
+            fractalCanvas.style.width = W + 'px';
+            fractalCanvas.style.height = H + 'px';
+            fCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            particleCanvas.width = W * dpr;
+            particleCanvas.height = H * dpr;
+            particleCanvas.style.width = W + 'px';
+            particleCanvas.style.height = H + 'px';
+            pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            generateShards();
+            generateParticles();
         }
-        const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 2);
-        grad.addColorStop(0, '#00F0FF');
-        grad.addColorStop(1, 'rgba(46,97,254,0)');
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
-      }
-      requestAnimationFrame(draw);
-    }
-    draw();
+
+        /* ====== MOUSE ====== */
+        document.addEventListener('mousemove', function(e) {
+            const hero = document.getElementById('home');
+            const rect = hero.getBoundingClientRect();
+            if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                targetMouseX = e.clientX / W;
+                targetMouseY = (e.clientY - rect.top) / H;
+            }
+        });
+
+        /* ====== TRUE VORONOI via Fortune's / brute-force pixel assign ====== */
+        // We generate seeds, then compute each Voronoi cell polygon via
+        // half-plane intersection — producing real irregular Voronoi shards.
+
+        let shards = [];
+
+        function clipPolygonByHalfPlane(poly, px, py, nx, ny) {
+            // Clip polygon to the half-plane dot((point - p), n) <= 0
+            if (poly.length === 0) return poly;
+            var out = [];
+            for (var i = 0; i < poly.length; i++) {
+                var cur = poly[i];
+                var nxt = poly[(i + 1) % poly.length];
+                var dc = (cur.x - px) * nx + (cur.y - py) * ny;
+                var dn = (nxt.x - px) * nx + (nxt.y - py) * ny;
+                if (dc <= 0) out.push(cur);
+                if ((dc <= 0) !== (dn <= 0)) {
+                    // intersection
+                    var t = dc / (dc - dn);
+                    out.push({ x: cur.x + t * (nxt.x - cur.x), y: cur.y + t * (nxt.y - cur.y) });
+                }
+            }
+            return out;
+        }
+
+        function computeVoronoiCell(seeds, idx, bx0, by0, bx1, by1) {
+            // Start with bounding box polygon, clip by bisectors with every other seed
+            var poly = [
+                { x: bx0, y: by0 }, { x: bx1, y: by0 },
+                { x: bx1, y: by1 }, { x: bx0, y: by1 }
+            ];
+            var sx = seeds[idx].x, sy = seeds[idx].y;
+            for (var j = 0; j < seeds.length; j++) {
+                if (j === idx) continue;
+                if (poly.length < 3) break;
+                // Bisector: midpoint and normal pointing away from seed j
+                var mx = (sx + seeds[j].x) * 0.5;
+                var my = (sy + seeds[j].y) * 0.5;
+                var nx = seeds[j].x - sx;
+                var ny = seeds[j].y - sy;
+                poly = clipPolygonByHalfPlane(poly, mx, my, nx, ny);
+            }
+            return poly;
+        }
+
+        function generateShards() {
+            shards = [];
+            var pad = 60; // bleed outside viewport for parallax
+            var bx0 = -pad, by0 = -pad, bx1 = W + pad, by1 = H + pad;
+
+            // Non-uniform seed distribution — denser near impact, sparser at edges
+            var seeds = [];
+            var totalSeeds = Math.max(90, Math.round((W * H) / 12000)); // ~120 on 1920x1080
+            for (var i = 0; i < totalSeeds; i++) {
+                var x, y;
+                // 40% of seeds cluster near impact point
+                if (i < totalSeeds * 0.4) {
+                    var angle = Math.random() * Math.PI * 2;
+                    var radius = Math.random() * Math.min(W, H) * 0.25;
+                    // Bias small radius
+                    radius = radius * Math.random();
+                    x = impactX + Math.cos(angle) * radius;
+                    y = impactY + Math.sin(angle) * radius;
+                } else {
+                    x = bx0 + Math.random() * (bx1 - bx0);
+                    y = by0 + Math.random() * (by1 - by0);
+                }
+                seeds.push({ x: x, y: y });
+            }
+
+            // Compute Voronoi cells
+            for (var i = 0; i < seeds.length; i++) {
+                var poly = computeVoronoiCell(seeds, i, bx0, by0, bx1, by1);
+                if (poly.length < 3) continue;
+
+                // Centroid
+                var cx = 0, cy = 0;
+                for (var v = 0; v < poly.length; v++) { cx += poly[v].x; cy += poly[v].y; }
+                cx /= poly.length; cy /= poly.length;
+
+                // Distance from impact
+                var distImpact = Math.hypot(cx - impactX, cy - impactY);
+                var maxDist = Math.hypot(W, H);
+                var impactProximity = Math.max(0, 1 - distImpact / (maxDist * 0.6));
+
+                // Area for sizing classification
+                var area = 0;
+                for (var v = 0; v < poly.length; v++) {
+                    var nv = (v + 1) % poly.length;
+                    area += poly[v].x * poly[nv].y - poly[nv].x * poly[v].y;
+                }
+                area = Math.abs(area) * 0.5;
+
+                // Refraction lines — 1-3 internal lines simulating glass refraction
+                var refractionLines = [];
+                var numRefLines = 1 + Math.floor(Math.random() * 3);
+                for (var r = 0; r < numRefLines; r++) {
+                    var vi1 = Math.floor(Math.random() * poly.length);
+                    var vi2 = (vi1 + 1 + Math.floor(Math.random() * (poly.length - 2))) % poly.length;
+                    // Offset inward
+                    var lx1 = poly[vi1].x * 0.7 + cx * 0.3;
+                    var ly1 = poly[vi1].y * 0.7 + cy * 0.3;
+                    var lx2 = poly[vi2].x * 0.7 + cx * 0.3;
+                    var ly2 = poly[vi2].y * 0.7 + cy * 0.3;
+                    refractionLines.push({ x1: lx1, y1: ly1, x2: lx2, y2: ly2 });
+                }
+
+                shards.push({
+                    verts: poly,
+                    cx: cx, cy: cy,
+                    area: area,
+                    impactProximity: impactProximity,
+                    colorMix: Math.random(),
+                    depth: 0.2 + Math.random() * 0.8,
+                    pulseOffset: Math.random() * Math.PI * 2,
+                    pulseSpeed: 0.2 + Math.random() * 0.6,
+                    refractionLines: refractionLines,
+                    // Glass tint angle for gradient fill
+                    tintAngle: Math.random() * Math.PI * 2,
+                    // Highlight position inside the shard (for inner glow)
+                    hlX: cx + (Math.random() - 0.5) * 40,
+                    hlY: cy + (Math.random() - 0.5) * 40
+                });
+            }
+
+            // Sort by depth for correct layering
+            shards.sort(function(a, b) { return a.depth - b.depth; });
+        }
+
+        /* ====== DRAW SHARDS ====== */
+        function drawPath(ctx, verts, px, py) {
+            ctx.beginPath();
+            ctx.moveTo(verts[0].x + px, verts[0].y + py);
+            for (var i = 1; i < verts.length; i++) {
+                ctx.lineTo(verts[i].x + px, verts[i].y + py);
+            }
+            ctx.closePath();
+        }
+
+        function drawShards(time) {
+            fCtx.clearRect(0, 0, W, H);
+            fCtx.fillStyle = '#030810';
+            fCtx.fillRect(0, 0, W, H);
+
+            var parallaxBaseX = (mouseX - 0.5) * 40;
+            var parallaxBaseY = (mouseY - 0.5) * 25;
+
+            fCtx.save();
+
+            for (var i = 0; i < shards.length; i++) {
+                var s = shards[i];
+                var px = parallaxBaseX * s.depth;
+                var py = parallaxBaseY * s.depth;
+
+                var pulse = Math.sin(time * s.pulseSpeed + s.pulseOffset) * 0.25 + 0.75;
+                var glow = (0.15 + s.impactProximity * 0.85) * pulse;
+
+                // ── Glass fill with gradient tint — very subtle ──
+                drawPath(fCtx, s.verts, px, py);
+                var fillAlpha = 0.015 + glow * 0.025;
+                var grad = fCtx.createLinearGradient(
+                    s.cx + px + Math.cos(s.tintAngle) * 60,
+                    s.cy + py + Math.sin(s.tintAngle) * 60,
+                    s.cx + px - Math.cos(s.tintAngle) * 60,
+                    s.cy + py - Math.sin(s.tintAngle) * 60
+                );
+                if (s.colorMix < 0.45) {
+                    grad.addColorStop(0, 'rgba(46, 97, 254, ' + (fillAlpha * 0.8) + ')');
+                    grad.addColorStop(1, 'rgba(3, 8, 16, ' + (fillAlpha * 0.2) + ')');
+                } else if (s.colorMix < 0.8) {
+                    grad.addColorStop(0, 'rgba(0, 240, 255, ' + (fillAlpha * 0.6) + ')');
+                    grad.addColorStop(1, 'rgba(3, 8, 16, ' + (fillAlpha * 0.2) + ')');
+                } else {
+                    grad.addColorStop(0, 'rgba(60, 130, 220, ' + (fillAlpha * 0.5) + ')');
+                    grad.addColorStop(1, 'rgba(0, 240, 255, ' + (fillAlpha * 0.2) + ')');
+                }
+                fCtx.fillStyle = grad;
+                fCtx.fill();
+
+                // ── Inner glow / highlight spot — reduced ──
+                if (glow > 0.4) {
+                    drawPath(fCtx, s.verts, px, py);
+                    fCtx.save();
+                    fCtx.clip();
+                    var innerGrad = fCtx.createRadialGradient(
+                        s.hlX + px, s.hlY + py, 0,
+                        s.hlX + px, s.hlY + py, Math.sqrt(s.area) * 0.6
+                    );
+                    var igAlpha = glow * 0.035;
+                    innerGrad.addColorStop(0, s.colorMix < 0.5
+                        ? 'rgba(46, 97, 254, ' + igAlpha + ')'
+                        : 'rgba(0, 240, 255, ' + igAlpha + ')');
+                    innerGrad.addColorStop(1, 'rgba(3, 8, 16, 0)');
+                    fCtx.fillStyle = innerGrad;
+                    fCtx.fillRect(s.cx + px - 200, s.cy + py - 200, 400, 400);
+                    fCtx.restore();
+                }
+
+                // ── Refraction lines — thinner, dimmer ──
+                for (var r = 0; r < s.refractionLines.length; r++) {
+                    var rl = s.refractionLines[r];
+                    fCtx.beginPath();
+                    fCtx.moveTo(rl.x1 + px, rl.y1 + py);
+                    fCtx.lineTo(rl.x2 + px, rl.y2 + py);
+                    var refAlpha = glow * 0.05;
+                    fCtx.strokeStyle = s.colorMix < 0.5
+                        ? 'rgba(80, 130, 220, ' + refAlpha + ')'
+                        : 'rgba(0, 200, 220, ' + refAlpha + ')';
+                    fCtx.lineWidth = 0.2 + glow * 0.25;
+                    fCtx.stroke();
+                }
+
+                // ── Glowing crack edges — reduced ~40% opacity, 30% thinner ──
+                drawPath(fCtx, s.verts, px, py);
+                var edgeAlpha = glow * 0.2;
+                if (s.colorMix < 0.35) {
+                    fCtx.strokeStyle = 'rgba(46, 97, 254, ' + edgeAlpha + ')';
+                } else if (s.colorMix < 0.7) {
+                    fCtx.strokeStyle = 'rgba(0, 240, 255, ' + edgeAlpha + ')';
+                } else {
+                    fCtx.strokeStyle = 'rgba(90, 160, 220, ' + edgeAlpha + ')';
+                }
+                fCtx.lineWidth = 0.3 + glow * 0.55;
+                fCtx.stroke();
+
+                // ── Bloom / glow pass — subdued ──
+                if (glow > 0.45) {
+                    drawPath(fCtx, s.verts, px, py);
+                    var bloomColor = s.colorMix < 0.5
+                        ? 'rgba(46, 97, 254, 0.3)'
+                        : 'rgba(0, 240, 255, 0.3)';
+                    fCtx.shadowColor = bloomColor;
+                    fCtx.shadowBlur = 6 + glow * 8;
+                    fCtx.strokeStyle = s.colorMix < 0.5
+                        ? 'rgba(46, 97, 254, ' + (edgeAlpha * 0.3) + ')'
+                        : 'rgba(0, 240, 255, ' + (edgeAlpha * 0.3) + ')';
+                    fCtx.lineWidth = 0.2;
+                    fCtx.stroke();
+                    fCtx.shadowBlur = 0;
+                    fCtx.shadowColor = 'transparent';
+                }
+
+                // ── Impact proximity bloom — toned down ──
+                if (s.impactProximity > 0.7) {
+                    drawPath(fCtx, s.verts, px, py);
+                    fCtx.shadowColor = 'rgba(0, 240, 255, 0.35)';
+                    fCtx.shadowBlur = 10 + s.impactProximity * 6;
+                    fCtx.strokeStyle = 'rgba(0, 240, 255, ' + (s.impactProximity * 0.1 * pulse) + ')';
+                    fCtx.lineWidth = 0.4;
+                    fCtx.stroke();
+                    fCtx.shadowBlur = 0;
+                    fCtx.shadowColor = 'transparent';
+                }
+            }
+
+            fCtx.restore();
+
+            // ── Impact point radial glow — subtle ──
+            var igr = fCtx.createRadialGradient(
+                impactX + parallaxBaseX * 0.5, impactY + parallaxBaseY * 0.5, 0,
+                impactX + parallaxBaseX * 0.5, impactY + parallaxBaseY * 0.5, W * 0.35
+            );
+            var impactPulse = Math.sin(time * 0.4) * 0.01 + 0.025;
+            igr.addColorStop(0, 'rgba(0, 240, 255, ' + (impactPulse + 0.015) + ')');
+            igr.addColorStop(0.15, 'rgba(46, 97, 254, ' + impactPulse + ')');
+            igr.addColorStop(0.5, 'rgba(46, 97, 254, 0.008)');
+            igr.addColorStop(1, 'rgba(3, 8, 16, 0)');
+            fCtx.fillStyle = igr;
+            fCtx.fillRect(0, 0, W, H);
+
+            // ── Subtle secondary glow at bottom right ──
+            var gr2 = fCtx.createRadialGradient(W * 0.75, H * 0.7, 0, W * 0.75, H * 0.7, W * 0.3);
+            gr2.addColorStop(0, 'rgba(46, 97, 254, 0.012)');
+            gr2.addColorStop(1, 'rgba(3, 8, 16, 0)');
+            fCtx.fillStyle = gr2;
+            fCtx.fillRect(0, 0, W, H);
+        }
+
+        /* ====== FLOATING PARTICLES ====== */
+        var particles = [];
+        var PARTICLE_COUNT = 100;
+
+        function generateParticles() {
+            particles = [];
+            for (var i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    vx: (Math.random() - 0.5) * 0.25,
+                    vy: (Math.random() - 0.5) * 0.2 - 0.08,
+                    size: 0.4 + Math.random() * 1.8,
+                    alpha: 0.15 + Math.random() * 0.45,
+                    color: Math.random() < 0.5 ? '46, 97, 254' : '0, 240, 255',
+                    pulseOffset: Math.random() * Math.PI * 2,
+                    depth: 0.3 + Math.random() * 0.7
+                });
+            }
+        }
+
+        function drawParticles(time) {
+            pCtx.clearRect(0, 0, W, H);
+            var parallaxBaseX = (mouseX - 0.5) * 18;
+            var parallaxBaseY = (mouseY - 0.5) * 12;
+
+            for (var i = 0; i < particles.length; i++) {
+                var p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < -10) p.x = W + 10;
+                if (p.x > W + 10) p.x = -10;
+                if (p.y < -10) p.y = H + 10;
+                if (p.y > H + 10) p.y = -10;
+
+                var drawX = p.x + parallaxBaseX * p.depth;
+                var drawY = p.y + parallaxBaseY * p.depth;
+                var pulse = Math.sin(time * 0.8 + p.pulseOffset) * 0.3 + 0.7;
+                var alpha = p.alpha * pulse;
+
+                // Soft glow
+                pCtx.beginPath();
+                pCtx.arc(drawX, drawY, p.size + 3, 0, Math.PI * 2);
+                pCtx.fillStyle = 'rgba(' + p.color + ', ' + (alpha * 0.12) + ')';
+                pCtx.fill();
+
+                // Core dot
+                pCtx.beginPath();
+                pCtx.arc(drawX, drawY, p.size, 0, Math.PI * 2);
+                pCtx.fillStyle = 'rgba(' + p.color + ', ' + alpha + ')';
+                pCtx.fill();
+            }
+        }
+
+        /* ====== ANIMATION LOOP ====== */
+        var animRunning = true;
+        function animate() {
+            if (!animRunning) return;
+            requestAnimationFrame(animate);
+            var time = performance.now() * 0.001;
+            mouseX += (targetMouseX - mouseX) * 0.04;
+            mouseY += (targetMouseY - mouseY) * 0.04;
+            drawShards(time);
+            drawParticles(time);
+        }
+
+        /* ====== SCROLL — pause when not visible ====== */
+        var heroEl = document.getElementById('home');
+        window.addEventListener('scroll', function() {
+            var bottom = heroEl.getBoundingClientRect().bottom;
+            var wasRunning = animRunning;
+            animRunning = bottom > 0;
+            if (!wasRunning && animRunning) animate();
+        }, { passive: true });
+
+        /* ====== INIT ====== */
+        resize();
+        window.addEventListener('resize', resize);
+        animate();
+    })();
     </script>
     </body>
 </html>
