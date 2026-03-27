@@ -19,9 +19,9 @@
             --secondary-blue: #2A55C8;
             --light-blue: #5580E0;
             --cyan: #00B4C8;
-            --dark-bg: #030308;
-            --dark-blue: #0A0D1A;
-            --card-bg: #080B16;
+            --dark-bg: #030810;
+            --dark-blue: #030810;
+            --card-bg: rgba(10, 18, 35, 0.6);
             --text-light: #E8EAED;
             --text-gray: #A8B2C1;
             --border-color: rgba(24, 69, 176, 0.15);
@@ -58,11 +58,11 @@
         }
 
         #neural-canvas {
-            opacity: 0.4;
+            opacity: 0.03;
         }
 
         #particle-canvas {
-            opacity: 0.3;
+            opacity: 0.02;
         }
 
         .gradient-mesh {
@@ -161,7 +161,10 @@
                         backdrop-filter 0.3s ease,
                         -webkit-backdrop-filter 0.3s ease,
                         border-color 0.3s ease;
-            border-bottom: 1px solid transparent;
+            border: none;
+            border-bottom: none;
+            box-shadow: none;
+            outline: none;
             transform: translateY(0);
         }
 
@@ -170,10 +173,13 @@
         }
 
         nav.nav-frosted {
-            background: rgba(5, 10, 21, 0.85);
+            background: rgba(3, 8, 16, 0.92);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-bottom: 1px solid rgba(0, 240, 255, 0.08);
+            border: none;
+            border-bottom: none;
+            box-shadow: none;
+            outline: none;
         }
 
         .nav-container {
@@ -1102,9 +1108,9 @@
         }
 
         .service-card {
-            background: rgba(15, 20, 41, 0.6);
+            background: rgba(10, 18, 35, 0.6);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(46, 97, 254, 0.2);
+            border: 1px solid rgba(46, 97, 254, 0.12);
             border-radius: 16px;
             padding: 2rem;
             transition: all 0.3s ease;
@@ -1948,8 +1954,8 @@
         }
 
         .contact-form {
-            background: rgba(15, 20, 41, 0.6);
-            border: 1px solid rgba(46, 97, 254, 0.2);
+            background: rgba(10, 18, 35, 0.6);
+            border: 1px solid rgba(46, 97, 254, 0.12);
             border-radius: 16px;
             padding: 1.5rem;
         }
@@ -2080,7 +2086,7 @@
 
         /* ========== FOOTER ========== */
         .footer {
-            background: rgba(3, 3, 8, 0.98);
+            background: #030810;
             border-top: 1px solid rgba(0, 240, 255, 0.12);
             padding: 5rem 2rem 0;
             position: relative;
@@ -2255,8 +2261,11 @@
 
         /* ========== TRIVOX PREMIUM BUTTONS ========== */
         @keyframes star-btn {
-            0% { offset-distance: 0%; }
-            100% { offset-distance: 100%; }
+            0% { offset-distance: 0%; opacity: 0; }
+            3% { opacity: 1; }
+            75% { opacity: 1; }
+            88% { offset-distance: 100%; opacity: 0; }
+            100% { offset-distance: 100%; opacity: 0; }
         }
 
         .trivox-btn {
@@ -2315,15 +2324,7 @@
                 transparent);
             z-index: 3;
             pointer-events: none;
-            animation: star-btn-orbit 8s linear infinite;
-        }
-
-        @keyframes star-btn-orbit {
-            0%   { top: -55px; left: -55px; }
-            25%  { top: -55px; left: calc(100% - 55px); }
-            50%  { top: calc(100% - 55px); left: calc(100% - 55px); }
-            75%  { top: calc(100% - 55px); left: -55px; }
-            100% { top: -55px; left: -55px; }
+            /* animation set by JS with offset-path */
         }
 
         .trivox-btn.primary .btn-bg {
@@ -2994,6 +2995,8 @@
             <style>
                 @keyframes statPulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.7); } }
             </style>
+            <!-- Hero bottom fade -->
+            <div style="position:absolute;bottom:0;left:0;width:100%;height:120px;background:linear-gradient(to bottom,transparent,#030810);pointer-events:none;z-index:5;"></div>
         </section>
 
         <!-- Image Gallery Section -->
@@ -3490,7 +3493,7 @@
                 .carousel-arrow.hidden { opacity:0; pointer-events:none; }
                 .carousel-arrow.left { left:-20px; }
                 .carousel-arrow.right { right:-20px; }
-                .tool-card { flex:0 0 300px; min-width:300px; background:linear-gradient(135deg, rgba(46,97,254,0.08) 0%, rgba(0,240,255,0.04) 100%); border:1.5px solid rgba(46,97,254,0.3); border-radius:16px; padding:28px 24px; transition:all 0.3s ease; overflow:hidden; display:flex; flex-direction:column; }
+                .tool-card { flex:0 0 300px; min-width:300px; background:rgba(10, 18, 35, 0.6); border:1px solid rgba(46, 97, 254, 0.12); border-radius:16px; padding:28px 24px; transition:all 0.3s ease; overflow:hidden; display:flex; flex-direction:column; }
                 .tool-card:hover { border-color:#00F0FF; box-shadow:0 0 30px rgba(0,240,255,0.12); transform:translateY(-3px); }
                 .tool-card-icon { width:42px; height:42px; border-radius:11px; background:linear-gradient(135deg,#2E61FE,#00F0FF); display:flex; align-items:center; justify-content:center; margin-bottom:16px; box-shadow:0 0 16px rgba(46,97,254,0.25); flex-shrink:0; }
                 .tool-card-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:14px; font-size:0.62rem; font-weight:700; color:#22C55E; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px; width:fit-content; }
@@ -3666,7 +3669,7 @@
                 overflow: hidden;
                 position: relative;
                 cursor: grab;
-                background: #0a0e27;
+                background: #030810;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -3679,7 +3682,7 @@
                 object-fit: contain;
                 object-position: center;
                 display: block;
-                background: #0a0e27;
+                background: #030810;
                 transform-origin: center center;
                 transition: transform 0.15s ease;
                 user-select: none;
@@ -4999,6 +5002,31 @@
         container.addEventListener('mouseleave', function() {
             revealGrad.setAttribute('r', '0');
         });
+    })();
+    </script>
+    <!-- Button Light Path Setup -->
+    <script>
+    (function() {
+        function setupBtnLights() {
+            document.querySelectorAll('.trivox-btn').forEach(function(btn) {
+                var w = btn.offsetWidth;
+                var h = btn.offsetHeight;
+                var light = btn.querySelector('.btn-light');
+                if (light && w > 0 && h > 0) {
+                    light.style.offsetPath = "path('M 0 0 H " + w + " V " + h + " H 0 V 0')";
+                    var duration = 7 + Math.random() * 6;
+                    var delay = -(Math.random() * 10);
+                    light.style.animation = 'star-btn ' + duration + 's ' + delay + 's linear infinite';
+                }
+            });
+        }
+        // Run after layout
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupBtnLights);
+        } else {
+            setupBtnLights();
+        }
+        window.addEventListener('resize', setupBtnLights);
     })();
     </script>
     <!-- Particle Network Hero Background -->
