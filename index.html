@@ -2838,10 +2838,13 @@
 
         /* ── ABOUT ── */
         @media (max-width: 768px) {
-            #about-rotator { min-height: 120px; margin-bottom: 1.5rem; }
-            #about-rot-dots { margin-bottom: 1.5rem !important; }
-            .about-rot-text { font-size: clamp(1.1rem, 4vw, 1.5rem) !important; }
+            #about { padding-top: 24px !important; padding-bottom: 16px !important; }
+            #about .section-header { margin-bottom: 0.8rem !important; }
+            #about-rotator { min-height: 90px; margin-bottom: 0.5rem; }
+            #about-rot-dots { margin-top: 0.5rem !important; margin-bottom: 0.8rem !important; }
+            .about-rot-text { font-size: clamp(1rem, 3.8vw, 1.3rem) !important; }
             .about-rot-text br { display: none; }
+            .about-rot-label { font-size: 0.6rem !important; margin-bottom: 0.5rem !important; }
         }
 
         /* ── CASE STUDIES tabs ── */
@@ -2907,16 +2910,27 @@
                 margin-bottom: 20px;
                 align-items: start;
             }
-            /* Brand — compact, full width */
+            /* Brand — animated TRIVOX replaces logo on mobile */
             .footer-brand {
                 grid-area: brand;
+                text-align: center;
             }
-            .footer-brand .footer-logo {
-                height: 28px !important;
+            .footer-brand .footer-logo-img {
+                display: none !important;
+            }
+            .footer-brand-anim {
+                display: block !important;
+                width: 220px;
+                margin: 0 auto 4px;
+            }
+            .footer-brand-anim svg {
+                width: 100%;
+                height: auto;
+                display: block;
             }
             .footer-brand p {
                 font-size: 12px;
-                margin-top: 6px !important;
+                margin-top: 4px !important;
                 line-height: 1.5;
                 color: rgba(255,255,255,0.4);
             }
@@ -2963,6 +2977,8 @@
             /* Hide the big TRIVOX SVG on mobile */
             .footer-big-text { display: none !important; }
         }
+        /* Hide animated brand on desktop */
+        .footer-brand-anim { display: none; }
 
         /* ── NOTIFICATIONS ── */
         @media (max-width: 768px) {
@@ -4480,7 +4496,28 @@
             <div class="footer-content">
                 <!-- Column 1: Brand -->
                 <div class="footer-brand">
-                    <img src="TRIVOX LOGO.svg" alt="Trivox AI" class="footer-logo">
+                    <img src="TRIVOX LOGO.svg" alt="Trivox AI" class="footer-logo footer-logo-img">
+                    <!-- Animated TRIVOX text (mobile replacement for logo) -->
+                    <div class="footer-brand-anim">
+                        <svg viewBox="0 0 360 48" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="ft-shimmer" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+                                    <stop offset="0%" stop-color="rgba(0,240,255,0)"/>
+                                    <stop offset="40%" stop-color="rgba(0,240,255,0)"/>
+                                    <stop offset="50%" stop-color="rgba(0,240,255,0.8)"/>
+                                    <stop offset="60%" stop-color="rgba(0,240,255,0)"/>
+                                    <stop offset="100%" stop-color="rgba(0,240,255,0)"/>
+                                    <animate attributeName="x1" from="-1" to="1" dur="3s" repeatCount="indefinite"/>
+                                    <animate attributeName="x2" from="0" to="2" dur="3s" repeatCount="indefinite"/>
+                                </linearGradient>
+                                <filter id="ft-glow"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                            </defs>
+                            <text x="180" y="38" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="46" fill="transparent" stroke="rgba(46,97,254,0.15)" stroke-width="1">TRIVOX</text>
+                            <text x="180" y="38" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="46" fill="transparent" stroke="rgba(0,240,255,0.4)" stroke-width="0.5" stroke-dasharray="800" style="animation:heroTrailGrow 4s ease forwards;">TRIVOX</text>
+                            <text x="180" y="38" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="46" fill="transparent" stroke="#00F0FF" stroke-width="0.7" stroke-dasharray="30 800" filter="url(#ft-glow)" style="animation:heroSparkTravel 3s linear infinite;">TRIVOX</text>
+                            <text x="180" y="38" text-anchor="middle" font-family="Sora,sans-serif" font-weight="800" font-size="46" fill="transparent" stroke="url(#ft-shimmer)" stroke-width="1.2">TRIVOX</text>
+                        </svg>
+                    </div>
                     <p>Building AI-powered systems that help businesses automate, grow, and scale with purpose.</p>
                 </div>
 
