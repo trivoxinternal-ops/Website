@@ -2637,7 +2637,7 @@
         @media (max-width: 768px) {
             .hero {
                 min-height: 100svh;
-                padding: 5rem 1.25rem 0;
+                padding: 0 1.25rem;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -2649,8 +2649,9 @@
                 flex: 0 0 auto;
             }
             .hero-left, .hero-right { flex: 1 1 100%; }
-            .hero-title { font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1.15; }
-            .hero-subtitle { font-size: 1rem; }
+            .hero-badge { margin-bottom: 0.8rem; }
+            .hero-title { font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1.15; margin-bottom: 0.8rem; }
+            .hero-subtitle { font-size: 0.95rem; margin-bottom: 1.2rem; }
 
             /* Hero buttons — stacked, centered, auto width, max 280px */
             .hero-cta {
@@ -2669,15 +2670,16 @@
                 display: none !important;
             }
 
-            /* Animated TRIVOX icon — centered */
+            /* Animated TRIVOX icon — centered with float animation */
             .hero-mobile-logo {
                 display: block !important;
-                width: 36vw;
-                max-width: 160px;
-                margin: 2rem auto 0;
+                width: 32vw;
+                max-width: 140px;
+                margin: 1.5rem auto 0;
                 position: relative;
                 z-index: 2;
                 flex-shrink: 0;
+                animation: iconFloat 4s ease-in-out infinite, iconPulseGlow 4s ease-in-out infinite;
             }
 
             /* Hide "Start Your Automation Journey" on mobile */
@@ -2704,9 +2706,13 @@
             0%   { stroke-dashoffset: 1200; }
             100% { stroke-dashoffset: 0; }
         }
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
         @keyframes iconPulseGlow {
             0%, 100% { filter: drop-shadow(0 0 8px rgba(0,240,255,0.3)); }
-            50% { filter: drop-shadow(0 0 20px rgba(0,240,255,0.6)) drop-shadow(0 0 40px rgba(46,97,254,0.3)); }
+            50% { filter: drop-shadow(0 0 24px rgba(0,240,255,0.6)) drop-shadow(0 0 50px rgba(46,97,254,0.3)); }
         }
 
         /* ── SERVICES floating image grid ── */
@@ -3323,7 +3329,7 @@
             </div>
 
             <!-- Animated TRIVOX icon (mobile only) -->
-            <div class="hero-mobile-logo" style="animation: iconPulseGlow 4s ease-in-out infinite;">
+            <div class="hero-mobile-logo">
                 <svg viewBox="620 440 860 600" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <!-- Shimmer sweep for icon -->
