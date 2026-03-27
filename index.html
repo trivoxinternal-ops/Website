@@ -884,19 +884,17 @@
             background: #030810;
         }
 
-        #hero-fractal-canvas,
-        #hero-particle-canvas {
+        #hero-fractal-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100%;
             z-index: 0;
-            pointer-events: none;
         }
 
         #hero-particle-canvas {
-            z-index: 1;
+            display: none;
         }
 
         .hero-split {
@@ -2082,24 +2080,40 @@
 
         /* ========== FOOTER ========== */
         .footer {
-            background: rgba(255, 255, 255, 0.02);
-            border-top: 1px solid rgba(0, 240, 255, 0.15);
-            padding: 2.5rem 2rem 1.5rem;
+            background: rgba(3, 3, 8, 0.98);
+            border-top: 1px solid rgba(0, 240, 255, 0.12);
+            padding: 5rem 2rem 0;
+            position: relative;
+            overflow: hidden;
         }
 
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 1.4fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .footer-brand p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+            line-height: 1.8;
+            margin-top: 1.2rem;
+        }
+
+        .footer-brand .footer-logo {
+            height: 28px;
+            opacity: 0.9;
         }
 
         .footer-section h4 {
             color: var(--text-light);
-            font-size: 0.95rem;
-            margin-bottom: 0.8rem;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
             font-weight: 700;
         }
 
@@ -2108,29 +2122,247 @@
         }
 
         .footer-section ul li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.6rem;
         }
 
         .footer-section ul li a {
-            color: var(--text-gray);
+            color: rgba(255,255,255,0.45);
             text-decoration: none;
+            font-size: 0.85rem;
             transition: all 0.3s ease;
-
         }
 
         .footer-section ul li a:hover {
-            color: var(--cyan);
-            padding-left: 5px;
+            color: #00F0FF;
+            padding-left: 4px;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-contact-item svg {
+            flex-shrink: 0;
+            width: 16px;
+            height: 16px;
+        }
+
+        .footer-contact-item span,
+        .footer-contact-item a {
+            color: rgba(255,255,255,0.45);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-contact-item a:hover {
+            color: #00F0FF;
+        }
+
+        .call-pulse {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #00F0FF;
+            border-radius: 50%;
+            margin-left: 6px;
+            animation: callPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes callPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,240,255,0.5); }
+            50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(0,240,255,0); }
+        }
+
+        .footer-divider {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
         }
 
         .footer-bottom {
             max-width: 1200px;
             margin: 0 auto;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(0, 240, 255, 0.08);
-            text-align: center;
-            color: var(--text-gray);
-            font-size: 0.8rem;
+            padding: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.78rem;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .footer-socials a {
+            color: rgba(255,255,255,0.3);
+            transition: color 0.3s;
+            display: flex;
+        }
+
+        .footer-socials a:hover {
+            color: #00F0FF;
+        }
+
+        .footer-socials a svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Giant TRIVOX SVG text */
+        .footer-big-text {
+            display: block;
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-bottom: 1rem;
+            overflow: visible;
+        }
+
+        .footer-big-text svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .footer-big-text text {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            fill: transparent;
+            stroke: rgba(46, 97, 254, 0.15);
+            stroke-width: 1;
+            transition: stroke 0.1s;
+        }
+
+        @keyframes textLight {
+            0% { stroke-dashoffset: 2000; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        .footer-text-trail {
+            animation: textLight 10s linear infinite;
+        }
+
+        .footer-text-spark {
+            animation: textLight 10s linear infinite;
+        }
+
+        /* ========== TRIVOX PREMIUM BUTTONS ========== */
+        @keyframes star-btn {
+            0% { offset-distance: 0%; }
+            100% { offset-distance: 100%; }
+        }
+
+        .trivox-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 999px;
+            font-family: 'Sora', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            overflow: hidden;
+            isolation: isolate;
+            border: none;
+            background: transparent;
+            color: white;
+            z-index: 1;
+            transition: transform 0.2s ease;
+            text-decoration: none;
+        }
+
+        .trivox-btn:hover {
+            transform: scale(1.03);
+        }
+
+        .trivox-btn .btn-border {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1.5px solid rgba(46, 97, 254, 0.35);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .trivox-btn .btn-bg {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: rgba(5, 10, 21, 0.85);
+            z-index: -1;
+        }
+
+        .trivox-btn .btn-light {
+            position: absolute;
+            width: 110px;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center,
+                rgba(0, 240, 255, 0.9),
+                transparent,
+                transparent);
+            z-index: 3;
+            pointer-events: none;
+            animation: star-btn-orbit 8s linear infinite;
+        }
+
+        @keyframes star-btn-orbit {
+            0%   { top: -55px; left: -55px; }
+            25%  { top: -55px; left: calc(100% - 55px); }
+            50%  { top: calc(100% - 55px); left: calc(100% - 55px); }
+            75%  { top: calc(100% - 55px); left: -55px; }
+            100% { top: -55px; left: -55px; }
+        }
+
+        .trivox-btn.primary .btn-bg {
+            background: linear-gradient(135deg,
+                rgba(46,97,254,0.15),
+                rgba(0,240,255,0.08));
+        }
+
+        .trivox-btn.primary .btn-border {
+            border-color: rgba(0, 240, 255, 0.4);
+        }
+
+        .trivox-btn .btn-text {
+            position: relative;
+            z-index: 10;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(to bottom, #ffffff, rgba(255,255,255,0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .trivox-btn .btn-text svg {
+            -webkit-text-fill-color: initial;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Nav button override — smaller */
+        .trivox-btn.nav-size {
+            padding: 10px 24px;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+        }
+
+        /* Submit button full width */
+        .trivox-btn.full-width {
+            width: 100%;
         }
 
         /* ========== ANIMATIONS ========== */
@@ -2584,9 +2816,9 @@
 
         /* ── FOOTER ── */
         @media (max-width: 768px) {
-            .footer { padding: 2.5rem 1.25rem 1.5rem; }
-            .footer-content { gap: 1.75rem; margin-bottom: 1.75rem; grid-template-columns: 1fr 1fr; }
-            .footer-section h4 { font-size: 1rem; }
+            .footer { padding: 3rem 1.25rem 0; }
+            .footer-content { gap: 2rem; margin-bottom: 2rem; grid-template-columns: 1fr 1fr; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
         }
         @media (max-width: 480px) {
             .footer-content { grid-template-columns: 1fr; gap: 1.5rem; }
@@ -2686,7 +2918,7 @@
                     <a href="#about" class="nav-link">About</a>
                     <a href="#pricing" class="nav-link">Built & Deployed</a>
                     <a href="#contact" class="nav-link">Contact</a>
-                    <a href="https://calendly.com/trivoxinternal/intro-call" class="cta-btn-nav" target="_blank">Book a Call</a>
+                    <a href="https://calendly.com/trivoxinternal/intro-call" class="trivox-btn primary nav-size" target="_blank"><div class="btn-bg"></div><div class="btn-border"></div><div class="btn-light"></div><span class="btn-text">Book a Call</span></a>
                 </div>
                 <div class="mobile-menu-toggle" id="mobileMenuToggle">
                     <span></span>
@@ -2703,7 +2935,7 @@
             <a href="#about" class="mobile-nav-link">About</a>
             <a href="#pricing" class="mobile-nav-link">Built & Deployed</a>
             <a href="#contact" class="mobile-nav-link">Contact</a>
-            <a href="https://calendly.com/trivoxinternal/intro-call" class="mobile-nav-link" style="font-size:1.5rem; background:linear-gradient(135deg, var(--primary-blue), var(--secondary-blue)); color:white;">Book a Call</a>
+            <a href="https://calendly.com/trivoxinternal/intro-call" class="trivox-btn primary" target="_blank" style="margin-top:0.5rem;"><div class="btn-bg"></div><div class="btn-border"></div><div class="btn-light"></div><span class="btn-text">Book a Call</span></a>
         </div>
 
         <!-- Hero Section with AI Image -->
@@ -2724,14 +2956,13 @@
                     We help businesses scale with purpose through custom AI automation systems that reclaim time, optimize operations, and unlock sustainable growth.
                 </p>
                 <div class="hero-cta">
-                    <a href="https://calendly.com/trivoxinternal/intro-call" class="cta-primary" target="_blank">
-                        <span>Start Your Automation Journey</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
+                    <a href="https://calendly.com/trivoxinternal/intro-call" class="trivox-btn primary" target="_blank">
+                        <div class="btn-bg"></div><div class="btn-border"></div><div class="btn-light"></div>
+                        <span class="btn-text">Start Your Automation Journey <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
                     </a>
-                    <a href="#services" class="cta-secondary">
-                        <span>See How It Works</span>
+                    <a href="#services" class="trivox-btn">
+                        <div class="btn-bg"></div><div class="btn-border"></div><div class="btn-light"></div>
+                        <span class="btn-text">See How It Works</span>
                     </a>
                 </div>
               </div>
@@ -3252,15 +3483,14 @@
             </div>
 
             <style>
-                .tools-scroll { display:flex; gap:1.2rem; overflow-x:auto; padding:2.5rem 2rem 1.5rem; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory; }
-                .tools-scroll::-webkit-scrollbar { height:3px; }
-                .tools-scroll::-webkit-scrollbar-track { background:transparent; }
-                .tools-scroll::-webkit-scrollbar-thumb { background:rgba(46,97,254,0.25); border-radius:2px; }
-                .tools-scroll-wrap { position:relative; }
-                .scroll-fade-l, .scroll-fade-r { position:absolute; top:0; bottom:0; width:48px; z-index:2; pointer-events:none; }
-                .scroll-fade-l { left:0; background:linear-gradient(90deg, var(--dark-bg, #0a0e27) 0%, transparent 100%); }
-                .scroll-fade-r { right:0; background:linear-gradient(270deg, var(--dark-bg, #0a0e27) 0%, transparent 100%); }
-                .tool-card { flex:0 0 280px; min-width:280px; scroll-snap-align:start; background:linear-gradient(135deg, rgba(46,97,254,0.08) 0%, rgba(0,240,255,0.04) 100%); border:1.5px solid rgba(46,97,254,0.3); border-radius:16px; padding:28px 24px; transition:all 0.3s ease; overflow:hidden; display:flex; flex-direction:column; }
+                .carousel-wrap { position:relative; overflow:hidden; width:100%; max-width:1200px; margin:0 auto; padding:2.5rem 2rem 1.5rem; }
+                .carousel-track { display:flex; gap:24px; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change:transform; }
+                .carousel-arrow { position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%; background:rgba(5,10,21,0.9); border:1px solid rgba(0,240,255,0.3); color:#00F0FF; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:5; transition:all 0.2s ease; box-shadow:0 0 20px rgba(0,240,255,0.15); }
+                .carousel-arrow:hover { border-color:#00F0FF; box-shadow:0 0 30px rgba(0,240,255,0.3); transform:translateY(-50%) scale(1.1); }
+                .carousel-arrow.hidden { opacity:0; pointer-events:none; }
+                .carousel-arrow.left { left:-20px; }
+                .carousel-arrow.right { right:-20px; }
+                .tool-card { flex:0 0 300px; min-width:300px; background:linear-gradient(135deg, rgba(46,97,254,0.08) 0%, rgba(0,240,255,0.04) 100%); border:1.5px solid rgba(46,97,254,0.3); border-radius:16px; padding:28px 24px; transition:all 0.3s ease; overflow:hidden; display:flex; flex-direction:column; }
                 .tool-card:hover { border-color:#00F0FF; box-shadow:0 0 30px rgba(0,240,255,0.12); transform:translateY(-3px); }
                 .tool-card-icon { width:42px; height:42px; border-radius:11px; background:linear-gradient(135deg,#2E61FE,#00F0FF); display:flex; align-items:center; justify-content:center; margin-bottom:16px; box-shadow:0 0 16px rgba(46,97,254,0.25); flex-shrink:0; }
                 .tool-card-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:14px; font-size:0.62rem; font-weight:700; color:#22C55E; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px; width:fit-content; }
@@ -3271,12 +3501,24 @@
                 .tool-card-tags span { padding:3px 8px; background:rgba(46,97,254,0.1); border:1px solid rgba(46,97,254,0.3); border-radius:4px; color:rgba(255,255,255,0.6); font-size:11px; font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace; }
                 .tool-card-btn { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:linear-gradient(135deg,#2E61FE,#00F0FF); border:none; border-radius:10px; color:#fff; font-family:'Sora',sans-serif; font-size:0.82rem; font-weight:700; text-decoration:none; transition:opacity 0.2s,transform 0.2s,box-shadow 0.2s; box-shadow:0 3px 14px rgba(46,97,254,0.25); width:fit-content; }
                 .tool-card-btn:hover { opacity:0.9; transform:translateY(-1px); box-shadow:0 6px 22px rgba(46,97,254,0.35); }
+                @media (max-width:768px) {
+                    .tool-card { flex:0 0 calc(85vw); min-width:calc(85vw); }
+                    .carousel-arrow.left { left:8px; }
+                    .carousel-arrow.right { right:8px; }
+                    .carousel-wrap { padding:2rem 1rem 1.5rem; }
+                }
             </style>
 
-            <div class="fade-in tools-scroll-wrap">
-                <div class="scroll-fade-l"></div>
-                <div class="scroll-fade-r"></div>
-                <div class="tools-scroll">
+            <div class="fade-in carousel-wrap" id="toolsCarousel">
+                <!-- Left Arrow -->
+                <button class="carousel-arrow left hidden" id="carouselLeft" onclick="carouselNav(-1)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <!-- Right Arrow -->
+                <button class="carousel-arrow right" id="carouselRight" onclick="carouselNav(1)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+                <div class="carousel-track" id="carouselTrack">
 
                 <!-- Real Estate AI Agent -->
                 <div class="tool-card">
@@ -3338,9 +3580,48 @@
                     <a href="https://clientbrieff.netlify.app" target="_blank" rel="noopener" class="tool-card-btn">Try Live Demo <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
 
-                </div><!-- /tools-scroll -->
+                </div><!-- /carousel-track -->
             </div>
         </section>
+
+        <script>
+        (function() {
+            var idx = 0;
+            var track = document.getElementById('carouselTrack');
+            var wrap = document.getElementById('toolsCarousel');
+            var leftBtn = document.getElementById('carouselLeft');
+            var rightBtn = document.getElementById('carouselRight');
+            var cards = track.querySelectorAll('.tool-card');
+            var cardWidth = 300;
+            var gap = 24;
+
+            function getVisible() {
+                return Math.floor(wrap.clientWidth / (cardWidth + gap)) || 1;
+            }
+
+            function getMax() {
+                return Math.max(0, cards.length - getVisible());
+            }
+
+            function update() {
+                track.style.transform = 'translateX(-' + (idx * (cardWidth + gap)) + 'px)';
+                leftBtn.classList.toggle('hidden', idx === 0);
+                rightBtn.classList.toggle('hidden', idx >= getMax());
+            }
+
+            window.carouselNav = function(dir) {
+                idx = Math.max(0, Math.min(getMax(), idx + dir));
+                update();
+            };
+
+            window.addEventListener('resize', function() {
+                idx = Math.min(idx, getMax());
+                update();
+            });
+
+            update();
+        })();
+        </script>
 
 
         <!-- ===== GLOBAL LIGHTBOX ===== -->
@@ -3902,7 +4183,7 @@
                         </div>
                         <!-- Honeypot field for spam protection -->
                         <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off">
-                        <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+                        <button type="submit" class="trivox-btn primary full-width" id="submitBtn"><div class="btn-bg"></div><div class="btn-border"></div><div class="btn-light"></div><span class="btn-text">Send Message</span></button>
                     </form>
                 </div>
 
@@ -3916,11 +4197,9 @@
                     <div class="service-card" style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Schedule a Call</h3>
                         <p style="color: var(--text-gray); margin-bottom: 1rem;">Book a free 30-minute consultation</p>
-                        <a href="https://calendly.com/trivoxinternal/intro-call" class="cta-primary" target="_blank" style="display: inline-flex;">
-                            Book Now
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="2"/>
-                            </svg>
+                        <a href="https://calendly.com/trivoxinternal/intro-call" class="trivox-btn primary" target="_blank">
+                            <div class="btn-bg"></div><div class="btn-border"></div><div class="btn-light"></div>
+                            <span class="btn-text">Book Now <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
                         </a>
                     </div>
 
@@ -3936,45 +4215,118 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Trivox AI</h4>
-                    <p style="color: var(--text-gray); line-height: 1.6;">Transforming businesses through intelligent automation. Reclaim time, optimize operations, unlock growth.</p>
+                <!-- Column 1: Brand -->
+                <div class="footer-brand">
+                    <img src="TRIVOX LOGO.svg" alt="Trivox AI" class="footer-logo">
+                    <p>Building AI-powered systems that help businesses automate, grow, and scale with purpose.</p>
                 </div>
+
+                <!-- Column 2: Services -->
                 <div class="footer-section">
-                    <h4>Solutions</h4>
+                    <h4>Services</h4>
                     <ul>
                         <li><a href="#services">AI Voice Agents</a></li>
                         <li><a href="#services">AI Chatbots</a></li>
                         <li><a href="#services">CRM Automation</a></li>
+                        <li><a href="#services">Lead Qualification</a></li>
                         <li><a href="#services">Workflow Automation</a></li>
+                        <li><a href="#services">Custom AI Solutions</a></li>
                     </ul>
                 </div>
+
+                <!-- Column 3: Company -->
                 <div class="footer-section">
                     <h4>Company</h4>
                     <ul>
                         <li><a href="#about">About Us</a></li>
                         <li><a href="#pricing">Built & Deployed</a></li>
                         <li><a href="#contact">Contact</a></li>
+                        <li><a href="https://calendly.com/trivoxinternal/intro-call" target="_blank">Book a Call <span class="call-pulse"></span></a></li>
                     </ul>
                 </div>
+
+                <!-- Column 4: Contact Us -->
                 <div class="footer-section">
-                    <h4>Reach out on social media.</h4>
-                    <ul>
-                        <li><a href="https://www.instagram.com/trivoxai/">Instagram</a></li>
-                        <li><a href="http://www.youtube.com/@TrivoxAI">Youtube</a></li>
-                        <li><a href="http://www.linkedin.com/in/trivoxai">LinkedIn </a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Connect</h4>
-                    <ul>
-                        <li><a href="mailto:daniel@trivox.ca">daniel@trivox.ca</a></li>
-                        <li><a href="https://calendly.com/trivoxinternal/intro-call" target="_blank">Schedule a Call</a></li>
-                    </ul>
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+                        <a href="mailto:daniel@trivox.ca">daniel@trivox.ca</a>
+                    </div>
+                    <div class="footer-contact-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <span>Toronto, Canada</span>
+                    </div>
                 </div>
             </div>
+
+            <div class="footer-divider"></div>
+
             <div class="footer-bottom">
-                <p>&copy; 2025 Trivox AI. All rights reserved. &nbsp;·&nbsp; <a href="privacy.html" style="color:var(--text-gray);text-decoration:none;transition:color 0.2s;">Privacy Policy</a></p>
+                <div class="footer-socials">
+                    <!-- LinkedIn -->
+                    <a href="http://www.linkedin.com/in/trivoxai" target="_blank" rel="noopener" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/trivoxai/" target="_blank" rel="noopener" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <!-- X / Twitter -->
+                    <a href="https://x.com/trivoxai" target="_blank" rel="noopener" aria-label="X">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+                <p>&copy; 2025 Trivox AI. All rights reserved. &nbsp;·&nbsp; <a href="privacy.html" style="color:rgba(255,255,255,0.3);text-decoration:none;transition:color 0.2s;">Privacy Policy</a></p>
+            </div>
+
+            <!-- Giant TRIVOX text -->
+            <div class="footer-big-text" id="footerBigText">
+                <svg viewBox="0 0 900 120" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="trivox-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#2E61FE"/>
+                            <stop offset="50%" stop-color="#00F0FF"/>
+                            <stop offset="100%" stop-color="#2E61FE"/>
+                        </linearGradient>
+                        <!-- Mouse reveal -->
+                        <radialGradient id="trivox-reveal" cx="0.5" cy="0.5" r="0.15">
+                            <stop offset="0%" stop-color="white"/>
+                            <stop offset="100%" stop-color="black"/>
+                        </radialGradient>
+                        <mask id="trivox-mask">
+                            <rect width="100%" height="100%" fill="black"/>
+                            <rect width="100%" height="100%" fill="url(#trivox-reveal)" id="trivox-mask-rect"/>
+                        </mask>
+                        <!-- Shimmer sweep -->
+                        <linearGradient id="trivox-shimmer" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+                            <stop offset="0%" stop-color="rgba(0,240,255,0)"/>
+                            <stop offset="40%" stop-color="rgba(0,240,255,0)"/>
+                            <stop offset="50%" stop-color="rgba(0,240,255,0.7)"/>
+                            <stop offset="60%" stop-color="rgba(0,240,255,0)"/>
+                            <stop offset="100%" stop-color="rgba(0,240,255,0)"/>
+                            <animate attributeName="x1" from="-1" to="1" dur="4s" repeatCount="indefinite"/>
+                            <animate attributeName="x2" from="0" to="2" dur="4s" repeatCount="indefinite"/>
+                        </linearGradient>
+                        <!-- Glow filter for traveling spark -->
+                        <filter id="glowFilter">
+                            <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <!-- Base stroke (always visible) -->
+                    <text x="450" y="95" text-anchor="middle" font-size="130" fill="transparent" stroke="rgba(46,97,254,0.15)" stroke-width="1">TRIVOX</text>
+                    <!-- Traveling light trail -->
+                    <text x="450" y="95" text-anchor="middle" font-size="130" fill="transparent" stroke="rgba(0,240,255,0.5)" stroke-width="0.4" stroke-dasharray="2000" class="footer-text-trail">TRIVOX</text>
+                    <!-- Traveling spark head -->
+                    <text x="450" y="95" text-anchor="middle" font-size="130" fill="transparent" stroke="#00F0FF" stroke-width="0.6" stroke-dasharray="30 9999" filter="url(#glowFilter)" class="footer-text-spark">TRIVOX</text>
+                    <!-- Shimmer sweep layer -->
+                    <text x="450" y="95" text-anchor="middle" font-size="130" fill="transparent" stroke="url(#trivox-shimmer)" stroke-width="1.2">TRIVOX</text>
+                    <!-- Gradient stroke (revealed by mask on hover) -->
+                    <text x="450" y="95" text-anchor="middle" font-size="130" fill="transparent" stroke="url(#trivox-grad)" stroke-width="1.5" mask="url(#trivox-mask)" id="trivox-glow-text">TRIVOX</text>
+                </svg>
             </div>
         </footer>
     </div>
@@ -4628,28 +4980,46 @@
         triggerCount();
     })();
     </script>
-    <!-- Shattered Glass Fractal Hero Background -->
+    <!-- Footer Big Text Mouse Reveal -->
+    <script>
+    (function() {
+        var container = document.getElementById('footerBigText');
+        var svg = container.querySelector('svg');
+        var revealGrad = document.getElementById('trivox-reveal');
+
+        container.addEventListener('mousemove', function(e) {
+            var rect = svg.getBoundingClientRect();
+            var x = (e.clientX - rect.left) / rect.width;
+            var y = (e.clientY - rect.top) / rect.height;
+            revealGrad.setAttribute('cx', x);
+            revealGrad.setAttribute('cy', y);
+            revealGrad.setAttribute('r', '0.25');
+        });
+
+        container.addEventListener('mouseleave', function() {
+            revealGrad.setAttribute('r', '0');
+        });
+    })();
+    </script>
+    <!-- Particle Network Hero Background -->
     <script>
     (function() {
         const fractalCanvas = document.getElementById('hero-fractal-canvas');
         const fCtx = fractalCanvas.getContext('2d');
-        const particleCanvas = document.getElementById('hero-particle-canvas');
-        const pCtx = particleCanvas.getContext('2d');
 
         let W, H, dpr;
-        let mouseX = 0.5, mouseY = 0.5;
-        let targetMouseX = 0.5, targetMouseY = 0.5;
+        let mouseX = -9999, mouseY = -9999;
+        const MOUSE_RADIUS = 200;
+        const CONNECTION_DIST_FACTOR = 7;
 
-        // Impact point — upper-left area for radial shatter
-        let impactX, impactY;
+        /* ====== PARTICLES ====== */
+        var particles = [];
 
         function resize() {
             dpr = Math.min(window.devicePixelRatio, 2);
             W = window.innerWidth;
-            const hero = document.getElementById('home');
+            var hero = document.getElementById('home');
             H = hero.offsetHeight;
-            impactX = W * 0.3;
-            impactY = H * 0.35;
 
             fractalCanvas.width = W * dpr;
             fractalCanvas.height = H * dpr;
@@ -4657,355 +5027,121 @@
             fractalCanvas.style.height = H + 'px';
             fCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-            particleCanvas.width = W * dpr;
-            particleCanvas.height = H * dpr;
-            particleCanvas.style.width = W + 'px';
-            particleCanvas.style.height = H + 'px';
-            pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-            generateShards();
             generateParticles();
         }
 
-        /* ====== MOUSE ====== */
-        document.addEventListener('mousemove', function(e) {
-            const hero = document.getElementById('home');
-            const rect = hero.getBoundingClientRect();
-            if (rect.bottom > 0 && rect.top < window.innerHeight) {
-                targetMouseX = e.clientX / W;
-                targetMouseY = (e.clientY - rect.top) / H;
-            }
-        });
-
-        /* ====== TRUE VORONOI via Fortune's / brute-force pixel assign ====== */
-        // We generate seeds, then compute each Voronoi cell polygon via
-        // half-plane intersection — producing real irregular Voronoi shards.
-
-        let shards = [];
-
-        function clipPolygonByHalfPlane(poly, px, py, nx, ny) {
-            // Clip polygon to the half-plane dot((point - p), n) <= 0
-            if (poly.length === 0) return poly;
-            var out = [];
-            for (var i = 0; i < poly.length; i++) {
-                var cur = poly[i];
-                var nxt = poly[(i + 1) % poly.length];
-                var dc = (cur.x - px) * nx + (cur.y - py) * ny;
-                var dn = (nxt.x - px) * nx + (nxt.y - py) * ny;
-                if (dc <= 0) out.push(cur);
-                if ((dc <= 0) !== (dn <= 0)) {
-                    // intersection
-                    var t = dc / (dc - dn);
-                    out.push({ x: cur.x + t * (nxt.x - cur.x), y: cur.y + t * (nxt.y - cur.y) });
-                }
-            }
-            return out;
-        }
-
-        function computeVoronoiCell(seeds, idx, bx0, by0, bx1, by1) {
-            // Start with bounding box polygon, clip by bisectors with every other seed
-            var poly = [
-                { x: bx0, y: by0 }, { x: bx1, y: by0 },
-                { x: bx1, y: by1 }, { x: bx0, y: by1 }
-            ];
-            var sx = seeds[idx].x, sy = seeds[idx].y;
-            for (var j = 0; j < seeds.length; j++) {
-                if (j === idx) continue;
-                if (poly.length < 3) break;
-                // Bisector: midpoint and normal pointing away from seed j
-                var mx = (sx + seeds[j].x) * 0.5;
-                var my = (sy + seeds[j].y) * 0.5;
-                var nx = seeds[j].x - sx;
-                var ny = seeds[j].y - sy;
-                poly = clipPolygonByHalfPlane(poly, mx, my, nx, ny);
-            }
-            return poly;
-        }
-
-        function generateShards() {
-            shards = [];
-            var pad = 60; // bleed outside viewport for parallax
-            var bx0 = -pad, by0 = -pad, bx1 = W + pad, by1 = H + pad;
-
-            // Non-uniform seed distribution — denser near impact, sparser at edges
-            var seeds = [];
-            var totalSeeds = Math.max(90, Math.round((W * H) / 12000)); // ~120 on 1920x1080
-            for (var i = 0; i < totalSeeds; i++) {
-                var x, y;
-                // 40% of seeds cluster near impact point
-                if (i < totalSeeds * 0.4) {
-                    var angle = Math.random() * Math.PI * 2;
-                    var radius = Math.random() * Math.min(W, H) * 0.25;
-                    // Bias small radius
-                    radius = radius * Math.random();
-                    x = impactX + Math.cos(angle) * radius;
-                    y = impactY + Math.sin(angle) * radius;
-                } else {
-                    x = bx0 + Math.random() * (bx1 - bx0);
-                    y = by0 + Math.random() * (by1 - by0);
-                }
-                seeds.push({ x: x, y: y });
-            }
-
-            // Compute Voronoi cells
-            for (var i = 0; i < seeds.length; i++) {
-                var poly = computeVoronoiCell(seeds, i, bx0, by0, bx1, by1);
-                if (poly.length < 3) continue;
-
-                // Centroid
-                var cx = 0, cy = 0;
-                for (var v = 0; v < poly.length; v++) { cx += poly[v].x; cy += poly[v].y; }
-                cx /= poly.length; cy /= poly.length;
-
-                // Distance from impact
-                var distImpact = Math.hypot(cx - impactX, cy - impactY);
-                var maxDist = Math.hypot(W, H);
-                var impactProximity = Math.max(0, 1 - distImpact / (maxDist * 0.6));
-
-                // Area for sizing classification
-                var area = 0;
-                for (var v = 0; v < poly.length; v++) {
-                    var nv = (v + 1) % poly.length;
-                    area += poly[v].x * poly[nv].y - poly[nv].x * poly[v].y;
-                }
-                area = Math.abs(area) * 0.5;
-
-                // Refraction lines — 1-3 internal lines simulating glass refraction
-                var refractionLines = [];
-                var numRefLines = 1 + Math.floor(Math.random() * 3);
-                for (var r = 0; r < numRefLines; r++) {
-                    var vi1 = Math.floor(Math.random() * poly.length);
-                    var vi2 = (vi1 + 1 + Math.floor(Math.random() * (poly.length - 2))) % poly.length;
-                    // Offset inward
-                    var lx1 = poly[vi1].x * 0.7 + cx * 0.3;
-                    var ly1 = poly[vi1].y * 0.7 + cy * 0.3;
-                    var lx2 = poly[vi2].x * 0.7 + cx * 0.3;
-                    var ly2 = poly[vi2].y * 0.7 + cy * 0.3;
-                    refractionLines.push({ x1: lx1, y1: ly1, x2: lx2, y2: ly2 });
-                }
-
-                shards.push({
-                    verts: poly,
-                    cx: cx, cy: cy,
-                    area: area,
-                    impactProximity: impactProximity,
-                    colorMix: Math.random(),
-                    depth: 0.2 + Math.random() * 0.8,
-                    pulseOffset: Math.random() * Math.PI * 2,
-                    pulseSpeed: 0.2 + Math.random() * 0.6,
-                    refractionLines: refractionLines,
-                    // Glass tint angle for gradient fill
-                    tintAngle: Math.random() * Math.PI * 2,
-                    // Highlight position inside the shard (for inner glow)
-                    hlX: cx + (Math.random() - 0.5) * 40,
-                    hlY: cy + (Math.random() - 0.5) * 40
+        function generateParticles() {
+            var count = Math.round((W * H) / 9000);
+            // Keep existing particles if possible, just adjust count
+            while (particles.length > count) particles.pop();
+            while (particles.length < count) {
+                particles.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    dx: (Math.random() - 0.5) * 0.4,
+                    dy: (Math.random() - 0.5) * 0.4,
+                    size: 1 + Math.random() * 2,
+                    color: Math.random() < 0.5 ? '0, 240, 255' : '46, 97, 254'
                 });
             }
-
-            // Sort by depth for correct layering
-            shards.sort(function(a, b) { return a.depth - b.depth; });
         }
 
-        /* ====== DRAW SHARDS ====== */
-        function drawPath(ctx, verts, px, py) {
-            ctx.beginPath();
-            ctx.moveTo(verts[0].x + px, verts[0].y + py);
-            for (var i = 1; i < verts.length; i++) {
-                ctx.lineTo(verts[i].x + px, verts[i].y + py);
-            }
-            ctx.closePath();
-        }
+        /* ====== MOUSE ====== */
+        var heroEl = document.getElementById('home');
+        heroEl.addEventListener('mousemove', function(e) {
+            var rect = heroEl.getBoundingClientRect();
+            mouseX = e.clientX;
+            mouseY = e.clientY - rect.top;
+        });
+        heroEl.addEventListener('mouseleave', function() {
+            mouseX = -9999;
+            mouseY = -9999;
+        });
 
-        function drawShards(time) {
+        /* ====== DRAW ====== */
+        var maxConnDist;
+
+        function draw() {
             fCtx.clearRect(0, 0, W, H);
             fCtx.fillStyle = '#030810';
             fCtx.fillRect(0, 0, W, H);
 
-            var parallaxBaseX = (mouseX - 0.5) * 40;
-            var parallaxBaseY = (mouseY - 0.5) * 25;
+            maxConnDist = Math.sqrt((W / CONNECTION_DIST_FACTOR) * (H / CONNECTION_DIST_FACTOR));
 
-            fCtx.save();
-
-            for (var i = 0; i < shards.length; i++) {
-                var s = shards[i];
-                var px = parallaxBaseX * s.depth;
-                var py = parallaxBaseY * s.depth;
-
-                var pulse = Math.sin(time * s.pulseSpeed + s.pulseOffset) * 0.25 + 0.75;
-                var glow = (0.15 + s.impactProximity * 0.85) * pulse;
-
-                // ── Glass fill with gradient tint — very subtle ──
-                drawPath(fCtx, s.verts, px, py);
-                var fillAlpha = 0.015 + glow * 0.025;
-                var grad = fCtx.createLinearGradient(
-                    s.cx + px + Math.cos(s.tintAngle) * 60,
-                    s.cy + py + Math.sin(s.tintAngle) * 60,
-                    s.cx + px - Math.cos(s.tintAngle) * 60,
-                    s.cy + py - Math.sin(s.tintAngle) * 60
-                );
-                if (s.colorMix < 0.45) {
-                    grad.addColorStop(0, 'rgba(46, 97, 254, ' + (fillAlpha * 0.8) + ')');
-                    grad.addColorStop(1, 'rgba(3, 8, 16, ' + (fillAlpha * 0.2) + ')');
-                } else if (s.colorMix < 0.8) {
-                    grad.addColorStop(0, 'rgba(0, 240, 255, ' + (fillAlpha * 0.6) + ')');
-                    grad.addColorStop(1, 'rgba(3, 8, 16, ' + (fillAlpha * 0.2) + ')');
-                } else {
-                    grad.addColorStop(0, 'rgba(60, 130, 220, ' + (fillAlpha * 0.5) + ')');
-                    grad.addColorStop(1, 'rgba(0, 240, 255, ' + (fillAlpha * 0.2) + ')');
-                }
-                fCtx.fillStyle = grad;
-                fCtx.fill();
-
-                // ── Inner glow / highlight spot — reduced ──
-                if (glow > 0.4) {
-                    drawPath(fCtx, s.verts, px, py);
-                    fCtx.save();
-                    fCtx.clip();
-                    var innerGrad = fCtx.createRadialGradient(
-                        s.hlX + px, s.hlY + py, 0,
-                        s.hlX + px, s.hlY + py, Math.sqrt(s.area) * 0.6
-                    );
-                    var igAlpha = glow * 0.035;
-                    innerGrad.addColorStop(0, s.colorMix < 0.5
-                        ? 'rgba(46, 97, 254, ' + igAlpha + ')'
-                        : 'rgba(0, 240, 255, ' + igAlpha + ')');
-                    innerGrad.addColorStop(1, 'rgba(3, 8, 16, 0)');
-                    fCtx.fillStyle = innerGrad;
-                    fCtx.fillRect(s.cx + px - 200, s.cy + py - 200, 400, 400);
-                    fCtx.restore();
-                }
-
-                // ── Refraction lines — thinner, dimmer ──
-                for (var r = 0; r < s.refractionLines.length; r++) {
-                    var rl = s.refractionLines[r];
-                    fCtx.beginPath();
-                    fCtx.moveTo(rl.x1 + px, rl.y1 + py);
-                    fCtx.lineTo(rl.x2 + px, rl.y2 + py);
-                    var refAlpha = glow * 0.05;
-                    fCtx.strokeStyle = s.colorMix < 0.5
-                        ? 'rgba(80, 130, 220, ' + refAlpha + ')'
-                        : 'rgba(0, 200, 220, ' + refAlpha + ')';
-                    fCtx.lineWidth = 0.2 + glow * 0.25;
-                    fCtx.stroke();
-                }
-
-                // ── Glowing crack edges — reduced ~40% opacity, 30% thinner ──
-                drawPath(fCtx, s.verts, px, py);
-                var edgeAlpha = glow * 0.2;
-                if (s.colorMix < 0.35) {
-                    fCtx.strokeStyle = 'rgba(46, 97, 254, ' + edgeAlpha + ')';
-                } else if (s.colorMix < 0.7) {
-                    fCtx.strokeStyle = 'rgba(0, 240, 255, ' + edgeAlpha + ')';
-                } else {
-                    fCtx.strokeStyle = 'rgba(90, 160, 220, ' + edgeAlpha + ')';
-                }
-                fCtx.lineWidth = 0.3 + glow * 0.55;
-                fCtx.stroke();
-
-                // ── Bloom / glow pass — subdued ──
-                if (glow > 0.45) {
-                    drawPath(fCtx, s.verts, px, py);
-                    var bloomColor = s.colorMix < 0.5
-                        ? 'rgba(46, 97, 254, 0.3)'
-                        : 'rgba(0, 240, 255, 0.3)';
-                    fCtx.shadowColor = bloomColor;
-                    fCtx.shadowBlur = 6 + glow * 8;
-                    fCtx.strokeStyle = s.colorMix < 0.5
-                        ? 'rgba(46, 97, 254, ' + (edgeAlpha * 0.3) + ')'
-                        : 'rgba(0, 240, 255, ' + (edgeAlpha * 0.3) + ')';
-                    fCtx.lineWidth = 0.2;
-                    fCtx.stroke();
-                    fCtx.shadowBlur = 0;
-                    fCtx.shadowColor = 'transparent';
-                }
-
-                // ── Impact proximity bloom — toned down ──
-                if (s.impactProximity > 0.7) {
-                    drawPath(fCtx, s.verts, px, py);
-                    fCtx.shadowColor = 'rgba(0, 240, 255, 0.35)';
-                    fCtx.shadowBlur = 10 + s.impactProximity * 6;
-                    fCtx.strokeStyle = 'rgba(0, 240, 255, ' + (s.impactProximity * 0.1 * pulse) + ')';
-                    fCtx.lineWidth = 0.4;
-                    fCtx.stroke();
-                    fCtx.shadowBlur = 0;
-                    fCtx.shadowColor = 'transparent';
-                }
-            }
-
-            fCtx.restore();
-
-            // ── Impact point radial glow — subtle ──
-            var igr = fCtx.createRadialGradient(
-                impactX + parallaxBaseX * 0.5, impactY + parallaxBaseY * 0.5, 0,
-                impactX + parallaxBaseX * 0.5, impactY + parallaxBaseY * 0.5, W * 0.35
-            );
-            var impactPulse = Math.sin(time * 0.4) * 0.01 + 0.025;
-            igr.addColorStop(0, 'rgba(0, 240, 255, ' + (impactPulse + 0.015) + ')');
-            igr.addColorStop(0.15, 'rgba(46, 97, 254, ' + impactPulse + ')');
-            igr.addColorStop(0.5, 'rgba(46, 97, 254, 0.008)');
-            igr.addColorStop(1, 'rgba(3, 8, 16, 0)');
-            fCtx.fillStyle = igr;
-            fCtx.fillRect(0, 0, W, H);
-
-            // ── Subtle secondary glow at bottom right ──
-            var gr2 = fCtx.createRadialGradient(W * 0.75, H * 0.7, 0, W * 0.75, H * 0.7, W * 0.3);
-            gr2.addColorStop(0, 'rgba(46, 97, 254, 0.012)');
-            gr2.addColorStop(1, 'rgba(3, 8, 16, 0)');
-            fCtx.fillStyle = gr2;
-            fCtx.fillRect(0, 0, W, H);
-        }
-
-        /* ====== FLOATING PARTICLES ====== */
-        var particles = [];
-        var PARTICLE_COUNT = 100;
-
-        function generateParticles() {
-            particles = [];
-            for (var i = 0; i < PARTICLE_COUNT; i++) {
-                particles.push({
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    vx: (Math.random() - 0.5) * 0.25,
-                    vy: (Math.random() - 0.5) * 0.2 - 0.08,
-                    size: 0.4 + Math.random() * 1.8,
-                    alpha: 0.15 + Math.random() * 0.45,
-                    color: Math.random() < 0.5 ? '46, 97, 254' : '0, 240, 255',
-                    pulseOffset: Math.random() * Math.PI * 2,
-                    depth: 0.3 + Math.random() * 0.7
-                });
-            }
-        }
-
-        function drawParticles(time) {
-            pCtx.clearRect(0, 0, W, H);
-            var parallaxBaseX = (mouseX - 0.5) * 18;
-            var parallaxBaseY = (mouseY - 0.5) * 12;
-
+            // Update positions
             for (var i = 0; i < particles.length; i++) {
                 var p = particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                if (p.x < -10) p.x = W + 10;
-                if (p.x > W + 10) p.x = -10;
-                if (p.y < -10) p.y = H + 10;
-                if (p.y > H + 10) p.y = -10;
 
-                var drawX = p.x + parallaxBaseX * p.depth;
-                var drawY = p.y + parallaxBaseY * p.depth;
-                var pulse = Math.sin(time * 0.8 + p.pulseOffset) * 0.3 + 0.7;
-                var alpha = p.alpha * pulse;
+                // Mouse repulsion
+                var dmx = p.x - mouseX;
+                var dmy = p.y - mouseY;
+                var distMouse = Math.sqrt(dmx * dmx + dmy * dmy);
+                if (distMouse < MOUSE_RADIUS && distMouse > 0) {
+                    var force = (MOUSE_RADIUS - distMouse) / MOUSE_RADIUS;
+                    var pushX = (dmx / distMouse) * force * 2.5;
+                    var pushY = (dmy / distMouse) * force * 2.5;
+                    p.x += pushX;
+                    p.y += pushY;
+                }
 
-                // Soft glow
-                pCtx.beginPath();
-                pCtx.arc(drawX, drawY, p.size + 3, 0, Math.PI * 2);
-                pCtx.fillStyle = 'rgba(' + p.color + ', ' + (alpha * 0.12) + ')';
-                pCtx.fill();
+                p.x += p.dx;
+                p.y += p.dy;
 
-                // Core dot
-                pCtx.beginPath();
-                pCtx.arc(drawX, drawY, p.size, 0, Math.PI * 2);
-                pCtx.fillStyle = 'rgba(' + p.color + ', ' + alpha + ')';
-                pCtx.fill();
+                // Bounce off edges
+                if (p.x < 0) { p.x = 0; p.dx *= -1; }
+                if (p.x > W) { p.x = W; p.dx *= -1; }
+                if (p.y < 0) { p.y = 0; p.dy *= -1; }
+                if (p.y > H) { p.y = H; p.dy *= -1; }
+            }
+
+            // Draw connections
+            for (var i = 0; i < particles.length; i++) {
+                for (var j = i + 1; j < particles.length; j++) {
+                    var dx = particles[i].x - particles[j].x;
+                    var dy = particles[i].y - particles[j].y;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < maxConnDist) {
+                        var opacity = (1 - dist / maxConnDist) * 0.35;
+
+                        // Check if either particle is near mouse — brighter color
+                        var dmi = Math.sqrt((particles[i].x - mouseX) * (particles[i].x - mouseX) + (particles[i].y - mouseY) * (particles[i].y - mouseY));
+                        var dmj = Math.sqrt((particles[j].x - mouseX) * (particles[j].x - mouseX) + (particles[j].y - mouseY) * (particles[j].y - mouseY));
+                        var nearMouse = dmi < MOUSE_RADIUS || dmj < MOUSE_RADIUS;
+
+                        fCtx.beginPath();
+                        fCtx.moveTo(particles[i].x, particles[i].y);
+                        fCtx.lineTo(particles[j].x, particles[j].y);
+                        fCtx.strokeStyle = nearMouse
+                            ? 'rgba(0, 240, 255, ' + opacity + ')'
+                            : 'rgba(46, 97, 254, ' + opacity + ')';
+                        fCtx.lineWidth = nearMouse ? 0.8 : 0.5;
+                        fCtx.stroke();
+                    }
+                }
+            }
+
+            // Draw particles
+            for (var i = 0; i < particles.length; i++) {
+                var p = particles[i];
+                var dmi = Math.sqrt((p.x - mouseX) * (p.x - mouseX) + (p.y - mouseY) * (p.y - mouseY));
+                var nearMouse = dmi < MOUSE_RADIUS;
+
+                // Glow
+                if (nearMouse) {
+                    fCtx.beginPath();
+                    fCtx.arc(p.x, p.y, p.size + 4, 0, Math.PI * 2);
+                    fCtx.fillStyle = 'rgba(0, 240, 255, 0.08)';
+                    fCtx.fill();
+                }
+
+                // Core
+                fCtx.beginPath();
+                fCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                fCtx.fillStyle = nearMouse
+                    ? 'rgba(0, 240, 255, 0.9)'
+                    : 'rgba(' + p.color + ', 0.8)';
+                fCtx.fill();
             }
         }
 
@@ -5014,15 +5150,10 @@
         function animate() {
             if (!animRunning) return;
             requestAnimationFrame(animate);
-            var time = performance.now() * 0.001;
-            mouseX += (targetMouseX - mouseX) * 0.04;
-            mouseY += (targetMouseY - mouseY) * 0.04;
-            drawShards(time);
-            drawParticles(time);
+            draw();
         }
 
         /* ====== SCROLL — pause when not visible ====== */
-        var heroEl = document.getElementById('home');
         window.addEventListener('scroll', function() {
             var bottom = heroEl.getBoundingClientRect().bottom;
             var wasRunning = animRunning;
