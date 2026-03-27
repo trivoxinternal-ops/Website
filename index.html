@@ -2893,12 +2893,124 @@
             .roi-value { font-size: 1.5rem; }
         }
 
-        /* ── CONTACT ── */
+        /* ── CONTACT — popup on mobile ── */
         @media (max-width: 768px) {
-            .contact-grid { gap: 2rem; margin: 2rem 0; }
-            .contact-form { padding: 1.75rem 1.25rem; }
-            .contact-form h2 { font-size: 1.5rem !important; margin-bottom: 1.25rem !important; }
+            /* Hide the full contact section on mobile */
+            #contact { display: none !important; }
         }
+
+        /* Floating contact button (mobile only) */
+        .mobile-contact-btn {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
+            z-index: 998;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: conic-gradient(from var(--contact-r, 0deg), #2E61FE, #00F0FF, #2E61FE);
+            box-shadow: 0 4px 24px rgba(0,240,255,0.4), 0 0 40px rgba(46,97,254,0.2);
+            animation: contactRotate 3s linear infinite;
+            transition: transform 0.2s;
+        }
+        .mobile-contact-btn::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: 50%;
+            background: var(--dark-bg);
+        }
+        .mobile-contact-btn svg {
+            position: relative;
+            z-index: 1;
+            width: 22px;
+            height: 22px;
+            color: #00F0FF;
+        }
+        .mobile-contact-btn:active { transform: scale(0.92); }
+        @keyframes contactRotate {
+            to { --contact-r: 360deg; }
+        }
+        @property --contact-r {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+        @media (max-width: 768px) {
+            .mobile-contact-btn { display: flex; align-items: center; justify-content: center; }
+        }
+
+        /* Contact popup modal */
+        #contact-popup {
+            position: fixed;
+            inset: 0;
+            z-index: 99998;
+            background: rgba(3,8,16,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #contact-popup.popup-open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        #contact-popup-box {
+            background: rgba(10,16,35,0.98);
+            border: 1px solid rgba(0,240,255,0.2);
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 480px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 24px 20px 32px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
+        }
+        #contact-popup.popup-open #contact-popup-box {
+            transform: translateY(0);
+        }
+        #contact-popup-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(5,8,22,0.8);
+            border: 1px solid rgba(0,240,255,0.3);
+            color: #00F0FF;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+        #contact-popup h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        #contact-popup .popup-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+        #contact-popup .form-group { margin-bottom: 14px; }
+        #contact-popup .form-group label { font-size: 0.8rem; margin-bottom: 4px; }
+        #contact-popup .form-group input,
+        #contact-popup .form-group textarea,
+        #contact-popup .form-group select { font-size: 0.85rem; padding: 10px 12px; }
+        #contact-popup .form-group textarea { min-height: 70px; }
 
         /* 5. FOOTER — redesigned mobile layout */
         @media (max-width: 768px) {
@@ -3019,6 +3131,72 @@
 <body>
     <!-- Notification Container -->
     <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Mobile floating contact button -->
+    <button class="mobile-contact-btn" onclick="document.getElementById('contact-popup').classList.add('popup-open');document.body.style.overflow='hidden';" aria-label="Contact us">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </button>
+
+    <!-- Mobile contact popup -->
+    <div id="contact-popup">
+        <div id="contact-popup-box">
+            <button id="contact-popup-close" onclick="document.getElementById('contact-popup').classList.remove('popup-open');document.body.style.overflow='';">&#10005;</button>
+            <h3>Get In Touch</h3>
+            <p class="popup-subtitle">Tell us about your business and we'll reach out within 24h.</p>
+            <form id="contactFormPopup" onsubmit="submitPopupForm(event)">
+                <div class="form-group">
+                    <label for="popup-name">Name *</label>
+                    <input type="text" id="popup-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="popup-email">Email *</label>
+                    <input type="email" id="popup-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="popup-service">Interested In</label>
+                    <select id="popup-service" name="service">
+                        <option value="">Select...</option>
+                        <option value="voice-agent">Voice Agent</option>
+                        <option value="chatbot">Chatbot</option>
+                        <option value="crm">CRM Automation</option>
+                        <option value="workflow">Workflow Automation</option>
+                        <option value="custom">Custom Solution</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="popup-message">Message *</label>
+                    <textarea id="popup-message" name="message" required placeholder="What do you need automated?"></textarea>
+                </div>
+                <input type="text" name="website" class="honeypot" tabindex="-1" autocomplete="off">
+                <button type="submit" class="trivox-btn primary full-width"><div class="btn-bg"></div><div class="btn-border"></div><div class="btn-light"></div><span class="btn-text">Send Message</span></button>
+            </form>
+        </div>
+    </div>
+    <script>
+    function submitPopupForm(e) {
+        e.preventDefault();
+        // Reuse the same submission logic as the main form
+        var form = document.getElementById('contactFormPopup');
+        var mainForm = document.getElementById('contactForm');
+        if (mainForm) {
+            // Copy values to main form and submit
+            document.getElementById('name').value = document.getElementById('popup-name').value;
+            document.getElementById('email').value = document.getElementById('popup-email').value;
+            document.getElementById('service').value = document.getElementById('popup-service').value;
+            document.getElementById('message').value = document.getElementById('popup-message').value;
+            mainForm.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        }
+        document.getElementById('contact-popup').classList.remove('popup-open');
+        document.body.style.overflow = '';
+    }
+    // Close on backdrop click
+    document.getElementById('contact-popup').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('popup-open');
+            document.body.style.overflow = '';
+        }
+    });
+    </script>
 
 
     <!-- Loading Overlay feature -->
@@ -3584,13 +3762,15 @@
                 }
                 .about-rot-label {
                     display: inline-block;
-                    font-size: 0.72rem;
+                    font-size: 0.82rem;
                     font-weight: 700;
-                    letter-spacing: 3px;
+                    letter-spacing: 4px;
                     text-transform: uppercase;
                     color: var(--cyan);
-                    margin-bottom: 1.1rem;
-                    opacity: 0.8;
+                    margin-bottom: 1rem;
+                    opacity: 0.9;
+                    border-bottom: 1px solid rgba(0,240,255,0.3);
+                    padding-bottom: 6px;
                 }
                 .about-rot-text {
                     font-size: clamp(1.5rem, 3vw, 2.1rem);
@@ -3654,8 +3834,8 @@
                 const sentences = rotator.querySelectorAll('.about-rot-sentence');
                 const dots      = document.querySelectorAll('#about-rot-dots .rot-dot');
                 let current     = 0;
-                let timer       = null;
                 let started     = false;
+                const isMob     = () => window.innerWidth <= 768;
 
                 function showSlide(idx) {
                     sentences[current].classList.remove('rot-active');
@@ -3663,7 +3843,6 @@
                     dots[current].classList.remove('active');
                     const prev = current;
                     setTimeout(() => sentences[prev].classList.remove('rot-exit'), 650);
-
                     current = (idx + sentences.length) % sentences.length;
                     sentences[current].classList.add('rot-active');
                     dots[current].classList.add('active');
@@ -3672,12 +3851,27 @@
                 function start() {
                     if (started) return;
                     started = true;
-                    // show first
                     sentences[0].classList.add('rot-active');
-                    timer = setInterval(() => showSlide(current + 1), 3800);
+                    // Auto-rotate only on desktop
+                    if (!isMob()) {
+                        setInterval(() => showSlide(current + 1), 3800);
+                    }
                 }
 
-                // kick off when section scrolls into view
+                // Dots clickable
+                dots.forEach((dot, i) => {
+                    dot.style.cursor = 'pointer';
+                    dot.addEventListener('click', () => { if (i !== current) showSlide(i); });
+                });
+
+                // Swipe on mobile
+                let sx = 0;
+                rotator.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+                rotator.addEventListener('touchend', e => {
+                    const dx = sx - e.changedTouches[0].clientX;
+                    if (Math.abs(dx) > 40) showSlide(current + (dx > 0 ? 1 : -1));
+                }, { passive: true });
+
                 const observer = new IntersectionObserver(entries => {
                     if (entries[0].isIntersecting) { start(); observer.disconnect(); }
                 }, { threshold: 0.3 });
@@ -3689,19 +3883,19 @@
                 <div class="service-card fade-in">
                     <div class="service-icon"></div>
                     <h3 class="service-title" style="color: #38BDF8;">Our Mission</h3>
-                    <p class="service-description">We help businesses scale with purpose by transforming repetitive work into intelligent, human-friendly automation systems that reclaim time, optimize operations, and unlock sustainable growth.</p>
+                    <p class="service-description">Transform repetitive work into intelligent systems that reclaim time and unlock growth.</p>
                 </div>
 
                 <div class="service-card fade-in">
                     <div class="service-icon"></div>
                     <h3 class="service-title" style="color: #38BDF8;">Our Vision</h3>
-                    <p class="service-description">To become the leading bridge between people and automation—redefining how the world experiences work through human-first technology, and freeing up time for what truly matters.</p>
+                    <p class="service-description">Become the leading bridge between people and automation — human-first technology.</p>
                 </div>
 
                 <div class="service-card fade-in">
                     <div class="service-icon"></div>
                     <h3 class="service-title" style="color: #38BDF8;">Our Values</h3>
-                    <p class="service-description">Purpose, Loyalty, Clarity, Innovation, Empowerment, and Integrity guide everything we do. We build with intention, always focused on freeing up time for what truly matters.</p>
+                    <p class="service-description">Purpose. Loyalty. Clarity. Innovation. Empowerment. Integrity.</p>
                 </div>
             </div>
         </section>
