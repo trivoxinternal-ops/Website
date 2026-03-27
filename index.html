@@ -2727,53 +2727,48 @@
             .image-grid-item:nth-child(7),
             .image-grid-item:nth-child(8) { display: block !important; }
         }
-        /* 2. SERVICES CARDS — text below image on mobile */
+        /* 2. SERVICES CARDS — compact cards with caption below */
         @media (max-width: 768px) {
             .image-grid {
-                gap: 8px !important;
+                gap: 10px !important;
                 padding: 0 !important;
             }
             .image-grid-item {
                 display: flex !important;
                 flex-direction: column !important;
                 height: auto !important;
-                max-height: 200px !important;
-                border-radius: 12px !important;
+                max-height: none !important;
+                border-radius: 10px !important;
                 overflow: hidden !important;
+                border-width: 1px !important;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 12px rgba(46,97,254,0.15) !important;
             }
             .image-grid-item .ai-image {
                 width: 100%;
-                height: 140px !important;
+                height: 110px !important;
                 object-fit: cover;
                 flex-shrink: 0;
             }
-            /* Caption below image — not absolute */
+            /* Caption below image — static, like a photo caption */
             .image-grid-caption {
                 position: static !important;
                 transform: none !important;
-                background: rgba(3, 8, 16, 0.95) !important;
-                padding: 8px 10px !important;
+                background: transparent !important;
+                padding: 6px 8px 8px !important;
+                text-align: center;
             }
             .image-grid-caption h3 {
-                font-size: 13px !important;
+                font-size: 11px !important;
                 font-weight: 600 !important;
-                line-height: 1.3 !important;
-                color: #fff !important;
-                -webkit-text-fill-color: #fff !important;
+                line-height: 1.2 !important;
+                color: rgba(255,255,255,0.85) !important;
+                -webkit-text-fill-color: rgba(255,255,255,0.85) !important;
+                letter-spacing: 0.3px;
             }
             .image-grid-caption p {
-                font-size: 11px !important;
-                line-height: 1.3 !important;
-                color: rgba(255,255,255,0.6) !important;
-                -webkit-text-fill-color: rgba(255,255,255,0.6) !important;
-                max-width: 100%;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
+                display: none !important;
             }
-            /* Hide the explore hint on mobile */
             .img-explore-hint { display: none !important; }
-            /* Remove pseudo overlays */
             .image-grid-item::before,
             .image-grid-item::after { display: none !important; }
         }
@@ -2796,22 +2791,36 @@
             .img-explore-hint { opacity: 1 !important; transform: translateX(-50%) translateY(0) !important; }
         }
 
-        /* 3. MISSION/VISION/VALUES — compact on mobile */
+        /* 3. MISSION/VISION/VALUES — creative mobile layout */
         @media (max-width: 768px) {
             .services-grid { grid-template-columns: 1fr; gap: 8px; }
             /* About section grid override */
             #about > div:last-of-type {
                 grid-template-columns: 1fr !important;
-                gap: 8px !important;
+                gap: 0 !important;
             }
-            .service-card {
-                padding: 14px !important;
+            #about > div:last-of-type .service-card {
+                padding: 16px 18px !important;
                 margin-bottom: 0 !important;
+                border-radius: 0 !important;
+                border-left: 2px solid rgba(0,240,255,0.3) !important;
+                border-right: none !important;
+                border-top: none !important;
+                border-bottom: 1px solid rgba(46,97,254,0.08) !important;
+                background: transparent !important;
+            }
+            #about > div:last-of-type .service-card:first-child {
+                border-top-left-radius: 12px !important;
+            }
+            #about > div:last-of-type .service-card:last-child {
+                border-bottom-left-radius: 12px !important;
+                border-bottom: none !important;
             }
             .service-icon { display: none !important; }
             .service-title {
-                font-size: 16px !important;
-                margin-bottom: 6px !important;
+                font-size: 14px !important;
+                margin-bottom: 4px !important;
+                letter-spacing: 0.5px !important;
             }
             .service-description {
                 font-size: 13px !important;
@@ -2839,7 +2848,9 @@
 
         /* ── ABOUT ── */
         @media (max-width: 768px) {
-            #about-rotator { min-height: 140px; margin-bottom: 3rem; }
+            #about-rotator { min-height: 120px; margin-bottom: 1.5rem; }
+            #about-rot-dots { margin-bottom: 1.5rem !important; }
+            .about-rot-text { font-size: clamp(1.1rem, 4vw, 1.5rem) !important; }
             .about-rot-text br { display: none; }
         }
 
@@ -2922,14 +2933,20 @@
             .notification-container { right: 12px; left: 12px; }
         }
 
-        /* ── ALL SECTIONS — consistent mobile padding ── */
+        /* ── ALL SECTIONS — tighter mobile padding ── */
         @media (max-width: 768px) {
             .section-title { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
             .section-subtitle { font-size: 0.95rem !important; }
-            section { padding: 60px 20px; }
+            section { padding: 36px 20px; }
+            .section-header { margin-bottom: 1.5rem !important; }
+            /* Tighter gap between About and Built & Deployed */
+            #about { padding-bottom: 20px; }
+            #pricing { padding-top: 24px; }
+            /* Services section tight */
+            #services { padding-top: 12px; padding-bottom: 24px; }
         }
         @media (max-width: 480px) {
-            section { padding: 48px 16px; }
+            section { padding: 28px 16px; }
             .section-title { font-size: clamp(1.4rem, 7vw, 1.8rem) !important; }
         }
 
