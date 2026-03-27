@@ -2669,30 +2669,33 @@
                 display: none !important;
             }
 
-            /* Animated TRIVOX logo — visible on mobile only */
+            /* Animated TRIVOX icon — large, centered, fills space */
             .hero-mobile-logo {
                 display: block !important;
-                width: 85%;
-                max-width: 340px;
-                margin: 2rem auto 0;
+                width: 55vw;
+                max-width: 240px;
+                margin: 2.5rem auto 0;
                 position: relative;
                 z-index: 2;
+                flex-shrink: 0;
+            }
+
+            /* Hide "Start Your Automation Journey" on mobile */
+            .hero-cta .trivox-btn.primary {
+                display: none !important;
             }
 
             .hero-image-wrapper { max-width: 100%; }
         }
         @media (max-width: 480px) {
             .hero-title { font-size: clamp(1.65rem, 8vw, 2rem); }
-            .hero-mobile-logo { max-width: 280px; }
+            .hero-mobile-logo { width: 50vw; max-width: 200px; }
         }
 
         /* Hero mobile logo — hidden on desktop */
         .hero-mobile-logo { display: none; }
         .hero-mobile-logo svg { width: 100%; height: auto; display: block; }
-        .hero-mobile-logo text {
-            font-family: 'Sora', sans-serif;
-            font-weight: 800;
-        }
+
         @keyframes heroSparkTravel {
             0%   { stroke-dashoffset: 1200; }
             100% { stroke-dashoffset: -1200; }
@@ -2700,6 +2703,10 @@
         @keyframes heroTrailGrow {
             0%   { stroke-dashoffset: 1200; }
             100% { stroke-dashoffset: 0; }
+        }
+        @keyframes iconPulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(0,240,255,0.3)); }
+            50% { filter: drop-shadow(0 0 20px rgba(0,240,255,0.6)) drop-shadow(0 0 40px rgba(46,97,254,0.3)); }
         }
 
         /* ── SERVICES floating image grid ── */
@@ -3137,39 +3144,60 @@
               </div>
             </div>
 
-            <!-- Animated TRIVOX logo (mobile only) -->
-            <div class="hero-mobile-logo">
-                <svg viewBox="0 0 500 80" xmlns="http://www.w3.org/2000/svg">
+            <!-- Animated TRIVOX icon (mobile only) -->
+            <div class="hero-mobile-logo" style="animation: iconPulseGlow 4s ease-in-out infinite;">
+                <svg viewBox="620 440 860 600" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <linearGradient id="hero-logo-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#2E61FE"/>
-                            <stop offset="50%" stop-color="#00F0FF"/>
-                            <stop offset="100%" stop-color="#2E61FE"/>
-                        </linearGradient>
-                        <linearGradient id="hero-logo-shimmer" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+                        <!-- Shimmer sweep for icon -->
+                        <linearGradient id="hi-shimmer" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
                             <stop offset="0%" stop-color="rgba(0,240,255,0)"/>
                             <stop offset="40%" stop-color="rgba(0,240,255,0)"/>
-                            <stop offset="50%" stop-color="rgba(0,240,255,0.8)"/>
+                            <stop offset="50%" stop-color="rgba(0,240,255,0.9)"/>
                             <stop offset="60%" stop-color="rgba(0,240,255,0)"/>
                             <stop offset="100%" stop-color="rgba(0,240,255,0)"/>
                             <animate attributeName="x1" from="-1" to="1" dur="3s" repeatCount="indefinite"/>
                             <animate attributeName="x2" from="0" to="2" dur="3s" repeatCount="indefinite"/>
                         </linearGradient>
-                        <filter id="hero-glow">
-                            <feGaussianBlur stdDeviation="2" result="blur"/>
-                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                        </filter>
+                        <!-- Spark glow filter -->
+                        <filter id="hi-glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                        <!-- Bottom gradient (white to blue) -->
+                        <linearGradient id="hi-wb" x1="1155" y1="650" x2="1222" y2="1024" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#FFFFFF"/>
+                            <stop offset="50%" stop-color="#CED0FF"/>
+                            <stop offset="100%" stop-color="#3137FD" stop-opacity="0"/>
+                        </linearGradient>
+                        <linearGradient id="hi-bw" x1="1341" y1="998" x2="1341" y2="728" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#2C75FF" stop-opacity="0.5"/>
+                            <stop offset="40%" stop-color="#B2CDFF"/>
+                            <stop offset="74%" stop-color="#FFFFFF"/>
+                        </linearGradient>
                     </defs>
-                    <!-- Base subtle stroke -->
-                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="rgba(46,97,254,0.12)" stroke-width="1">TRIVOX</text>
-                    <!-- Traveling light trail -->
-                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="rgba(0,240,255,0.4)" stroke-width="0.5" stroke-dasharray="1200" style="animation:heroTrailGrow 4s ease forwards;">TRIVOX</text>
-                    <!-- Traveling spark -->
-                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="#00F0FF" stroke-width="0.8" stroke-dasharray="40 1200" filter="url(#hero-glow)" style="animation:heroSparkTravel 3s linear infinite;">TRIVOX</text>
-                    <!-- Shimmer sweep -->
-                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="url(#hero-logo-shimmer)" stroke-width="1.5">TRIVOX</text>
-                    <!-- Gradient fill (subtle) -->
-                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="url(#hero-logo-grad)" stroke-width="0.6" opacity="0.5">TRIVOX</text>
+                    <!-- Layer 1: Base subtle stroke outline -->
+                    <g fill="none" stroke="rgba(46,97,254,0.15)" stroke-width="2">
+                        <path d="M1134.9,541.8l62.5,133.4h185.9c10.9,0,20.9-6.3,25.6-16.2l59.6-127.2c6.6-14-3.7-30.2-19.2-30.2h-288.8C1139.8,501.6,1126.1,523.1,1134.9,541.8z"/>
+                        <path d="M702.9,531.7l59.6,127.2c4.6,9.9,14.6,16.2,25.6,16.2h224.2L942.3,526c-7-14.9-21.9-24.4-38.3-24.4H722C706.5,501.6,696.3,517.7,702.9,531.7z"/>
+                        <path d="M1197.3,675.2L1274,839l67.1,143.2c4.8,10.3,14.4,15.7,24.1,16.2h-182.5c-10.7,0.5-21.5-4.9-26.8-16.2l-143.8-307H1197.3z"/>
+                        <path d="M1207,982.1l46.7-99.8L1274,839l44.4-94.8c4.6-9.9,14.6-16.3,25.6-16.3h134c15.5,0,25.7,16.1,19.2,30.2l-104.9,224.1c-5.3,11.3-16.3,16.7-27,16.2h-182.5C1192.5,997.9,1202.1,992.5,1207,982.1z"/>
+                    </g>
+                    <!-- Layer 2: Traveling spark along paths -->
+                    <g fill="none" stroke="#00F0FF" stroke-width="2.5" stroke-dasharray="60 3000" filter="url(#hi-glow)" style="animation: heroSparkTravel 4s linear infinite;">
+                        <path d="M1134.9,541.8l62.5,133.4h185.9c10.9,0,20.9-6.3,25.6-16.2l59.6-127.2c6.6-14-3.7-30.2-19.2-30.2h-288.8C1139.8,501.6,1126.1,523.1,1134.9,541.8z"/>
+                        <path d="M702.9,531.7l59.6,127.2c4.6,9.9,14.6,16.2,25.6,16.2h224.2L942.3,526c-7-14.9-21.9-24.4-38.3-24.4H722C706.5,501.6,696.3,517.7,702.9,531.7z"/>
+                        <path d="M1197.3,675.2L1274,839l67.1,143.2c4.8,10.3,14.4,15.7,24.1,16.2h-182.5c-10.7,0.5-21.5-4.9-26.8-16.2l-143.8-307H1197.3z"/>
+                        <path d="M1207,982.1l46.7-99.8L1274,839l44.4-94.8c4.6-9.9,14.6-16.3,25.6-16.3h134c15.5,0,25.7,16.1,19.2,30.2l-104.9,224.1c-5.3,11.3-16.3,16.7-27,16.2h-182.5C1192.5,997.9,1202.1,992.5,1207,982.1z"/>
+                    </g>
+                    <!-- Layer 3: Shimmer sweep -->
+                    <g fill="none" stroke="url(#hi-shimmer)" stroke-width="3">
+                        <path d="M1134.9,541.8l62.5,133.4h185.9c10.9,0,20.9-6.3,25.6-16.2l59.6-127.2c6.6-14-3.7-30.2-19.2-30.2h-288.8C1139.8,501.6,1126.1,523.1,1134.9,541.8z"/>
+                        <path d="M702.9,531.7l59.6,127.2c4.6,9.9,14.6,16.2,25.6,16.2h224.2L942.3,526c-7-14.9-21.9-24.4-38.3-24.4H722C706.5,501.6,696.3,517.7,702.9,531.7z"/>
+                        <path d="M1197.3,675.2L1274,839l67.1,143.2c4.8,10.3,14.4,15.7,24.1,16.2h-182.5c-10.7,0.5-21.5-4.9-26.8-16.2l-143.8-307H1197.3z"/>
+                        <path d="M1207,982.1l46.7-99.8L1274,839l44.4-94.8c4.6-9.9,14.6-16.3,25.6-16.3h134c15.5,0,25.7,16.1,19.2,30.2l-104.9,224.1c-5.3,11.3-16.3,16.7-27,16.2h-182.5C1192.5,997.9,1202.1,992.5,1207,982.1z"/>
+                    </g>
+                    <!-- Layer 4: Filled shape (subtle, like original logo) -->
+                    <path fill="#FFFFFF" opacity="0.9" d="M1134.9,541.8l62.5,133.4h185.9c10.9,0,20.9-6.3,25.6-16.2l59.6-127.2c6.6-14-3.7-30.2-19.2-30.2h-288.8C1139.8,501.6,1126.1,523.1,1134.9,541.8z"/>
+                    <path fill="#FFFFFF" opacity="0.9" d="M702.9,531.7l59.6,127.2c4.6,9.9,14.6,16.2,25.6,16.2h224.2L942.3,526c-7-14.9-21.9-24.4-38.3-24.4H722C706.5,501.6,696.3,517.7,702.9,531.7z"/>
+                    <path fill="url(#hi-wb)" d="M1197.3,675.2L1274,839l67.1,143.2c4.8,10.3,14.4,15.7,24.1,16.2h-182.5c-10.7,0.5-21.5-4.9-26.8-16.2l-143.8-307H1197.3z"/>
+                    <path fill="url(#hi-bw)" d="M1207,982.1l46.7-99.8L1274,839l44.4-94.8c4.6-9.9,14.6-16.3,25.6-16.3h134c15.5,0,25.7,16.1,19.2,30.2l-104.9,224.1c-5.3,11.3-16.3,16.7-27,16.2h-182.5C1192.5,997.9,1202.1,992.5,1207,982.1z"/>
                 </svg>
             </div>
 
