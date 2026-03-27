@@ -2635,8 +2635,19 @@
 
         /* ── HERO ── */
         @media (max-width: 768px) {
-            .hero { padding: 4.5rem 1.25rem 0; min-height: auto; }
-            .hero-split { flex-direction: column; text-align: center; }
+            .hero {
+                min-height: 100svh;
+                padding: 5rem 1.25rem 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .hero-split {
+                flex-direction: column;
+                text-align: center;
+                flex: 0 0 auto;
+            }
             .hero-left, .hero-right { flex: 1 1 100%; }
             .hero-title { font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1.15; }
             .hero-subtitle { font-size: 1rem; }
@@ -2653,15 +2664,42 @@
                 max-width: 280px;
             }
 
-            /* 1. HERO STATS — hidden on mobile */
+            /* Hero stats — hidden on mobile */
             .hero-stats {
                 display: none !important;
+            }
+
+            /* Animated TRIVOX logo — visible on mobile only */
+            .hero-mobile-logo {
+                display: block !important;
+                width: 85%;
+                max-width: 340px;
+                margin: 2rem auto 0;
+                position: relative;
+                z-index: 2;
             }
 
             .hero-image-wrapper { max-width: 100%; }
         }
         @media (max-width: 480px) {
             .hero-title { font-size: clamp(1.65rem, 8vw, 2rem); }
+            .hero-mobile-logo { max-width: 280px; }
+        }
+
+        /* Hero mobile logo — hidden on desktop */
+        .hero-mobile-logo { display: none; }
+        .hero-mobile-logo svg { width: 100%; height: auto; display: block; }
+        .hero-mobile-logo text {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+        }
+        @keyframes heroSparkTravel {
+            0%   { stroke-dashoffset: 1200; }
+            100% { stroke-dashoffset: -1200; }
+        }
+        @keyframes heroTrailGrow {
+            0%   { stroke-dashoffset: 1200; }
+            100% { stroke-dashoffset: 0; }
         }
 
         /* ── SERVICES floating image grid ── */
@@ -3028,6 +3066,42 @@
               </div>
               <div class="hero-right">
               </div>
+            </div>
+
+            <!-- Animated TRIVOX logo (mobile only) -->
+            <div class="hero-mobile-logo">
+                <svg viewBox="0 0 500 80" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="hero-logo-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#2E61FE"/>
+                            <stop offset="50%" stop-color="#00F0FF"/>
+                            <stop offset="100%" stop-color="#2E61FE"/>
+                        </linearGradient>
+                        <linearGradient id="hero-logo-shimmer" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+                            <stop offset="0%" stop-color="rgba(0,240,255,0)"/>
+                            <stop offset="40%" stop-color="rgba(0,240,255,0)"/>
+                            <stop offset="50%" stop-color="rgba(0,240,255,0.8)"/>
+                            <stop offset="60%" stop-color="rgba(0,240,255,0)"/>
+                            <stop offset="100%" stop-color="rgba(0,240,255,0)"/>
+                            <animate attributeName="x1" from="-1" to="1" dur="3s" repeatCount="indefinite"/>
+                            <animate attributeName="x2" from="0" to="2" dur="3s" repeatCount="indefinite"/>
+                        </linearGradient>
+                        <filter id="hero-glow">
+                            <feGaussianBlur stdDeviation="2" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                    </defs>
+                    <!-- Base subtle stroke -->
+                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="rgba(46,97,254,0.12)" stroke-width="1">TRIVOX</text>
+                    <!-- Traveling light trail -->
+                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="rgba(0,240,255,0.4)" stroke-width="0.5" stroke-dasharray="1200" style="animation:heroTrailGrow 4s ease forwards;">TRIVOX</text>
+                    <!-- Traveling spark -->
+                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="#00F0FF" stroke-width="0.8" stroke-dasharray="40 1200" filter="url(#hero-glow)" style="animation:heroSparkTravel 3s linear infinite;">TRIVOX</text>
+                    <!-- Shimmer sweep -->
+                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="url(#hero-logo-shimmer)" stroke-width="1.5">TRIVOX</text>
+                    <!-- Gradient fill (subtle) -->
+                    <text x="250" y="62" text-anchor="middle" font-size="76" fill="transparent" stroke="url(#hero-logo-grad)" stroke-width="0.6" opacity="0.5">TRIVOX</text>
+                </svg>
             </div>
 
             <div class="hero-stats" id="heroStats">
