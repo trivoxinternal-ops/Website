@@ -2742,10 +2742,11 @@
                 overflow: hidden !important;
                 border-width: 1px !important;
                 box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 12px rgba(46,97,254,0.15) !important;
+                background: rgba(8,14,30,0.95) !important;
             }
             .image-grid-item .ai-image {
                 width: 100%;
-                height: 110px !important;
+                height: 105px !important;
                 object-fit: cover;
                 flex-shrink: 0;
             }
@@ -2754,16 +2755,16 @@
                 position: static !important;
                 transform: none !important;
                 background: transparent !important;
-                padding: 6px 8px 8px !important;
+                padding: 5px 6px 4px !important;
                 text-align: center;
             }
             .image-grid-caption h3 {
-                font-size: 11px !important;
+                font-size: 12px !important;
                 font-weight: 600 !important;
-                line-height: 1.2 !important;
-                color: rgba(255,255,255,0.85) !important;
-                -webkit-text-fill-color: rgba(255,255,255,0.85) !important;
-                letter-spacing: 0.3px;
+                line-height: 1.15 !important;
+                color: rgba(255,255,255,0.9) !important;
+                -webkit-text-fill-color: rgba(255,255,255,0.9) !important;
+                letter-spacing: 0.2px;
             }
             .image-grid-caption p {
                 display: none !important;
@@ -2900,33 +2901,79 @@
             .contact-form h2 { font-size: 1.5rem !important; margin-bottom: 1.25rem !important; }
         }
 
-        /* 5. FOOTER — clean mobile layout */
+        /* 5. FOOTER — redesigned mobile layout */
         @media (max-width: 768px) {
             .footer {
                 background: #030810;
-                padding: 24px 24px 0;
+                padding: 28px 20px 0;
             }
             .footer-content {
-                grid-template-columns: 1fr;
-                gap: 24px;
-                margin-bottom: 24px;
+                display: grid !important;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 20px 16px;
+                margin-bottom: 20px;
+            }
+            /* Brand spans full width */
+            .footer-brand {
+                grid-column: 1 / -1;
             }
             .footer-brand .footer-logo {
-                height: 36px !important;
+                height: 32px !important;
             }
-            .footer-brand p,
+            .footer-brand p {
+                font-size: 13px;
+                margin-top: 8px !important;
+                line-height: 1.5;
+            }
+            /* Services (left) & Company (right) — side by side */
+            .footer-section:nth-of-type(1) { grid-column: 1; }
+            .footer-section:nth-of-type(2) { grid-column: 2; }
+            /* Contact Us — full width below */
+            .footer-section:nth-of-type(3) {
+                grid-column: 1 / -1;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                align-items: center;
+            }
+            .footer-section:nth-of-type(3) h4 {
+                width: 100%;
+            }
+            .footer-section h4 {
+                font-size: 0.7rem;
+                margin-bottom: 8px;
+                letter-spacing: 2.5px;
+            }
             .footer-section a,
             .footer-section span,
             .footer-contact-item a,
             .footer-contact-item span {
-                font-size: 14px;
+                font-size: 13px;
             }
-            .footer-section h4 { font-size: 0.8rem; }
             .footer-section ul { gap: 0; }
-            .footer-section li { margin-bottom: 4px; }
-            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; padding: 16px 0; }
-            .footer-big-text { display: none !important; }
+            .footer-section li { margin-bottom: 3px; }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                padding: 16px 0 12px;
+            }
+            .footer-bottom p { font-size: 12px; }
+            /* Show animated TRIVOX text on mobile too */
+            .footer-big-text {
+                display: block !important;
+                overflow: hidden;
+                margin: 12px auto 0;
+                padding-bottom: 8px;
+            }
+            /* Mobile TRIVOX footer animation */
+            .footer-mobile-logo {
+                display: block !important;
+            }
         }
+        /* Hide mobile footer logo on desktop */
+        .footer-mobile-logo { display: none; }
 
         /* ── NOTIFICATIONS ── */
         @media (max-width: 768px) {
@@ -3162,7 +3209,7 @@
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('chatbots')">
                     <img src="AI Messaging Assistant.png" alt="AI Messaging Assistant" class="ai-image">
                     <div class="image-grid-caption">
-                        <h3 style="color: var(--cyan);">AI Messenging Assistant</h3>
+                        <h3 style="color: var(--cyan);">Messaging Assistant</h3>
                         <p style="color: var(--text-gray);">Multi-channel communication automation</p>
                     </div>
                     <span class="img-explore-hint">Tap to explore</span>
@@ -3172,7 +3219,7 @@
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('voice')">
                     <img src="AI Voice Assistant.png" alt="AI Voice Assistant" class="ai-image">
                     <div class="image-grid-caption">
-                        <h3 style="color: var(--cyan);">AI Voice Assistant</h3>
+                        <h3 style="color: var(--cyan);">Voice Assistant</h3>
                         <p style="color: var(--text-gray);">Human-like voice interactions</p>
                     </div>
                     <span class="img-explore-hint">Tap to explore</span>
@@ -3192,7 +3239,7 @@
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('appointment')">
                     <img src="AI Appointment Scheduling.png" alt="AI Appointment Scheduling" class="ai-image">
                     <div class="image-grid-caption">
-                        <h3 style="color: var(--cyan);">AI Appointment Scheduling</h3>
+                        <h3 style="color: var(--cyan);">Appointment Scheduling</h3>
                         <p style="color: var(--text-gray);">Automated scheduling 24/7</p>
                     </div>
                     <span class="img-explore-hint">Tap to explore</span>
@@ -3212,7 +3259,7 @@
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('support')">
                     <img src="AI Customer Support.png" alt="AI Customer Support" class="ai-image">
                     <div class="image-grid-caption">
-                        <h3 style="color: var(--cyan);">AI Customer Support</h3>
+                        <h3 style="color: var(--cyan);">Customer Support</h3>
                         <p style="color: var(--text-gray);">24/7 intelligent assistance</p>
                     </div>
                     <span class="img-explore-hint">Tap to explore</span>
@@ -3222,7 +3269,7 @@
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('custom')">
                     <img src="Custom AI Architecture.png" alt="Custom AI Architecture" class="ai-image">
                     <div class="image-grid-caption">
-                        <h3 style="color: var(--cyan);">Custom AI Solutions</h3>
+                        <h3 style="color: var(--cyan);">Custom Solutions</h3>
                         <p style="color: var(--text-gray);">Built around your workflow</p>
                     </div>
                     <span class="img-explore-hint">Tap to explore</span>
@@ -3232,7 +3279,7 @@
                 <div class="image-grid-item clickable fade-in" onclick="openServiceModal('industry')">
                     <img src="Agonstic AI Systems.png" alt="Agnostic AI Systems" class="ai-image">
                     <div class="image-grid-caption">
-                        <h3 style="color: var(--cyan);">Industry-Agnostic AI</h3>
+                        <h3 style="color: var(--cyan);">Industry-Agnostic</h3>
                         <p style="color: var(--text-gray);">Works across every sector</p>
                     </div>
                     <span class="img-explore-hint">Tap to explore</span>
