@@ -3884,9 +3884,43 @@
                 startAuto();
             }
 
-            /* Pause on touch */
-            wrap.addEventListener('touchstart', stopAuto, { passive: true });
-            wrap.addEventListener('touchend', function() {
+            /* Touch swipe to navigate */
+            var touchStartX = 0;
+            var touchStartY = 0;
+            var isSwiping = false;
+
+            wrap.addEventListener('touchstart', function(e) {
+                stopAuto();
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                isSwiping = false;
+                track.style.transition = 'none';
+            }, { passive: true });
+
+            wrap.addEventListener('touchmove', function(e) {
+                if (!isMobile()) return;
+                var dx = e.touches[0].clientX - touchStartX;
+                var dy = e.touches[0].clientY - touchStartY;
+                // Only swipe horizontally
+                if (!isSwiping && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) {
+                    isSwiping = true;
+                }
+                if (isSwiping) {
+                    e.preventDefault();
+                    var unit = getCardUnit();
+                    var offset = -(idx * unit) + dx;
+                    track.style.transform = 'translateX(' + offset + 'px)';
+                }
+            }, { passive: false });
+
+            wrap.addEventListener('touchend', function(e) {
+                track.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+                if (isSwiping) {
+                    var dx = e.changedTouches[0].clientX - touchStartX;
+                    if (dx < -40 && idx < getMax()) idx++;
+                    else if (dx > 40 && idx > 0) idx--;
+                }
+                update();
                 setTimeout(startAuto, 4000);
             }, { passive: true });
 
