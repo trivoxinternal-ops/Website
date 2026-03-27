@@ -2637,23 +2637,25 @@
         @media (max-width: 768px) {
             .hero {
                 min-height: 100svh;
-                padding: 0 1.25rem;
+                padding: 70px 1.25rem 24px;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
+                justify-content: space-between;
                 align-items: center;
             }
+            /* Top spacer pushes content down from navbar */
             .hero-split {
                 flex-direction: column;
                 text-align: center;
                 flex: 0 0 auto;
+                margin-top: auto;
             }
             .hero-left, .hero-right { flex: 1 1 100%; }
             .hero-badge { margin-bottom: 0.8rem; }
             .hero-title { font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1.15; margin-bottom: 0.8rem; }
             .hero-subtitle { font-size: 0.95rem; margin-bottom: 1.2rem; }
 
-            /* Hero buttons — stacked, centered, auto width, max 280px */
+            /* Hero buttons */
             .hero-cta {
                 flex-direction: column;
                 align-items: center;
@@ -2670,15 +2672,18 @@
                 display: none !important;
             }
 
-            /* Animated TRIVOX icon — centered with float animation */
+            /* Animated TRIVOX icon — grows to fill remaining space */
             .hero-mobile-logo {
-                display: block !important;
-                width: 32vw;
-                max-width: 140px;
-                margin: 1.5rem auto 0;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                flex: 1 1 auto;
+                width: 100%;
+                max-width: 160px;
+                margin: 0 auto;
+                padding: 1rem 0;
                 position: relative;
                 z-index: 2;
-                flex-shrink: 0;
                 animation: iconFloat 4s ease-in-out infinite, iconPulseGlow 4s ease-in-out infinite;
             }
 
@@ -2794,36 +2799,36 @@
             .img-explore-hint { opacity: 1 !important; transform: translateX(-50%) translateY(0) !important; }
         }
 
-        /* 3. MISSION/VISION/VALUES — creative mobile layout */
+        /* 3. MISSION/VISION/VALUES — horizontal scroll cards */
         @media (max-width: 768px) {
             .services-grid { grid-template-columns: 1fr; gap: 8px; }
-            /* About section grid override */
+            /* Horizontal scrolling strip */
             #about > div:last-of-type {
-                grid-template-columns: 1fr !important;
-                gap: 0 !important;
+                display: flex !important;
+                gap: 12px !important;
+                overflow-x: auto !important;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                padding: 0 0 8px !important;
+                scrollbar-width: none;
             }
+            #about > div:last-of-type::-webkit-scrollbar { display: none; }
             #about > div:last-of-type .service-card {
-                padding: 16px 18px !important;
+                flex: 0 0 72vw !important;
+                min-width: 72vw !important;
+                scroll-snap-align: center;
+                padding: 20px !important;
                 margin-bottom: 0 !important;
-                border-radius: 0 !important;
-                border-left: 2px solid rgba(0,240,255,0.3) !important;
-                border-right: none !important;
-                border-top: none !important;
-                border-bottom: 1px solid rgba(46,97,254,0.08) !important;
-                background: transparent !important;
-            }
-            #about > div:last-of-type .service-card:first-child {
-                border-top-left-radius: 12px !important;
-            }
-            #about > div:last-of-type .service-card:last-child {
-                border-bottom-left-radius: 12px !important;
-                border-bottom: none !important;
+                border-radius: 14px !important;
+                border: 1px solid rgba(0,240,255,0.15) !important;
+                background: rgba(10,18,35,0.5) !important;
             }
             .service-icon { display: none !important; }
             .service-title {
-                font-size: 14px !important;
-                margin-bottom: 4px !important;
-                letter-spacing: 0.5px !important;
+                font-size: 15px !important;
+                margin-bottom: 8px !important;
+                letter-spacing: 1px !important;
+                text-transform: uppercase !important;
             }
             .service-description {
                 font-size: 13px !important;
@@ -2905,15 +2910,33 @@
             #contact { display: none !important; }
         }
 
-        /* Floating contact button (mobile only) */
-        .mobile-contact-btn {
+        /* Floating contact button + label (mobile only) */
+        .mobile-contact-wrap {
             display: none;
             position: fixed;
             bottom: 24px;
-            right: 20px;
+            right: 16px;
             z-index: 998;
-            width: 56px;
-            height: 56px;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .mobile-contact-label {
+            background: rgba(10,16,35,0.92);
+            border: 1px solid rgba(0,240,255,0.25);
+            color: #00F0FF;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 20px;
+            white-space: nowrap;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        }
+        .mobile-contact-btn {
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
@@ -2921,6 +2944,8 @@
             box-shadow: 0 4px 24px rgba(0,240,255,0.4), 0 0 40px rgba(46,97,254,0.2);
             animation: contactRotate 3s linear infinite;
             transition: transform 0.2s;
+            position: relative;
+            flex-shrink: 0;
         }
         .mobile-contact-btn::after {
             content: '';
@@ -2932,11 +2957,11 @@
         .mobile-contact-btn svg {
             position: relative;
             z-index: 1;
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             color: #00F0FF;
         }
-        .mobile-contact-btn:active { transform: scale(0.92); }
+        .mobile-contact-wrap:active .mobile-contact-btn { transform: scale(0.92); }
         @keyframes contactRotate {
             to { --contact-r: 360deg; }
         }
@@ -2946,7 +2971,7 @@
             inherits: false;
         }
         @media (max-width: 768px) {
-            .mobile-contact-btn { display: flex; align-items: center; justify-content: center; }
+            .mobile-contact-wrap { display: flex; }
         }
 
         /* Contact popup modal */
@@ -3138,10 +3163,13 @@
     <!-- Notification Container -->
     <div class="notification-container" id="notificationContainer"></div>
 
-    <!-- Mobile floating contact button -->
-    <button class="mobile-contact-btn" onclick="document.getElementById('contact-popup').classList.add('popup-open');document.body.style.overflow='hidden';" aria-label="Contact us">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    </button>
+    <!-- Mobile floating contact button with label -->
+    <div class="mobile-contact-wrap" onclick="document.getElementById('contact-popup').classList.add('popup-open');document.body.style.overflow='hidden';">
+        <span class="mobile-contact-label">Contact Us</span>
+        <button class="mobile-contact-btn" aria-label="Contact us">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+    </div>
 
     <!-- Mobile contact popup -->
     <div id="contact-popup">
@@ -3888,20 +3916,20 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
                 <div class="service-card fade-in">
                     <div class="service-icon"></div>
-                    <h3 class="service-title" style="color: #38BDF8;">Our Mission</h3>
+                    <h3 class="service-title" style="color: #38BDF8;">Mission</h3>
                     <p class="service-description">Transform repetitive work into intelligent systems that reclaim time and unlock growth.</p>
                 </div>
 
                 <div class="service-card fade-in">
                     <div class="service-icon"></div>
-                    <h3 class="service-title" style="color: #38BDF8;">Our Vision</h3>
-                    <p class="service-description">Become the leading bridge between people and automation — human-first technology.</p>
+                    <h3 class="service-title" style="color: #38BDF8;">Vision</h3>
+                    <p class="service-description">The leading bridge between people and automation — human-first technology, always.</p>
                 </div>
 
                 <div class="service-card fade-in">
                     <div class="service-icon"></div>
-                    <h3 class="service-title" style="color: #38BDF8;">Our Values</h3>
-                    <p class="service-description">Purpose. Loyalty. Clarity. Innovation. Empowerment. Integrity.</p>
+                    <h3 class="service-title" style="color: #38BDF8;">Values</h3>
+                    <p class="service-description">Purpose &middot; Loyalty &middot; Clarity &middot; Innovation &middot; Empowerment &middot; Integrity</p>
                 </div>
             </div>
         </section>
