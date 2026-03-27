@@ -2636,7 +2636,7 @@
         /* ── NAV ── */
         @media (max-width: 768px) {
             .nav-container { padding: 0.5rem 1rem; justify-content: center; }
-            .nav-logo-img { height: 48px; }
+            .nav-logo-img { height: 52px; }
         }
 
         /* ── HERO ── */
@@ -2646,17 +2646,19 @@
                 padding: 70px 1.25rem 24px;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                justify-content: center;
                 align-items: center;
+                text-align: center;
             }
-            /* Top spacer pushes content down from navbar */
             .hero-split {
                 flex-direction: column;
                 text-align: center;
                 flex: 0 0 auto;
-                margin-top: auto;
+                width: 100%;
+                align-items: center;
             }
-            .hero-left, .hero-right { flex: 1 1 100%; }
+            .hero-left, .hero-right { flex: 1 1 100%; width: 100%; }
+            .hero-left { display: flex; flex-direction: column; align-items: center; }
             .hero-badge { margin-bottom: 0.8rem; }
             .hero-title { font-size: clamp(1.9rem, 7vw, 2.6rem); line-height: 1.15; margin-bottom: 0.8rem; }
             .hero-subtitle { font-size: 0.95rem; margin-bottom: 1.2rem; }
@@ -2678,16 +2680,12 @@
                 display: none !important;
             }
 
-            /* Animated TRIVOX icon — grows to fill remaining space */
+            /* Animated TRIVOX icon — centered below button */
             .hero-mobile-logo {
-                display: flex !important;
-                align-items: center;
-                justify-content: center;
-                flex: 1 1 auto;
-                width: 100%;
-                max-width: 160px;
-                margin: 0 auto;
-                padding: 1rem 0;
+                display: block !important;
+                width: 30vw;
+                max-width: 130px;
+                margin: 2rem auto 0;
                 position: relative;
                 z-index: 2;
                 animation: iconFloat 4s ease-in-out infinite, iconPulseGlow 4s ease-in-out infinite;
@@ -2828,6 +2826,11 @@
                 border-radius: 14px !important;
                 border: 1px solid rgba(0,240,255,0.15) !important;
                 background: rgba(10,18,35,0.5) !important;
+                text-align: center !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
             }
             .service-icon { display: none !important; }
             .service-title {
