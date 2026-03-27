@@ -352,17 +352,22 @@
             .nav-links {
                 display: none;
             }
-            
+
             .mobile-menu-toggle {
-                display: flex;
+                display: none;
             }
-            
+
+            .mobile-nav-overlay {
+                display: none !important;
+            }
+
             .nav-logo-img {
-                height: 38px;
+                height: 48px;
             }
-            
+
             .nav-container {
                 padding: 0.7rem 1.5rem;
+                justify-content: center;
             }
         }
 
@@ -2630,7 +2635,8 @@
 
         /* ── NAV ── */
         @media (max-width: 768px) {
-            .nav-container { padding: 0.6rem 1rem; }
+            .nav-container { padding: 0.5rem 1rem; justify-content: center; }
+            .nav-logo-img { height: 48px; }
         }
 
         /* ── HERO ── */
