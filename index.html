@@ -3772,28 +3772,28 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                width: 65vw;
-                max-width: 480px;
+                width: 90vw;
+                max-width: 700px;
                 pointer-events: none;
                 z-index: 3;
                 opacity: 0;
                 transition: opacity 0.5s ease;
             }
-            #trivox-wm.wm-show { opacity: 0.15; }
+            #trivox-wm.wm-show { opacity: 0.35; }
             @media (max-width: 768px) {
-                #trivox-wm { width: 85vw; max-width: 340px; }
-                #trivox-wm.wm-show { opacity: 0.12; }
+                #trivox-wm { width: 110vw; max-width: none; }
+                #trivox-wm.wm-show { opacity: 0.25; }
             }
         </style>
         <svg id="trivox-wm" viewBox="600 420 900 640" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="wm-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#2E61FE"/>
+                    <stop offset="0%" stop-color="#4A7AFF"/>
                     <stop offset="50%" stop-color="#00F0FF"/>
-                    <stop offset="100%" stop-color="#2E61FE"/>
+                    <stop offset="100%" stop-color="#4A7AFF"/>
                 </linearGradient>
             </defs>
-            <g fill="none" stroke="url(#wm-grad)" stroke-width="2.5">
+            <g fill="none" stroke="url(#wm-grad)" stroke-width="4">
                 <path d="M1134.9,541.8l62.5,133.4h185.9c10.9,0,20.9-6.3,25.6-16.2l59.6-127.2c6.6-14-3.7-30.2-19.2-30.2h-288.8C1139.8,501.6,1126.1,523.1,1134.9,541.8z"/>
                 <path d="M702.9,531.7l59.6,127.2c4.6,9.9,14.6,16.2,25.6,16.2h224.2L942.3,526c-7-14.9-21.9-24.4-38.3-24.4H722C706.5,501.6,696.3,517.7,702.9,531.7z"/>
                 <path d="M1197.3,675.2L1274,839l67.1,143.2c4.8,10.3,14.4,15.7,24.1,16.2h-182.5c-10.7,0.5-21.5-4.9-26.8-16.2l-143.8-307H1197.3z"/>
