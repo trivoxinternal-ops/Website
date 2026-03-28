@@ -3765,61 +3765,6 @@
         });
         </script>
 
-        <!-- Watermark: fixed center, hidden on hero/services via scroll JS -->
-        <style>
-            #trivox-wm {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 90vw;
-                max-width: 700px;
-                pointer-events: none;
-                z-index: 3;
-                opacity: 0;
-                transition: opacity 0.5s ease;
-            }
-            #trivox-wm.wm-show { opacity: 0.06; }
-            @media (max-width: 768px) {
-                #trivox-wm { width: 120vw; max-width: none; }
-                #trivox-wm.wm-show { opacity: 0.045; }
-            }
-        </style>
-        <svg id="trivox-wm" viewBox="600 420 900 640" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="wm-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#4A7AFF"/>
-                    <stop offset="50%" stop-color="#00F0FF"/>
-                    <stop offset="100%" stop-color="#4A7AFF"/>
-                </linearGradient>
-            </defs>
-            <g fill="none" stroke="url(#wm-grad)" stroke-width="6">
-                <path d="M1134.9,541.8l62.5,133.4h185.9c10.9,0,20.9-6.3,25.6-16.2l59.6-127.2c6.6-14-3.7-30.2-19.2-30.2h-288.8C1139.8,501.6,1126.1,523.1,1134.9,541.8z"/>
-                <path d="M702.9,531.7l59.6,127.2c4.6,9.9,14.6,16.2,25.6,16.2h224.2L942.3,526c-7-14.9-21.9-24.4-38.3-24.4H722C706.5,501.6,696.3,517.7,702.9,531.7z"/>
-                <path d="M1197.3,675.2L1274,839l67.1,143.2c4.8,10.3,14.4,15.7,24.1,16.2h-182.5c-10.7,0.5-21.5-4.9-26.8-16.2l-143.8-307H1197.3z"/>
-                <path d="M1207,982.1l46.7-99.8L1274,839l44.4-94.8c4.6-9.9,14.6-16.3,25.6-16.3h134c15.5,0,25.7,16.1,19.2,30.2l-104.9,224.1c-5.3,11.3-16.3,16.7-27,16.2h-182.5C1192.5,997.9,1202.1,992.5,1207,982.1z"/>
-            </g>
-        </svg>
-        <script>
-        (function(){
-            var wm = document.getElementById('trivox-wm');
-            var about = document.getElementById('about');
-            if (!wm || !about) return;
-            // Show watermark once user scrolls past services into about
-            function check() {
-                var rect = about.getBoundingClientRect();
-                // Show when top of about is at or above bottom of viewport
-                if (rect.top < window.innerHeight) {
-                    wm.classList.add('wm-show');
-                } else {
-                    wm.classList.remove('wm-show');
-                }
-            }
-            window.addEventListener('scroll', check, { passive: true });
-            check();
-        })();
-        </script>
-
         <!-- About Section with AI Image -->
         <section id="about">
             <div class="section-header fade-in">
@@ -3906,7 +3851,16 @@
                 }
             </style>
 
-            <div id="about-rotator">
+            <div id="about-rotator" style="position:relative;">
+                <!-- Watermark V icon behind rotator text -->
+                <svg viewBox="600 420 900 640" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:320px;height:auto;opacity:0.08;pointer-events:none;z-index:0;">
+                    <g fill="none" stroke="#4A7AFF" stroke-width="5">
+                        <path d="M1134.9,541.8l62.5,133.4h185.9c10.9,0,20.9-6.3,25.6-16.2l59.6-127.2c6.6-14-3.7-30.2-19.2-30.2h-288.8C1139.8,501.6,1126.1,523.1,1134.9,541.8z"/>
+                        <path d="M702.9,531.7l59.6,127.2c4.6,9.9,14.6,16.2,25.6,16.2h224.2L942.3,526c-7-14.9-21.9-24.4-38.3-24.4H722C706.5,501.6,696.3,517.7,702.9,531.7z"/>
+                        <path d="M1197.3,675.2L1274,839l67.1,143.2c4.8,10.3,14.4,15.7,24.1,16.2h-182.5c-10.7,0.5-21.5-4.9-26.8-16.2l-143.8-307H1197.3z"/>
+                        <path d="M1207,982.1l46.7-99.8L1274,839l44.4-94.8c4.6-9.9,14.6-16.3,25.6-16.3h134c15.5,0,25.7,16.1,19.2,30.2l-104.9,224.1c-5.3,11.3-16.3,16.7-27,16.2h-182.5C1192.5,997.9,1202.1,992.5,1207,982.1z"/>
+                    </g>
+                </svg>
                 <div class="about-rot-sentence" data-index="0">
                     <span class="about-rot-label">Who We Are</span>
                     <p class="about-rot-text">At Trivox, automation isn't just about speed —<br>it's about <em>freeing people</em> to do what truly matters.</p>
