@@ -3777,12 +3777,18 @@
                 height: auto;
                 z-index: 1;
                 pointer-events: none;
+                opacity: 0;
+                transition: opacity 0.6s ease;
+            }
+            .trivox-watermark.wm-visible {
                 opacity: 0.12;
             }
             @media (max-width: 768px) {
                 .trivox-watermark {
                     width: 95vw;
                     max-width: 400px;
+                }
+                .trivox-watermark.wm-visible {
                     opacity: 0.1;
                 }
             }
@@ -3802,6 +3808,24 @@
                 <path d="M1207,982.1l46.7-99.8L1274,839l44.4-94.8c4.6-9.9,14.6-16.3,25.6-16.3h134c15.5,0,25.7,16.1,19.2,30.2l-104.9,224.1c-5.3,11.3-16.3,16.7-27,16.2h-182.5C1192.5,997.9,1202.1,992.5,1207,982.1z"/>
             </g>
         </svg>
+
+        <script>
+        (function(){
+            var wm = document.querySelector('.trivox-watermark');
+            var about = document.getElementById('about');
+            if (!wm || !about) return;
+            var obs = new IntersectionObserver(function(entries){
+                entries.forEach(function(e){
+                    if (e.isIntersecting) wm.classList.add('wm-visible');
+                    else wm.classList.remove('wm-visible');
+                });
+            }, { threshold: 0.05 });
+            obs.observe(about);
+            // Also show for pricing and footer
+            var pricing = document.getElementById('pricing');
+            if (pricing) obs.observe(pricing);
+        })();
+        </script>
 
         <!-- About Section with AI Image -->
         <section id="about">
