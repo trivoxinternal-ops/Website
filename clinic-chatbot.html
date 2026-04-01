@@ -409,15 +409,14 @@
 </div>
 
 <script>
-    const SYSTEM_PROMPT = `You are Maya, a friendly and professional AI receptionist for Northview Psychology, a psychological clinic in Toronto. Your job is to answer questions about the clinic, help users understand what services are available, and guide interested users toward booking an appointment. Services include: individual therapy, couples counseling, psychological assessments, anxiety & depression treatment, and neuropsychological evaluations. Be warm, concise, and empathetic. Never diagnose. If someone seems in crisis, compassionately refer them to 988 (crisis line). When a user wants to book, tell them you can connect them with the team and ask for their name and preferred time. Keep responses short — max 3 sentences.`;
-
     const messagesEl = document.getElementById('messages');
     const quickRepliesEl = document.getElementById('quickReplies');
     const chatInput = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
 
-    let conversationHistory = [];
     let isTyping = false;
+    let bookingState = null; // null, 'asked_name', 'asked_time'
+    let userName = '';
 
     const BOT_AVATAR = `<div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>`;
     const USER_AVATAR = `<div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
@@ -453,37 +452,105 @@
         quickRepliesEl.innerHTML = options.map(o =>
             `<button class="quick-btn">${o}</button>`
         ).join('');
-
         quickRepliesEl.querySelectorAll('.quick-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                sendMessage(btn.textContent);
-            });
+            btn.addEventListener('click', () => sendMessage(btn.textContent));
         });
     }
 
-    async function sendToAPI(messages) {
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': '',
-                'anthropic-version': '2023-06-01',
-                'anthropic-dangerous-direct-browser-access': 'true'
-            },
-            body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 1000,
-                system: SYSTEM_PROMPT,
-                messages: messages
-            })
-        });
+    // ─── Smart Response Engine ───
+    function getReply(input) {
+        const msg = input.toLowerCase().trim();
 
-        if (!response.ok) {
-            throw new Error('API request failed');
+        // Booking flow states
+        if (bookingState === 'asked_name') {
+            userName = input.trim();
+            bookingState = 'asked_time';
+            return { text: `Great to meet you, ${userName}! What day and time works best for you? We have availability Monday through Friday, 9am to 6pm.`, followUp: ['Morning this week', 'Afternoon this week', 'Next Monday'] };
         }
 
-        const data = await response.json();
-        return data.content[0].text;
+        if (bookingState === 'asked_time') {
+            bookingState = null;
+            return { text: `Perfect — I've noted your preference for ${input.trim()}. Our team will reach out to ${userName} shortly to confirm your appointment. You'll receive a confirmation email within the hour. Is there anything else I can help with?`, followUp: ['What should I expect?', 'Where are you located?', "That's all, thanks!"] };
+        }
+
+        // Crisis detection
+        if (msg.match(/\b(suicid|kill myself|end it|don'?t want to live|harm myself|self.?harm|crisis)\b/i)) {
+            return { text: "I hear you, and I want you to know that you're not alone. If you're in crisis or having thoughts of self-harm, please reach out to the 988 Suicide & Crisis Lifeline — call or text <strong>988</strong>. They're available 24/7 and ready to help. Our clinical team is also here for you when you're ready." };
+        }
+
+        // Book appointment
+        if (msg.match(/\b(book|appointment|schedule|see someone|come in|visit|consultation)\b/)) {
+            bookingState = 'asked_name';
+            return { text: "I'd love to help you book an appointment! Our earliest availability is usually within the week. Could I get your name to get started?" };
+        }
+
+        // Services
+        if (msg.match(/\b(service|offer|provide|what do you|help with|specializ|treat)\b/)) {
+            return { text: "At Northview Psychology, we offer a range of services tailored to your needs:<br><br>• <strong>Individual Therapy</strong> — anxiety, depression, trauma, life transitions<br>• <strong>Couples Counseling</strong> — communication, conflict resolution, intimacy<br>• <strong>Psychological Assessments</strong> — ADHD, learning disabilities, diagnostic evaluations<br>• <strong>Neuropsychological Evaluations</strong> — memory, cognition, brain health<br><br>Would you like to book a session for any of these?", followUp: ['Book an appointment', 'Tell me about therapy', 'How much does it cost?'] };
+        }
+
+        // Insurance
+        if (msg.match(/\b(insurance|cover|cost|price|fee|pay|afford|accept|ohip|benefit)\b/)) {
+            return { text: "We accept most major insurance providers, and our sessions are covered under registered psychologist benefits. A standard individual therapy session is $200, and we offer a free 15-minute consultation call so you can find the right fit. We can also provide superbills for out-of-network reimbursement.", followUp: ['Book a free consultation', 'What services do you offer?'] };
+        }
+
+        // Talk to someone / urgent
+        if (msg.match(/\b(talk|speak|someone|urgent|now|today|asap|right away|immediate)\b/)) {
+            return { text: "I understand you'd like to speak with someone soon. Our next available appointment is typically within 1-2 business days. If this is urgent but not a crisis, I can flag your request as priority. Would you like me to set that up?", followUp: ['Yes, book me in', 'Tell me more about your services'] };
+        }
+
+        // Anxiety / depression
+        if (msg.match(/\b(anxi|depress|stress|overwhelm|panic|worry|sad|burnout|lonely)\b/)) {
+            return { text: "I'm really glad you're reaching out — that takes courage. Our therapists specialize in anxiety and depression treatment using evidence-based approaches like CBT and DBT. Many clients start feeling a difference within just a few sessions. Would you like to book an initial consultation?", followUp: ['Book an appointment', 'What is CBT?', 'How long is treatment?'] };
+        }
+
+        // Couples
+        if (msg.match(/\b(couple|relationship|partner|marriage|spouse|together)\b/)) {
+            return { text: "Our couples counseling program helps partners improve communication, resolve conflicts, and rebuild connection. Sessions are 60-90 minutes and our therapists use the Gottman Method and Emotionally Focused Therapy (EFT). Would you like to schedule a session for you and your partner?", followUp: ['Book for us', 'How much does it cost?'] };
+        }
+
+        // Assessment / ADHD
+        if (msg.match(/\b(assess|adhd|evaluation|diagnos|testing|neuropsych|learning dis)\b/)) {
+            return { text: "We provide comprehensive psychological and neuropsychological assessments for ADHD, learning disabilities, autism spectrum, and cognitive functioning. The process typically includes an intake interview, standardized testing, and a detailed report with recommendations. Assessments start at $2,500.", followUp: ['Book an assessment', 'Do you accept insurance?'] };
+        }
+
+        // Location / hours
+        if (msg.match(/\b(where|location|address|office|hour|open|close|direction)\b/)) {
+            return { text: "We're located at <strong>320 Danforth Ave, Suite 210, Toronto ON</strong>. Our office hours are Monday to Friday, 9am to 6pm, with evening appointments available on Tuesdays and Thursdays. We also offer virtual sessions for your convenience.", followUp: ['Book an appointment', 'Do you offer virtual sessions?'] };
+        }
+
+        // Virtual / online
+        if (msg.match(/\b(virtual|online|remote|telehealth|video|zoom|phone)\b/)) {
+            return { text: "Yes! We offer secure video sessions through our PHIPA-compliant telehealth platform. Virtual sessions are just as effective as in-person for most services and are available across Ontario. Same pricing applies.", followUp: ['Book a virtual session', 'What services do you offer?'] };
+        }
+
+        // What to expect
+        if (msg.match(/\b(expect|first session|first time|how does|what happen|prepare)\b/)) {
+            return { text: "Your first session is all about getting to know you. Your therapist will ask about your background, what brings you in, and what you'd like to work on — no pressure, at your own pace. Sessions are 50 minutes, and together you'll create a personalized treatment plan.", followUp: ['Book an appointment', 'How long is treatment?'] };
+        }
+
+        // How long / duration
+        if (msg.match(/\b(how long|duration|how many session|timeline|weeks|months)\b/)) {
+            return { text: "It depends on your goals and what you're working through. Some clients see meaningful progress in 6-8 sessions, while others benefit from longer-term support. Your therapist will check in regularly and adjust the plan with you.", followUp: ['Book an appointment', 'What services do you offer?'] };
+        }
+
+        // CBT
+        if (msg.match(/\b(cbt|cognitive behav|what is cbt|therapy type|approach|method)\b/)) {
+            return { text: "CBT (Cognitive Behavioral Therapy) is one of the most effective, research-backed treatments for anxiety and depression. It helps you identify and change negative thought patterns that affect your emotions and behavior. Most clients learn practical skills they can use for life.", followUp: ['Book an appointment', 'Tell me about other services'] };
+        }
+
+        // Thanks / goodbye
+        if (msg.match(/\b(thank|thanks|bye|goodbye|that'?s all|that's it|no more|have a good)\b/)) {
+            return { text: "You're welcome! Remember, Northview Psychology is here whenever you need us. Don't hesitate to reach out anytime. Wishing you all the best! 💙", followUp: ['Book an appointment', 'Visit website'] };
+        }
+
+        // Hello / greeting
+        if (msg.match(/\b(hi|hello|hey|good morning|good afternoon|good evening|sup|yo)\b/)) {
+            return { text: "Hey there! Welcome to Northview Psychology. I'm Maya, your virtual receptionist. I can help you learn about our services, answer questions, or get you booked for an appointment. What would you like to know?", followUp: ['What services do you offer?', 'Book an appointment', 'Do you accept insurance?'] };
+        }
+
+        // Default / fallback
+        return { text: "That's a great question! I want to make sure you get the most accurate answer. For anything specific, I'd recommend a quick free consultation with our team — they can address all your questions in detail. Would you like me to set that up?", followUp: ['Yes, book a consultation', 'What services do you offer?', 'Where are you located?'] };
     }
 
     async function sendMessage(text) {
@@ -491,26 +558,28 @@
 
         hideQuickReplies();
         addMessage(text, 'user');
-        conversationHistory.push({ role: 'user', content: text });
 
         chatInput.value = '';
         isTyping = true;
         sendBtn.disabled = true;
         showTyping();
 
-        try {
-            const reply = await sendToAPI(conversationHistory);
-            removeTyping();
-            addMessage(reply, 'bot');
-            conversationHistory.push({ role: 'assistant', content: reply });
-        } catch (err) {
-            removeTyping();
-            addMessage("I'm sorry, I'm having trouble connecting right now. Please call us directly at (416) 555-0192 and our team will be happy to help.", 'bot');
-        }
+        // Simulate natural typing delay (800-1800ms)
+        const delay = 800 + Math.random() * 1000;
 
-        isTyping = false;
-        sendBtn.disabled = false;
-        chatInput.focus();
+        setTimeout(() => {
+            removeTyping();
+            const response = getReply(text);
+            addMessage(response.text, 'bot');
+
+            if (response.followUp) {
+                setTimeout(() => showQuickReplies(response.followUp), 300);
+            }
+
+            isTyping = false;
+            sendBtn.disabled = false;
+            chatInput.focus();
+        }, delay);
     }
 
     // Event listeners
