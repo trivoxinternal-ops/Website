@@ -455,14 +455,176 @@
     // ═══════════════════════════════════════════════════════
 
     const ctx = {
-        state: 'idle',          // idle | booking_name | booking_type | booking_time | booking_confirm | post_booking
+        state: 'idle',          // idle | booking_name | booking_type | booking_time | booking_slot | booking_confirm | post_booking
         name: '',
         serviceInterest: '',
-        timePreference: '',
-        discussed: new Set(),   // tracks topics already covered
+        selectedDate: '',
+        selectedTime: '',
+        discussed: new Set(),
         turnCount: 0,
         lastTopic: '',
     };
+
+    // ─── Real Date/Time Scheduling Engine ───
+    const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    // Slots: standard 9-5 Mon-Fri, extended Tue/Thu to 8pm
+    const SLOT_TIMES = {
+        morning:   ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'],
+        afternoon: ['1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM'],
+        evening:   ['6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM'],
+    };
+
+    // Seed random "taken" slots so it feels like a real calendar
+    const takenSeed = Math.floor(Date.now() / 86400000);
+    function pseudoRandom(seed) { let x = Math.sin(seed) * 10000; return x - Math.floor(x); }
+    function isSlotTaken(dayOffset, slotIndex) { return pseudoRandom(takenSeed + dayOffset * 100 + slotIndex) < 0.35; }
+
+    function formatDate(d) {
+        return `${DAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+    }
+
+    function formatDateShort(d) {
+        return `${DAYS[d.getDay()].slice(0,3)}, ${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()}`;
+    }
+
+    function getNextBusinessDays(count) {
+        const days = [];
+        const now = new Date();
+        let d = new Date(now);
+        d.setDate(d.getDate() + 1); // start from tomorrow
+        while (days.length < count) {
+            const dow = d.getDay();
+            if (dow >= 1 && dow <= 5) { // Mon-Fri
+                days.push(new Date(d));
+            }
+            d.setDate(d.getDate() + 1);
+        }
+        return days;
+    }
+
+    function getAvailableSlots(date) {
+        const dow = date.getDay();
+        const dayOffset = Math.floor((date - new Date()) / 86400000);
+        const hasEvening = (dow === 2 || dow === 4); // Tue, Thu
+
+        const slots = [];
+        let idx = 0;
+
+        ['morning', 'afternoon'].forEach(period => {
+            SLOT_TIMES[period].forEach(time => {
+                if (!isSlotTaken(dayOffset, idx)) {
+                    slots.push({ time, period });
+                }
+                idx++;
+            });
+        });
+
+        if (hasEvening) {
+            SLOT_TIMES.evening.forEach(time => {
+                if (!isSlotTaken(dayOffset, idx)) {
+                    slots.push({ time, period: 'evening' });
+                }
+                idx++;
+            });
+        }
+
+        return slots;
+    }
+
+    function buildDatePickerMessage() {
+        const days = getNextBusinessDays(5);
+        let html = `Which day works best for you, ${ctx.name}? Here are the next available dates:<br><br>`;
+        days.forEach((d, i) => {
+            const slots = getAvailableSlots(d);
+            const morn = slots.filter(s => s.period === 'morning').length;
+            const aft = slots.filter(s => s.period === 'afternoon').length;
+            const eve = slots.filter(s => s.period === 'evening').length;
+            const parts = [];
+            if (morn) parts.push(`${morn} morning`);
+            if (aft) parts.push(`${aft} afternoon`);
+            if (eve) parts.push(`${eve} evening`);
+            html += `📅 <strong>${formatDate(d)}</strong> — ${parts.join(', ')} slots<br>`;
+        });
+        html += `<br>Pick a day, or tell me your preference and I'll find the best fit.`;
+
+        const quickDates = days.slice(0, 4).map(d => formatDateShort(d));
+        return { html, quickDates };
+    }
+
+    function buildTimeSlotMessage(date) {
+        const slots = getAvailableSlots(date);
+        if (slots.length === 0) return { html: `Unfortunately, ${formatDate(date)} is fully booked. Would you like to try a different day?`, quickTimes: ['Pick another day'] };
+
+        let html = `Here are the available times for <strong>${formatDate(date)}</strong>:<br><br>`;
+
+        const morning = slots.filter(s => s.period === 'morning');
+        const afternoon = slots.filter(s => s.period === 'afternoon');
+        const evening = slots.filter(s => s.period === 'evening');
+
+        if (morning.length) html += `🌅 <strong>Morning:</strong> ${morning.map(s => s.time).join(' · ')}<br>`;
+        if (afternoon.length) html += `☀️ <strong>Afternoon:</strong> ${afternoon.map(s => s.time).join(' · ')}<br>`;
+        if (evening.length) html += `🌙 <strong>Evening:</strong> ${evening.map(s => s.time).join(' · ')}<br>`;
+
+        html += `<br>Which time works for you?`;
+
+        // Pick 3-4 representative slots for quick replies
+        const picks = [];
+        if (morning.length) picks.push(morning[0].time);
+        if (afternoon.length) picks.push(afternoon[0].time);
+        if (evening.length) picks.push(evening[0].time);
+        if (afternoon.length > 1) picks.push(afternoon[afternoon.length - 1].time);
+
+        return { html, quickTimes: picks.slice(0, 4) };
+    }
+
+    function parseDateFromInput(input) {
+        const m = input.toLowerCase();
+        const days = getNextBusinessDays(10);
+
+        // Match specific day names
+        const dayMap = { mon: 1, tue: 2, wed: 3, thu: 4, fri: 5 };
+        for (const [key, dow] of Object.entries(dayMap)) {
+            if (m.includes(key)) {
+                return days.find(d => d.getDay() === dow) || null;
+            }
+        }
+
+        // Match quick reply format "Mon, Apr 2" etc
+        for (const d of days) {
+            if (m.includes(formatDateShort(d).toLowerCase())) return d;
+            if (m.includes(d.getDate().toString()) && m.includes(MONTHS[d.getMonth()].toLowerCase().slice(0,3))) return d;
+        }
+
+        // "tomorrow"
+        if (m.includes('tomorrow')) {
+            const tom = new Date(); tom.setDate(tom.getDate() + 1);
+            if (tom.getDay() >= 1 && tom.getDay() <= 5) return tom;
+            return days[0]; // next business day
+        }
+
+        // "next week"
+        if (m.includes('next week')) return days.find(d => d.getDay() === 1) || days[4]; // next monday
+
+        // "this week"
+        if (m.includes('this week')) return days[0];
+
+        // Fallback: first available
+        return days[0];
+    }
+
+    function parseTimeFromInput(input) {
+        // Match times like "9:00 AM", "2:30 PM", "10 am", "3pm"
+        const match = input.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)/i);
+        if (match) {
+            let h = parseInt(match[1]);
+            const min = match[2] || '00';
+            const ampm = match[3].toUpperCase();
+            return `${h}:${min} ${ampm}`;
+        }
+        return input.trim();
+    }
 
     // Intent detection — returns the BEST intent for the message given current context
     function detectIntent(msg) {
@@ -479,7 +641,8 @@
             if (/\b(not sure|don'?t know|help me decide|recommend|which one|unsure)\b/.test(m)) return 'need_recommendation';
             return 'provide_service'; // treat free text as their concern
         }
-        if (ctx.state === 'booking_time') return 'provide_time';
+        if (ctx.state === 'booking_time') return 'provide_date';
+        if (ctx.state === 'booking_slot') return 'provide_time_slot';
         if (ctx.state === 'booking_confirm') {
             if (/\b(yes|yeah|yep|sure|confirm|perfect|great|looks good|correct|that'?s right)\b/.test(m)) return 'confirm_yes';
             if (/\b(no|change|wrong|different|actually|wait)\b/.test(m)) return 'confirm_no';
@@ -608,16 +771,17 @@
         case 'provide_service':
             ctx.serviceInterest = input.trim();
             ctx.state = 'booking_time';
-            // Map to proper service name
             const m = input.toLowerCase();
             let service = ctx.serviceInterest;
             if (/individual|therapy|depress|anxi|stress|trauma/.test(m)) service = 'Individual Therapy';
             else if (/couple|relationship|partner|marriage/.test(m)) service = 'Couples Counseling';
             else if (/assess|adhd|neuropsych|testing|diagnos|autism/.test(m)) service = 'Psychological Assessment';
-            else service = 'Individual Therapy'; // default
+            else service = 'Individual Therapy';
             ctx.serviceInterest = service;
-            text = `Great — I'll set you up for <strong>${service}</strong>. What day and time work best for you, ${ctx.name}? We have availability Monday to Friday, 9am–6pm, with evening spots on Tuesdays and Thursdays. We also do virtual sessions if you prefer.`;
-            quickReplies = ['Tomorrow morning', 'This Thursday evening', 'Next Monday afternoon', 'Virtual session please'];
+            const duration = service === 'Couples Counseling' ? '75 min' : '50 min';
+            const datePicker = buildDatePickerMessage();
+            text = `Great — I'll set you up for <strong>${service}</strong> (${duration} session).<br><br>${datePicker.html}`;
+            quickReplies = datePicker.quickDates;
             break;
 
         case 'need_recommendation':
@@ -625,37 +789,88 @@
             text = `No worries at all, ${ctx.name} — that's completely normal. Can you tell me a little about what's been going on? For example, are you dealing with stress or anxiety, relationship challenges, difficulty focusing, or something else? That'll help me point you to the right service.`;
             break;
 
-        case 'provide_time':
-            ctx.timePreference = input.trim();
+        case 'provide_date': {
+            const pickedDate = parseDateFromInput(input);
+            ctx.selectedDate = pickedDate;
+            ctx.state = 'booking_slot';
+            const slotInfo = buildTimeSlotMessage(pickedDate);
+            text = slotInfo.html;
+            quickReplies = slotInfo.quickTimes;
+            break;
+        }
+
+        case 'provide_time_slot': {
+            ctx.selectedTime = parseTimeFromInput(input);
+            if (input.toLowerCase().includes('another day') || input.toLowerCase().includes('pick another') || input.toLowerCase().includes('different day')) {
+                ctx.state = 'booking_time';
+                const dp = buildDatePickerMessage();
+                text = `No problem! Let's pick a different day:<br><br>${dp.html}`;
+                quickReplies = dp.quickDates;
+                break;
+            }
             ctx.state = 'booking_confirm';
-            const virtual = /virtual|online|video|remote|from home/.test(input.toLowerCase()) ? ' (Virtual)' : ' (In-Person)';
-            text = `Perfect, let me confirm your booking details:<br><br>
-                <strong>Name:</strong> ${ctx.name}<br>
-                <strong>Service:</strong> ${ctx.serviceInterest}<br>
-                <strong>Preferred Time:</strong> ${ctx.timePreference}${virtual}<br>
-                <strong>Location:</strong> 320 Danforth Ave, Suite 210, Toronto<br><br>
-                Does everything look correct?`;
-            quickReplies = ['Yes, confirm my booking', 'I need to change something'];
+            const dateStr = formatDate(ctx.selectedDate);
+            const yr = ctx.selectedDate.getFullYear();
+            text = `Perfect! Let me confirm your appointment:<br><br>
+                📋 <strong>Patient:</strong> ${ctx.name}<br>
+                🧠 <strong>Service:</strong> ${ctx.serviceInterest}<br>
+                📅 <strong>Date:</strong> ${dateStr}, ${yr}<br>
+                🕐 <strong>Time:</strong> ${ctx.selectedTime}<br>
+                📍 <strong>Location:</strong> 320 Danforth Ave, Suite 210, Toronto<br><br>
+                Shall I confirm this booking?`;
+            quickReplies = ['Yes, confirm my booking', 'Change the time', 'Change the date'];
             break;
+        }
 
-        case 'confirm_yes':
+        case 'confirm_yes': {
             ctx.state = 'post_booking';
-            text = `You're all set, ${ctx.name}! 🎉 Our team will reach out within the next few hours to finalize your <strong>${ctx.serviceInterest}</strong> appointment. You'll get a confirmation email with all the details, intake forms, and what to expect for your first visit. Is there anything else I can help you with?`;
-            quickReplies = ['What should I expect at my first session?', 'Do you accept insurance?', "That's all, thank you!"];
             ctx.discussed.add('booked');
+            const confDate = formatDate(ctx.selectedDate);
+            const confYear = ctx.selectedDate.getFullYear();
+            text = `Your appointment is confirmed! 🎉<br><br>
+                ✅ <strong>${ctx.serviceInterest}</strong><br>
+                📅 ${confDate}, ${confYear} at <strong>${ctx.selectedTime}</strong><br>
+                📍 320 Danforth Ave, Suite 210, Toronto<br><br>
+                ${ctx.name}, you'll receive a confirmation email shortly with intake forms and preparation details. Our team may also call to introduce your assigned therapist. Is there anything else I can help with?`;
+            quickReplies = ['What should I expect?', 'Do you accept insurance?', "That's all, thanks!"];
             break;
+        }
 
-        case 'confirm_no':
-            ctx.state = 'booking_type';
-            text = `No problem! Let's fix that. What would you like to change — the service type, or the day and time?`;
-            quickReplies = ['Change the service', 'Change the time'];
+        case 'confirm_no': {
+            const changeInput = input.toLowerCase();
+            if (/time|slot|hour/.test(changeInput)) {
+                ctx.state = 'booking_slot';
+                const slotInfo2 = buildTimeSlotMessage(ctx.selectedDate);
+                text = `Sure, let's pick a different time on <strong>${formatDate(ctx.selectedDate)}</strong>:<br><br>${slotInfo2.html}`;
+                quickReplies = slotInfo2.quickTimes;
+            } else if (/date|day/.test(changeInput)) {
+                ctx.state = 'booking_time';
+                const dp2 = buildDatePickerMessage();
+                text = `No problem! Let's pick a different day:<br><br>${dp2.html}`;
+                quickReplies = dp2.quickDates;
+            } else if (/service|type/.test(changeInput)) {
+                ctx.state = 'booking_type';
+                text = `Sure thing! What service would you like instead?`;
+                quickReplies = ['Individual therapy', 'Couples counseling', 'Psychological assessment'];
+            } else {
+                ctx.state = 'booking_type';
+                text = `No problem! What would you like to change — the service, the date, or the time?`;
+                quickReplies = ['Change the service', 'Change the date', 'Change the time'];
+            }
             break;
+        }
 
-        case 'availability':
+        case 'availability': {
             ctx.lastTopic = 'availability';
-            text = `We have appointments available Monday through Friday, 9am to 6pm. Tuesdays and Thursdays we offer extended evening hours until 8pm. Most new patients can get in within 3-5 business days. Would you like to book a specific time?`;
+            const avDays = getNextBusinessDays(3);
+            const avSummary = avDays.map(d => {
+                const s = getAvailableSlots(d);
+                return `<strong>${formatDateShort(d)}</strong>: ${s.length} slots open`;
+            }).join('<br>');
+            text = `Here's our current availability:<br><br>${avSummary}<br><br>We're open Monday–Friday 9am–6pm, with extended evening hours on Tuesdays & Thursdays. Would you like to book a specific time?`;
             quickReplies = ['Yes, book me in', 'Do you offer virtual sessions?'];
             break;
+        }
 
         case 'services':
             ctx.lastTopic = 'services';
