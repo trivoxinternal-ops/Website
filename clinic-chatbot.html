@@ -415,8 +415,6 @@
     const sendBtn = document.getElementById('sendBtn');
 
     let isTyping = false;
-    let bookingState = null; // null, 'asked_name', 'asked_time'
-    let userName = '';
 
     const BOT_AVATAR = `<div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>`;
     const USER_AVATAR = `<div class="msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`;
@@ -424,8 +422,7 @@
     function addMessage(text, sender) {
         const div = document.createElement('div');
         div.className = `msg msg--${sender}`;
-        const avatar = sender === 'bot' ? BOT_AVATAR : USER_AVATAR;
-        div.innerHTML = `${avatar}<div class="msg-bubble">${text}</div>`;
+        div.innerHTML = `${sender === 'bot' ? BOT_AVATAR : USER_AVATAR}<div class="msg-bubble">${text}</div>`;
         messagesEl.appendChild(div);
         messagesEl.scrollTop = messagesEl.scrollHeight;
     }
@@ -439,118 +436,363 @@
         messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    function removeTyping() {
-        const el = document.getElementById('typingIndicator');
-        if (el) el.remove();
-    }
+    function removeTyping() { const el = document.getElementById('typingIndicator'); if (el) el.remove(); }
 
-    function hideQuickReplies() {
-        quickRepliesEl.innerHTML = '';
-    }
+    function hideQuickReplies() { quickRepliesEl.innerHTML = ''; }
 
     function showQuickReplies(options) {
-        quickRepliesEl.innerHTML = options.map(o =>
-            `<button class="quick-btn">${o}</button>`
-        ).join('');
+        quickRepliesEl.innerHTML = options.map(o => `<button class="quick-btn">${o}</button>`).join('');
         quickRepliesEl.querySelectorAll('.quick-btn').forEach(btn => {
             btn.addEventListener('click', () => sendMessage(btn.textContent));
         });
     }
 
-    // ─── Smart Response Engine ───
-    function getReply(input) {
-        const msg = input.toLowerCase().trim();
+    // ═══════════════════════════════════════════════════════
+    // CONVERSATION STATE MACHINE
+    // Tracks context, remembers what was discussed,
+    // handles multi-turn booking flows, and responds
+    // contextually based on the full conversation state.
+    // ═══════════════════════════════════════════════════════
 
-        // Booking flow states
-        if (bookingState === 'asked_name') {
-            userName = input.trim();
-            bookingState = 'asked_time';
-            return { text: `Great to meet you, ${userName}! What day and time works best for you? We have availability Monday through Friday, 9am to 6pm.`, followUp: ['Morning this week', 'Afternoon this week', 'Next Monday'] };
+    const ctx = {
+        state: 'idle',          // idle | booking_name | booking_type | booking_time | booking_confirm | post_booking
+        name: '',
+        serviceInterest: '',
+        timePreference: '',
+        discussed: new Set(),   // tracks topics already covered
+        turnCount: 0,
+        lastTopic: '',
+    };
+
+    // Intent detection — returns the BEST intent for the message given current context
+    function detectIntent(msg) {
+        const m = msg.toLowerCase();
+
+        // Crisis — always top priority
+        if (/\b(suicid|kill myself|end it all|don'?t want to live|harm myself|self.?harm|crisis|emergency)\b/.test(m)) return 'crisis';
+
+        // Context-aware: if we're in a booking flow, interpret input as booking data
+        if (ctx.state === 'booking_name') return 'provide_name';
+        if (ctx.state === 'booking_type') {
+            // User might pick a service OR say something else
+            if (/\b(individual|therapy|counseling|counsel|couples?|assessment|adhd|neuropsych|depress|anxi)\b/.test(m)) return 'provide_service';
+            if (/\b(not sure|don'?t know|help me decide|recommend|which one|unsure)\b/.test(m)) return 'need_recommendation';
+            return 'provide_service'; // treat free text as their concern
+        }
+        if (ctx.state === 'booking_time') return 'provide_time';
+        if (ctx.state === 'booking_confirm') {
+            if (/\b(yes|yeah|yep|sure|confirm|perfect|great|looks good|correct|that'?s right)\b/.test(m)) return 'confirm_yes';
+            if (/\b(no|change|wrong|different|actually|wait)\b/.test(m)) return 'confirm_no';
+            return 'confirm_yes'; // default to yes for ambiguous
         }
 
-        if (bookingState === 'asked_time') {
-            bookingState = null;
-            return { text: `Perfect — I've noted your preference for ${input.trim()}. Our team will reach out to ${userName} shortly to confirm your appointment. You'll receive a confirmation email within the hour. Is there anything else I can help with?`, followUp: ['What should I expect?', 'Where are you located?', "That's all, thanks!"] };
+        // Affirmative responses (yes, sure, ok) — context-dependent
+        if (/^(yes|yeah|yep|sure|ok|okay|please|absolutely|definitely|let'?s do it|go ahead|sign me up)[\s!.]*$/i.test(m)) {
+            if (ctx.lastTopic === 'services') return 'book';
+            if (ctx.lastTopic === 'insurance') return 'book';
+            if (ctx.lastTopic === 'anxiety' || ctx.lastTopic === 'couples' || ctx.lastTopic === 'assessment') return 'book';
+            if (ctx.lastTopic === 'urgent') return 'book';
+            return 'book'; // default: they want to proceed
         }
 
-        // Crisis detection
-        if (msg.match(/\b(suicid|kill myself|end it|don'?t want to live|harm myself|self.?harm|crisis)\b/i)) {
-            return { text: "I hear you, and I want you to know that you're not alone. If you're in crisis or having thoughts of self-harm, please reach out to the 988 Suicide & Crisis Lifeline — call or text <strong>988</strong>. They're available 24/7 and ready to help. Our clinical team is also here for you when you're ready." };
-        }
+        // Negative / decline
+        if (/^(no|nah|not really|no thanks|i'?m good|not now|maybe later)[\s!.]*$/i.test(m)) return 'decline';
 
-        // Book appointment
-        if (msg.match(/\b(book|appointment|schedule|see someone|come in|visit|consultation)\b/)) {
-            bookingState = 'asked_name';
-            return { text: "I'd love to help you book an appointment! Our earliest availability is usually within the week. Could I get your name to get started?" };
+        // Booking intent
+        if (/\b(book|appointment|schedule|sign up|set up|reserve|slot|opening|available|availability|when can|see a therapist|see someone)\b/.test(m)) return 'book';
+
+        // Time/availability questions (outside booking flow)
+        if (/\b(time|when|hour|morning|afternoon|evening|today|tomorrow|this week|next week|monday|tuesday|wednesday|thursday|friday|saturday|weekend)\b/.test(m)) {
+            if (ctx.discussed.has('booking_started')) return 'provide_time';
+            return 'availability';
         }
 
         // Services
-        if (msg.match(/\b(service|offer|provide|what do you|help with|specializ|treat)\b/)) {
-            return { text: "At Northview Psychology, we offer a range of services tailored to your needs:<br><br>• <strong>Individual Therapy</strong> — anxiety, depression, trauma, life transitions<br>• <strong>Couples Counseling</strong> — communication, conflict resolution, intimacy<br>• <strong>Psychological Assessments</strong> — ADHD, learning disabilities, diagnostic evaluations<br>• <strong>Neuropsychological Evaluations</strong> — memory, cognition, brain health<br><br>Would you like to book a session for any of these?", followUp: ['Book an appointment', 'Tell me about therapy', 'How much does it cost?'] };
-        }
+        if (/\b(service|offer|provide|what do you do|help with|specializ|treat|what kind|types of)\b/.test(m)) return 'services';
 
-        // Insurance
-        if (msg.match(/\b(insurance|cover|cost|price|fee|pay|afford|accept|ohip|benefit)\b/)) {
-            return { text: "We accept most major insurance providers, and our sessions are covered under registered psychologist benefits. A standard individual therapy session is $200, and we offer a free 15-minute consultation call so you can find the right fit. We can also provide superbills for out-of-network reimbursement.", followUp: ['Book a free consultation', 'What services do you offer?'] };
-        }
+        // Insurance / cost
+        if (/\b(insurance|cover|cost|price|fee|pay|afford|accept|ohip|benefit|how much|expensive|rate|sliding scale)\b/.test(m)) return 'insurance';
 
-        // Talk to someone / urgent
-        if (msg.match(/\b(talk|speak|someone|urgent|now|today|asap|right away|immediate)\b/)) {
-            return { text: "I understand you'd like to speak with someone soon. Our next available appointment is typically within 1-2 business days. If this is urgent but not a crisis, I can flag your request as priority. Would you like me to set that up?", followUp: ['Yes, book me in', 'Tell me more about your services'] };
-        }
+        // Talk to someone urgently
+        if (/\b(talk to someone|speak.*someone|urgent|right away|asap|immediate|need help now|can'?t wait)\b/.test(m)) return 'urgent';
 
-        // Anxiety / depression
-        if (msg.match(/\b(anxi|depress|stress|overwhelm|panic|worry|sad|burnout|lonely)\b/)) {
-            return { text: "I'm really glad you're reaching out — that takes courage. Our therapists specialize in anxiety and depression treatment using evidence-based approaches like CBT and DBT. Many clients start feeling a difference within just a few sessions. Would you like to book an initial consultation?", followUp: ['Book an appointment', 'What is CBT?', 'How long is treatment?'] };
-        }
+        // Anxiety / depression / mental health
+        if (/\b(anxi|depress|stress|overwhelm|panic|worry|sad|burnout|lonely|mental health|struggling|not okay|feeling down|can'?t cope)\b/.test(m)) return 'anxiety';
 
         // Couples
-        if (msg.match(/\b(couple|relationship|partner|marriage|spouse|together)\b/)) {
-            return { text: "Our couples counseling program helps partners improve communication, resolve conflicts, and rebuild connection. Sessions are 60-90 minutes and our therapists use the Gottman Method and Emotionally Focused Therapy (EFT). Would you like to schedule a session for you and your partner?", followUp: ['Book for us', 'How much does it cost?'] };
-        }
+        if (/\b(couple|relationship|partner|marriage|spouse|wife|husband|boyfriend|girlfriend|together|fighting|communication)\b/.test(m)) return 'couples';
 
         // Assessment / ADHD
-        if (msg.match(/\b(assess|adhd|evaluation|diagnos|testing|neuropsych|learning dis)\b/)) {
-            return { text: "We provide comprehensive psychological and neuropsychological assessments for ADHD, learning disabilities, autism spectrum, and cognitive functioning. The process typically includes an intake interview, standardized testing, and a detailed report with recommendations. Assessments start at $2,500.", followUp: ['Book an assessment', 'Do you accept insurance?'] };
-        }
+        if (/\b(assess|adhd|evaluation|diagnos|testing|neuropsych|learning dis|autism|asd|cognitive)\b/.test(m)) return 'assessment';
 
         // Location / hours
-        if (msg.match(/\b(where|location|address|office|hour|open|close|direction)\b/)) {
-            return { text: "We're located at <strong>320 Danforth Ave, Suite 210, Toronto ON</strong>. Our office hours are Monday to Friday, 9am to 6pm, with evening appointments available on Tuesdays and Thursdays. We also offer virtual sessions for your convenience.", followUp: ['Book an appointment', 'Do you offer virtual sessions?'] };
-        }
+        if (/\b(where|location|address|office|directions?|find you|parking|transit)\b/.test(m)) return 'location';
+        if (/\b(hours?|open|close|weekend|saturday|sunday)\b/.test(m)) return 'hours';
 
         // Virtual / online
-        if (msg.match(/\b(virtual|online|remote|telehealth|video|zoom|phone)\b/)) {
-            return { text: "Yes! We offer secure video sessions through our PHIPA-compliant telehealth platform. Virtual sessions are just as effective as in-person for most services and are available across Ontario. Same pricing applies.", followUp: ['Book a virtual session', 'What services do you offer?'] };
-        }
+        if (/\b(virtual|online|remote|telehealth|video|zoom|phone|from home)\b/.test(m)) return 'virtual';
 
         // What to expect
-        if (msg.match(/\b(expect|first session|first time|how does|what happen|prepare)\b/)) {
-            return { text: "Your first session is all about getting to know you. Your therapist will ask about your background, what brings you in, and what you'd like to work on — no pressure, at your own pace. Sessions are 50 minutes, and together you'll create a personalized treatment plan.", followUp: ['Book an appointment', 'How long is treatment?'] };
-        }
+        if (/\b(expect|first session|first time|how does it work|what happen|prepare|new patient|never been)\b/.test(m)) return 'expect';
 
-        // How long / duration
-        if (msg.match(/\b(how long|duration|how many session|timeline|weeks|months)\b/)) {
-            return { text: "It depends on your goals and what you're working through. Some clients see meaningful progress in 6-8 sessions, while others benefit from longer-term support. Your therapist will check in regularly and adjust the plan with you.", followUp: ['Book an appointment', 'What services do you offer?'] };
-        }
+        // Duration
+        if (/\b(how long|duration|how many session|timeline|weeks|months|quick fix)\b/.test(m)) return 'duration';
 
-        // CBT
-        if (msg.match(/\b(cbt|cognitive behav|what is cbt|therapy type|approach|method)\b/)) {
-            return { text: "CBT (Cognitive Behavioral Therapy) is one of the most effective, research-backed treatments for anxiety and depression. It helps you identify and change negative thought patterns that affect your emotions and behavior. Most clients learn practical skills they can use for life.", followUp: ['Book an appointment', 'Tell me about other services'] };
-        }
+        // Therapy types
+        if (/\b(cbt|cognitive behav|dbt|therapy type|approach|method|emdr|psychodynamic)\b/.test(m)) return 'therapy_types';
+
+        // Therapist info
+        if (/\b(therapist|psychologist|counselor|doctor|who will|qualif|credential|experience|team)\b/.test(m)) return 'therapists';
 
         // Thanks / goodbye
-        if (msg.match(/\b(thank|thanks|bye|goodbye|that'?s all|that's it|no more|have a good)\b/)) {
-            return { text: "You're welcome! Remember, Northview Psychology is here whenever you need us. Don't hesitate to reach out anytime. Wishing you all the best! 💙", followUp: ['Book an appointment', 'Visit website'] };
+        if (/\b(thank|thanks|bye|goodbye|that'?s all|that'?s it|no more|have a good|take care)\b/.test(m)) return 'goodbye';
+
+        // Greetings
+        if (/^(hi|hello|hey|good morning|good afternoon|good evening|sup|yo|hola)[\s!.]*$/i.test(m)) return 'greeting';
+
+        // How are you / small talk
+        if (/\b(how are you|what'?s up|how'?s it going)\b/.test(m)) return 'smalltalk';
+
+        // Catch questions about the bot
+        if (/\b(are you real|are you a bot|are you ai|human|real person|are you a person)\b/.test(m)) return 'about_bot';
+
+        return 'unknown';
+    }
+
+    // Generate response based on intent + conversation context
+    function getReply(input) {
+        const intent = detectIntent(input);
+        ctx.turnCount++;
+
+        let text = '';
+        let quickReplies = null;
+
+        switch (intent) {
+
+        case 'crisis':
+            text = "I hear you, and I want you to know that you're not alone. Please reach out to the <strong>988 Suicide & Crisis Lifeline</strong> — call or text <strong>988</strong>, available 24/7. If you're in immediate danger, call 911. Our clinical team is also here for you whenever you're ready to talk.";
+            quickReplies = ['I want to book a session', 'Tell me about your services'];
+            break;
+
+        case 'greeting':
+            text = "Hey there! Welcome to Northview Psychology. I'm Maya, your virtual receptionist. I can help you learn about our services, answer your questions, or get you set up with an appointment. What brings you in today?";
+            quickReplies = ['I want to book a session', 'What services do you offer?', 'How much does it cost?', 'I need to talk to someone'];
+            break;
+
+        case 'smalltalk':
+            text = "I'm doing great, thanks for asking! More importantly — how can I help you today? Whether you have questions about our clinic or want to set something up, I'm here for you.";
+            quickReplies = ['I want to book a session', 'What services do you offer?'];
+            break;
+
+        case 'about_bot':
+            text = "I'm Maya, an AI receptionist powered by TRIVOX AI. I'm here to help you navigate Northview Psychology's services, answer your questions, and get you started with booking. For clinical questions, our licensed psychologists will be your go-to!";
+            quickReplies = ['Book an appointment', 'What services do you offer?'];
+            break;
+
+        case 'book':
+            ctx.state = 'booking_name';
+            ctx.discussed.add('booking_started');
+            ctx.lastTopic = 'booking';
+            text = "I'd love to help you book a session! Let's get you set up. First — what's your name?";
+            break;
+
+        case 'provide_name':
+            ctx.name = input.trim().replace(/^(my name is |i'm |i am |it's |call me )/i, '').replace(/[.!]$/, '').trim();
+            // Capitalize first letter of each word
+            ctx.name = ctx.name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+            ctx.state = 'booking_type';
+            text = `Nice to meet you, ${ctx.name}! What are you looking to come in for? For example: individual therapy, couples counseling, a psychological assessment — or if you're not sure, just tell me what you're going through and I'll point you in the right direction.`;
+            quickReplies = ['Individual therapy', 'Couples counseling', 'Psychological assessment', "I'm not sure yet"];
+            break;
+
+        case 'provide_service':
+            ctx.serviceInterest = input.trim();
+            ctx.state = 'booking_time';
+            // Map to proper service name
+            const m = input.toLowerCase();
+            let service = ctx.serviceInterest;
+            if (/individual|therapy|depress|anxi|stress|trauma/.test(m)) service = 'Individual Therapy';
+            else if (/couple|relationship|partner|marriage/.test(m)) service = 'Couples Counseling';
+            else if (/assess|adhd|neuropsych|testing|diagnos|autism/.test(m)) service = 'Psychological Assessment';
+            else service = 'Individual Therapy'; // default
+            ctx.serviceInterest = service;
+            text = `Great — I'll set you up for <strong>${service}</strong>. What day and time work best for you, ${ctx.name}? We have availability Monday to Friday, 9am–6pm, with evening spots on Tuesdays and Thursdays. We also do virtual sessions if you prefer.`;
+            quickReplies = ['Tomorrow morning', 'This Thursday evening', 'Next Monday afternoon', 'Virtual session please'];
+            break;
+
+        case 'need_recommendation':
+            ctx.state = 'booking_type';
+            text = `No worries at all, ${ctx.name} — that's completely normal. Can you tell me a little about what's been going on? For example, are you dealing with stress or anxiety, relationship challenges, difficulty focusing, or something else? That'll help me point you to the right service.`;
+            break;
+
+        case 'provide_time':
+            ctx.timePreference = input.trim();
+            ctx.state = 'booking_confirm';
+            const virtual = /virtual|online|video|remote|from home/.test(input.toLowerCase()) ? ' (Virtual)' : ' (In-Person)';
+            text = `Perfect, let me confirm your booking details:<br><br>
+                <strong>Name:</strong> ${ctx.name}<br>
+                <strong>Service:</strong> ${ctx.serviceInterest}<br>
+                <strong>Preferred Time:</strong> ${ctx.timePreference}${virtual}<br>
+                <strong>Location:</strong> 320 Danforth Ave, Suite 210, Toronto<br><br>
+                Does everything look correct?`;
+            quickReplies = ['Yes, confirm my booking', 'I need to change something'];
+            break;
+
+        case 'confirm_yes':
+            ctx.state = 'post_booking';
+            text = `You're all set, ${ctx.name}! 🎉 Our team will reach out within the next few hours to finalize your <strong>${ctx.serviceInterest}</strong> appointment. You'll get a confirmation email with all the details, intake forms, and what to expect for your first visit. Is there anything else I can help you with?`;
+            quickReplies = ['What should I expect at my first session?', 'Do you accept insurance?', "That's all, thank you!"];
+            ctx.discussed.add('booked');
+            break;
+
+        case 'confirm_no':
+            ctx.state = 'booking_type';
+            text = `No problem! Let's fix that. What would you like to change — the service type, or the day and time?`;
+            quickReplies = ['Change the service', 'Change the time'];
+            break;
+
+        case 'availability':
+            ctx.lastTopic = 'availability';
+            text = `We have appointments available Monday through Friday, 9am to 6pm. Tuesdays and Thursdays we offer extended evening hours until 8pm. Most new patients can get in within 3-5 business days. Would you like to book a specific time?`;
+            quickReplies = ['Yes, book me in', 'Do you offer virtual sessions?'];
+            break;
+
+        case 'services':
+            ctx.lastTopic = 'services';
+            ctx.discussed.add('services');
+            text = `Here's what we offer at Northview Psychology:<br><br>
+                🧠 <strong>Individual Therapy</strong> — anxiety, depression, trauma, life transitions, burnout<br>
+                💑 <strong>Couples Counseling</strong> — communication, conflict, intimacy, pre-marital<br>
+                📋 <strong>Psychological Assessments</strong> — ADHD, learning disabilities, diagnostic evals<br>
+                🔬 <strong>Neuropsychological Evaluations</strong> — memory, cognition, brain injury<br><br>
+                All sessions are available in-person or virtually. Which one sounds like what you're looking for?`;
+            quickReplies = ['Individual therapy', 'Couples counseling', 'Assessments', 'How much does it cost?'];
+            break;
+
+        case 'insurance':
+            ctx.lastTopic = 'insurance';
+            ctx.discussed.add('insurance');
+            text = `Great question! Here's a quick breakdown:<br><br>
+                <strong>Individual Therapy:</strong> $200/session (50 min)<br>
+                <strong>Couples Counseling:</strong> $250/session (75 min)<br>
+                <strong>Assessments:</strong> starting at $2,500<br><br>
+                We accept most major insurance plans, and sessions are covered under <strong>registered psychologist benefits</strong>. We also offer a <strong>free 15-minute consultation</strong> so you can meet your therapist first. Would you like to book one?`;
+            quickReplies = ['Book a free consultation', 'What services do you offer?', 'Do you offer virtual?'];
+            break;
+
+        case 'urgent':
+            ctx.lastTopic = 'urgent';
+            text = `I understand you need to speak with someone soon, and I want to make sure you get the support you need. Our next available appointment is typically within 1-2 business days, and I can flag your request as <strong>priority</strong>. If this is a mental health emergency, please call 988 or go to your nearest emergency room. Would you like me to set up a priority appointment?`;
+            quickReplies = ['Yes, priority appointment please', 'Tell me more about your services'];
+            break;
+
+        case 'anxiety':
+            ctx.lastTopic = 'anxiety';
+            ctx.discussed.add('anxiety');
+            text = `I'm really glad you're reaching out — it takes strength to take that first step. Our therapists specialize in anxiety and depression treatment using proven approaches like <strong>CBT</strong> (Cognitive Behavioral Therapy) and <strong>DBT</strong> (Dialectical Behavior Therapy). Many clients notice meaningful progress within 6-8 sessions. Would you like to book an initial session?`;
+            quickReplies = ['Yes, book a session', 'How much does it cost?', 'What is CBT?'];
+            break;
+
+        case 'couples':
+            ctx.lastTopic = 'couples';
+            ctx.discussed.add('couples');
+            text = `Our couples counseling program helps partners strengthen communication, work through conflict, and rebuild trust. Sessions are 75 minutes, and our therapists use the <strong>Gottman Method</strong> and <strong>Emotionally Focused Therapy (EFT)</strong> — both backed by decades of research. Would you like to schedule a session for you and your partner?`;
+            quickReplies = ['Book for us', 'How much is it?', 'Do you offer virtual?'];
+            break;
+
+        case 'assessment':
+            ctx.lastTopic = 'assessment';
+            ctx.discussed.add('assessment');
+            text = `We provide comprehensive assessments for <strong>ADHD</strong>, learning disabilities, autism spectrum, and cognitive functioning. The process includes an intake interview, standardized testing across 1-2 sessions, and a detailed report with recommendations you can share with schools, employers, or doctors. Assessments start at $2,500. Want me to get you started?`;
+            quickReplies = ['Book an assessment', 'Do you accept insurance?', 'How long does it take?'];
+            break;
+
+        case 'location':
+            ctx.lastTopic = 'location';
+            ctx.discussed.add('location');
+            text = `We're located at <strong>320 Danforth Ave, Suite 210, Toronto ON</strong>, right near Broadview station. Street parking is available, and there's a Green P lot one block east. The building has elevator access and is fully wheelchair accessible.`;
+            quickReplies = ['What are your hours?', 'Book an appointment', 'Do you offer virtual?'];
+            break;
+
+        case 'hours':
+            ctx.lastTopic = 'hours';
+            text = `Our hours are:<br><br>
+                <strong>Monday–Friday:</strong> 9:00am – 6:00pm<br>
+                <strong>Tues & Thurs:</strong> Extended until 8:00pm<br>
+                <strong>Weekends:</strong> Closed (virtual sessions by request)<br><br>
+                Would you like to book a session?`;
+            quickReplies = ['Book an appointment', 'Where are you located?'];
+            break;
+
+        case 'virtual':
+            ctx.lastTopic = 'virtual';
+            ctx.discussed.add('virtual');
+            text = `Absolutely! We offer secure video sessions through our <strong>PHIPA-compliant telehealth platform</strong>. It works on any device — no app needed. Virtual therapy is just as effective as in-person for most services, and it's available for clients across Ontario. Same pricing and session lengths apply. Want to book a virtual session?`;
+            quickReplies = ['Book a virtual session', 'What services do you offer?'];
+            break;
+
+        case 'expect':
+            ctx.lastTopic = 'expect';
+            text = `Here's what your first session looks like:<br><br>
+                1️⃣ You'll fill out a brief intake form beforehand (emailed to you)<br>
+                2️⃣ Your therapist will spend the session getting to know you — your background, what's brought you in, and your goals<br>
+                3️⃣ Together, you'll create a personalized plan for moving forward<br><br>
+                There's no pressure to share more than you're comfortable with. Sessions are 50 minutes. Most clients say they feel relieved just after the first one.`;
+            quickReplies = ctx.discussed.has('booked') ? ["That's helpful, thanks!", 'How long is treatment usually?'] : ['Book my first session', 'How much does it cost?'];
+            break;
+
+        case 'duration':
+            ctx.lastTopic = 'duration';
+            text = `It really depends on your needs and goals. Here's a general guide:<br><br>
+                <strong>Short-term (6-12 sessions):</strong> Specific issues like anxiety, stress, adjustment<br>
+                <strong>Medium-term (3-6 months):</strong> Depression, relationship issues, trauma processing<br>
+                <strong>Ongoing:</strong> Complex concerns, personal growth, long-term support<br><br>
+                Your therapist will check in with you regularly and adjust the plan. There's never any pressure to commit to a set number of sessions.`;
+            quickReplies = ['Book an appointment', 'What services do you offer?'];
+            break;
+
+        case 'therapy_types':
+            ctx.lastTopic = 'therapy_types';
+            text = `Our team uses several evidence-based approaches, matched to your specific needs:<br><br>
+                <strong>CBT</strong> — Identifies and changes negative thought patterns. Great for anxiety and depression.<br>
+                <strong>DBT</strong> — Builds emotional regulation skills. Effective for intense emotions and self-harm.<br>
+                <strong>EFT</strong> — Strengthens emotional bonds. Primarily used in couples therapy.<br>
+                <strong>EMDR</strong> — Processes traumatic memories. Highly effective for PTSD.<br><br>
+                Your therapist will discuss the best fit during your first session.`;
+            quickReplies = ['Book an appointment', 'Tell me about your therapists'];
+            break;
+
+        case 'therapists':
+            ctx.lastTopic = 'therapists';
+            text = `Our team includes licensed <strong>Clinical Psychologists (Ph.D. & Psy.D.)</strong> and <strong>Registered Psychotherapists</strong>, all with 5+ years of clinical experience. Each therapist has specialized training in their areas of focus. During booking, we'll match you with the best fit based on your needs and preferences.`;
+            quickReplies = ['Book an appointment', 'What services do you offer?'];
+            break;
+
+        case 'goodbye':
+            ctx.state = 'idle';
+            const name = ctx.name ? `, ${ctx.name}` : '';
+            text = `You're very welcome${name}! Don't hesitate to come back anytime you have questions. Northview Psychology is here for you. Take care! 💙`;
+            break;
+
+        case 'decline':
+            text = `No worries at all! If you change your mind or have any other questions down the line, I'm always here. Is there anything else you'd like to know about the clinic?`;
+            quickReplies = ['What services do you offer?', 'Where are you located?', "No, I'm good"];
+            break;
+
+        default:
+            // Contextual fallback — connect to last topic or booking
+            if (ctx.discussed.has('booking_started') && !ctx.discussed.has('booked')) {
+                text = `I want to make sure I help you properly. Were you looking to continue with the booking, or did you have a different question? I'm happy to help either way.`;
+                quickReplies = ['Continue booking', 'I have a question'];
+            } else {
+                text = `I appreciate you asking! That's a bit outside what I can cover in detail, but our team would be happy to answer that during a free 15-minute consultation. Want me to set one up? Or I can help with info about our services, pricing, or booking.`;
+                quickReplies = ['Book a free consultation', 'What services do you offer?', 'How much does it cost?'];
+            }
+            break;
         }
 
-        // Hello / greeting
-        if (msg.match(/\b(hi|hello|hey|good morning|good afternoon|good evening|sup|yo)\b/)) {
-            return { text: "Hey there! Welcome to Northview Psychology. I'm Maya, your virtual receptionist. I can help you learn about our services, answer questions, or get you booked for an appointment. What would you like to know?", followUp: ['What services do you offer?', 'Book an appointment', 'Do you accept insurance?'] };
-        }
-
-        // Default / fallback
-        return { text: "That's a great question! I want to make sure you get the most accurate answer. For anything specific, I'd recommend a quick free consultation with our team — they can address all your questions in detail. Would you like me to set that up?", followUp: ['Yes, book a consultation', 'What services do you offer?', 'Where are you located?'] };
+        ctx.lastTopic = ctx.lastTopic || intent;
+        return { text, quickReplies };
     }
 
     async function sendMessage(text) {
@@ -558,51 +800,39 @@
 
         hideQuickReplies();
         addMessage(text, 'user');
-
         chatInput.value = '';
         isTyping = true;
         sendBtn.disabled = true;
         showTyping();
 
-        // Simulate natural typing delay (800-1800ms)
-        const delay = 800 + Math.random() * 1000;
+        // Typing delay scales with response length (feels natural)
+        const response = getReply(text);
+        const baseDelay = 600;
+        const charDelay = Math.min(response.text.length * 3, 1400);
+        const delay = baseDelay + charDelay * (0.5 + Math.random() * 0.5);
 
         setTimeout(() => {
             removeTyping();
-            const response = getReply(text);
             addMessage(response.text, 'bot');
-
-            if (response.followUp) {
-                setTimeout(() => showQuickReplies(response.followUp), 300);
+            if (response.quickReplies) {
+                setTimeout(() => showQuickReplies(response.quickReplies), 300);
             }
-
             isTyping = false;
             sendBtn.disabled = false;
             chatInput.focus();
         }, delay);
     }
 
-    // Event listeners
     sendBtn.addEventListener('click', () => sendMessage(chatInput.value));
-
     chatInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage(chatInput.value);
-        }
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(chatInput.value); }
     });
 
     // Initial greeting
     setTimeout(() => {
-        addMessage("Hi there! I'm Maya, the virtual receptionist at Northview Psychology. How can I help you today?", 'bot');
-
+        addMessage("Hi there! I'm <strong>Maya</strong>, the virtual receptionist at Northview Psychology. I can help you learn about our services, answer questions about the clinic, or get you started with booking an appointment. What brings you in today?", 'bot');
         setTimeout(() => {
-            showQuickReplies([
-                'Book an appointment',
-                'What services do you offer?',
-                'Do you accept insurance?',
-                'Talk to someone now'
-            ]);
+            showQuickReplies(['Book an appointment', 'What services do you offer?', 'How much does it cost?', 'I need to talk to someone']);
         }, 400);
     }, 600);
 </script>
