@@ -1,0 +1,36 @@
+# TRIVOX AI
+
+> TRIVOX AI is an AI automation agency based in Toronto, Canada, serving businesses across the Greater Toronto Area and remotely Canada-wide. TRIVOX designs and deploys complete, custom AI automation systems — AI voice agents, AI chatbots, CRM automation, and workflow automation — that help growing businesses respond to leads instantly, qualify prospects, and eliminate repetitive manual work, operating 24/7.
+
+## What TRIVOX does
+
+TRIVOX builds done-for-you automation infrastructure tailored to each business, rather than leaving owners to stitch together disconnected AI tools. Every system is built to deliver at least one measurable outcome: faster lead response, better lead organization, automated qualification, reduced manual workload, or higher booking and conversion rates.
+
+## Core services
+
+- **AI Voice Agents**: Human-like AI receptionists that answer calls 24/7, handle inquiries, qualify leads, and book appointments (built on VAPI).
+- **AI Chatbots**: Custom website and messaging chatbots that answer questions, collect information, and route qualified prospects into the sales pipeline.
+- **AI Lead Handling Systems**: Capture inbound leads from forms, ads, websites, WhatsApp and SMS, respond instantly, and guide prospects to book a call.
+- **CRM Automation**: Automated workflows that organize leads, track activity, trigger follow-ups, and manage the full sales pipeline so no lead is lost.
+- **Workflow Automation**: Automate repetitive internal tasks — data entry, notifications, reporting, and cross-system syncing (n8n, Make.com).
+
+## Who it is for
+
+Lead-driven and communication-heavy businesses: real estate agents and brokerages, healthcare and dental clinics, service businesses, marketing and sales agencies, professional services and consultants, and high-ticket service providers.
+
+## Service area
+
+Based in Toronto, Ontario, Canada. Serves the Greater Toronto Area (GTA) in-person and the rest of Canada remotely.
+
+## How TRIVOX prices
+
+Projects combine a one-time system implementation fee with optional monthly management/maintenance. Custom builds are scoped per business. Book a free intro call for a tailored quote.
+
+## Contact
+
+- Website: https://trivox.ca/
+- Book a free intro call: https://calendly.com/trivoxinternal/intro-call
+- Email: daniel@trivox.ca
+- LinkedIn: https://www.linkedin.com/in/trivoxai
+- Instagram: https://www.instagram.com/trivoxai/
+- X: https://x.com/trivoxai
