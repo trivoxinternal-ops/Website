@@ -1,0 +1,110 @@
+/* ============================================================================
+   TRIVOX DESIGN SYSTEM — tokens.css
+   The single source of truth. Every TRIVOX build (site, demo, landing, doc)
+   loads THIS file. No build invents its own colors, spacing, or type.
+   Brand truth extracted from the official Brand Guide (Sora / #2E61FE / #00F0FF).
+   Type pairing (locked 2026-06): Sora = body/UI · Fraunces = display/headlines.
+   ============================================================================ */
+
+/* Fonts load with the system — link tokens.css and you get both faces. */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Fraunces:opsz,wght@9..144,400..900&display=swap');
+
+:root {
+  /* ---- BRAND CORE ---------------------------------------------------------- */
+  --tx-blue:        #2E61FE;   /* primary electric blue (RGB 46 97 254) */
+  --tx-blue-600:    #1F4BDB;   /* pressed / darker */
+  --tx-blue-300:    #6E92FF;   /* tints, links on dark */
+  --tx-cyan:        #00F0FF;   /* accent cyan (RGB 0 240 255) */
+
+  /* The ONLY approved gradient. Use on the V-mark and accent shapes ONLY.
+     NEVER on text. NEVER as a full-section wash. */
+  --tx-grad-mark:   linear-gradient(135deg, var(--tx-blue) 0%, var(--tx-cyan) 100%);
+
+  /* ---- DARK SURFACES (TRIVOX signature: near-black navy) ------------------- */
+  --tx-bg:          #060810;   /* page base */
+  --tx-bg-2:        #0A0E1B;   /* raised page band */
+  --tx-surface:     #0E1424;   /* card */
+  --tx-surface-2:   #151D33;   /* card hover / nested */
+  --tx-line:        rgba(255,255,255,.08);  /* hairline borders */
+  --tx-line-2:      rgba(255,255,255,.14);
+
+  /* ---- TEXT ---------------------------------------------------------------- */
+  --tx-white:       #FFFFFF;
+  --tx-text:        #E8ECF6;   /* primary on dark */
+  --tx-text-dim:    #9AA6BF;   /* secondary on dark */
+  --tx-text-faint:  #5C6680;   /* labels, captions */
+
+  /* Light-mode equivalents (client sites that need light). Same system. */
+  --tx-ink:         #0B1020;   /* text on light */
+  --tx-ink-dim:     #45506B;
+  --tx-paper:       #FFFFFF;
+  --tx-paper-2:     #F4F6FB;
+
+  /* ---- TYPE: SORA (body) + FRAUNCES (display) ------------------------------ */
+  --tx-font:        'Sora', system-ui, -apple-system, sans-serif;  /* body, UI, labels */
+  --tx-font-display:'Fraunces', Georgia, serif;                    /* headlines, display, big statements */
+  /* Sora weights: 300 lede · 400 body · 600 subhead · 700 headline · 800 hero.
+     Fraunces is the display face for manifesto/section headlines/giant numbers.
+     The serif display is what kills the generic dark-tech look. Use it on the
+     big moments, Sora everywhere else. */
+
+  /* Fluid modular scale (drama on purpose — anti-"median web") */
+  --tx-display:  clamp(3rem, 7vw + 1rem, 6rem);     /* hero        48 -> 96 */
+  --tx-h1:       clamp(2.25rem, 4vw + 1rem, 3.5rem);/* section     36 -> 56 */
+  --tx-h2:       clamp(1.6rem, 2vw + .8rem, 2.25rem);
+  --tx-h3:       1.3rem;
+  --tx-lede:     clamp(1.05rem, 1vw + .8rem, 1.35rem); /* intro paragraph */
+  --tx-body:     1.0625rem;   /* 17px */
+  --tx-small:    .9375rem;
+  --tx-label:    .8125rem;    /* uppercase eyebrow / caption */
+
+  --tx-tight:   -0.03em;      /* headline tracking */
+  --tx-tighter: -0.045em;     /* display tracking */
+  --tx-wide:     0.16em;      /* eyebrow / label tracking */
+  --tx-leading-tight: 1.05;
+  --tx-leading:       1.6;
+
+  /* ---- SPACE (4px base, intentional rhythm) -------------------------------- */
+  --s-1:  .25rem;  --s-2: .5rem;  --s-3: .75rem; --s-4: 1rem;
+  --s-5: 1.5rem;   --s-6: 2rem;   --s-7: 3rem;   --s-8: 4rem;
+  --s-9: 6rem;     --s-10: 8rem;  --s-11: 12rem;
+  --tx-gutter: clamp(1.25rem, 5vw, 5rem);  /* page side padding */
+  --tx-maxw: 1200px;                        /* content max width */
+
+  /* ---- RADII (rounded, not pill; matches the brand's soft geometry) -------- */
+  --r-sm: 10px;  --r: 16px;  --r-lg: 24px;  --r-xl: 34px;  --r-pill: 999px;
+
+  /* ---- ELEVATION + GLOW ---------------------------------------------------- */
+  --tx-shadow:      0 24px 60px -24px rgba(0,0,0,.7);
+  --tx-shadow-card: 0 1px 0 rgba(255,255,255,.04) inset, 0 18px 50px -30px rgba(0,0,0,.8);
+  --tx-glow-blue:   0 12px 40px -8px rgba(46,97,254,.55);   /* primary button glow */
+  --tx-glow-cyan:   0 0 0 1px rgba(0,240,255,.25), 0 0 30px -6px rgba(0,240,255,.35);
+
+  /* ---- MOTION -------------------------------------------------------------- */
+  --tx-ease:   cubic-bezier(.2,.7,.2,1);
+  --tx-ease-out: cubic-bezier(.16,1,.3,1);
+  --tx-fast:   .18s;  --tx-base: .32s;  --tx-slow: .6s;
+}
+
+/* The signature TRIVOX backdrop: one restrained blue glow top-left + faint
+   grid texture. This is what makes a page read "TRIVOX" not "AI template".
+   Apply to <body> or a hero <section>. */
+.tx-backdrop {
+  background:
+    radial-gradient(900px 600px at 12% -5%, rgba(46,97,254,.30), transparent 60%),
+    radial-gradient(700px 500px at 100% 0%, rgba(0,240,255,.06), transparent 55%),
+    var(--tx-bg);
+  position: relative;
+}
+.tx-backdrop::before {              /* faint grid — texture, not decoration */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --tx-fast: .01ms; --tx-base: .01ms; --tx-slow: .01ms; }
+}

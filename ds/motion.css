@@ -1,0 +1,48 @@
+/* ============================================================================
+   TRIVOX DESIGN SYSTEM — motion.css
+   The motion layer. Reusable, restrained, consistent across every build.
+   Pair with motion.js (IntersectionObserver reveals + pointer tilt).
+   Rule: motion is purposeful and fast. No bounce, no spin, no scroll-jacking.
+   ============================================================================ */
+
+/* ---- SCROLL REVEALS ----------------------------------------------------------
+   Add data-reveal to any element. Variants: "", up, left, right, scale, blur.
+   Stagger siblings with style="--i:1" / 2 / 3 ... (each adds 70ms).            */
+[data-reveal]{
+  opacity:0;
+  transform:translateY(26px);
+  transition:opacity .7s var(--tx-ease-out), transform .7s var(--tx-ease-out);
+  transition-delay:calc(var(--i, 0) * 70ms);
+  will-change:opacity, transform;
+}
+[data-reveal="left"]  { transform:translateX(-34px); }
+[data-reveal="right"] { transform:translateX(34px); }
+[data-reveal="scale"] { transform:scale(.94); }
+[data-reveal="blur"]  { filter:blur(12px); transform:none; transition:opacity .8s var(--tx-ease-out), filter .8s var(--tx-ease-out); }
+[data-reveal].in{ opacity:1; transform:none; filter:none; }
+
+/* ---- MICRO-INTERACTIONS (utilities) ----------------------------------------- */
+.hover-lift{ transition:transform var(--tx-fast) var(--tx-ease), box-shadow var(--tx-base); }
+.hover-lift:hover{ transform:translateY(-3px); }
+
+.u-underline{ position:relative; }
+.u-underline::after{ content:""; position:absolute; left:0; bottom:-3px; width:100%; height:2px;
+  background:var(--tx-blue); transform:scaleX(0); transform-origin:left;
+  transition:transform var(--tx-base) var(--tx-ease); }
+.u-underline:hover::after{ transform:scaleX(1); }
+
+/* element that tilts + spotlights toward the cursor (needs motion.js: data-tilt) */
+[data-tilt]{ transition:transform var(--tx-base) var(--tx-ease); transform-style:preserve-3d; }
+
+/* ---- AMBIENT (looping, subtle) ---------------------------------------------- */
+.m-float{ animation:m-float 6s var(--tx-ease) infinite; }
+@keyframes m-float{ 50%{ transform:translateY(-12px); } }
+.m-breathe{ animation:m-breathe 7s var(--tx-ease) infinite; }
+@keyframes m-breathe{ 50%{ opacity:.7; transform:scale(1.06); } }
+
+/* ---- ACCESSIBILITY: kill it all when the user asks ---------------------------- */
+@media (prefers-reduced-motion: reduce){
+  [data-reveal]{ opacity:1 !important; transform:none !important; filter:none !important; transition:none; }
+  .m-float, .m-breathe{ animation:none; }
+  [data-tilt]{ transform:none !important; }
+}
