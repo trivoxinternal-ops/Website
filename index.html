@@ -134,13 +134,25 @@
   .eyebrow::before{content:"";display:inline-block;width:26px;height:1px;background:var(--tx-cyan);opacity:.7;vertical-align:middle;margin-right:.6rem}
   .eyebrow.plain::before{display:none}
 
-  /* buttons */
-  .btn{font-weight:600;font-size:var(--tx-small);border-radius:var(--r-pill);padding:.9rem 1.6rem;text-decoration:none;
-    display:inline-flex;align-items:center;gap:.5rem;transition:transform var(--tx-fast) var(--tx-ease),box-shadow var(--tx-base),border-color var(--tx-base)}
-  .btn-primary{background:var(--tx-blue);color:#fff;box-shadow:var(--tx-glow-blue)}
-  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 22px 60px -10px rgba(46,97,254,.8)}
-  .btn-ghost{border:1px solid var(--tx-line-2);color:#fff}
-  .btn-ghost:hover{border-color:var(--tx-cyan);transform:translateY(-3px)}
+  /* buttons — premium: gradient fill + sheen sweep (primary) · gradient-ring glass (ghost) */
+  .btn{position:relative;overflow:hidden;font-weight:700;font-size:var(--tx-small);border-radius:var(--r-pill);
+    padding:.92rem 1.65rem;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+    isolation:isolate;transition:transform var(--tx-fast) var(--tx-ease),box-shadow var(--tx-base),border-color var(--tx-base)}
+  .btn-primary{color:#fff;border:1px solid rgba(120,150,255,.5);
+    background:linear-gradient(180deg,#5479ff 0%,#2E61FE 52%,#1e46d6 100%);
+    box-shadow:0 12px 30px -10px rgba(46,97,254,.7),0 0 0 1px rgba(46,97,254,.25),
+      inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 6px rgba(9,20,70,.55)}
+  .btn-primary::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.5) 48%,transparent 62%);
+    transform:translateX(-130%);transition:transform .7s var(--tx-ease)}
+  .btn-primary:hover{transform:translateY(-3px);
+    box-shadow:0 20px 48px -10px rgba(46,97,254,.85),inset 0 1px 0 rgba(255,255,255,.5)}
+  .btn-primary:hover::before{transform:translateX(130%)}
+  .btn-ghost{color:#fff;border:1px solid transparent;background:
+    linear-gradient(rgba(10,14,26,.72),rgba(10,14,26,.72)) padding-box,
+    linear-gradient(120deg,rgba(0,240,255,.65),rgba(46,97,254,.55) 60%,rgba(0,240,255,.2)) border-box;
+    backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+  .btn-ghost:hover{transform:translateY(-3px);box-shadow:var(--tx-glow-cyan),inset 0 1px 0 rgba(255,255,255,.14)}
 
   /* masthead */
   .top{position:relative;z-index:5}
@@ -302,11 +314,7 @@
     .hero-copy{margin-top:.5rem}
     .hero-cta{flex-direction:row;gap:.55rem;width:100%;margin:0}
     .hero-cta .btn{flex:1;min-width:0;justify-content:center;text-align:center;
-      padding:.85rem .55rem;font-size:.82rem;line-height:1.1;letter-spacing:-.01em;border-radius:15px}
-    .hero-cta .btn-primary{box-shadow:0 10px 34px -8px rgba(46,97,254,.7),inset 0 1px 0 rgba(255,255,255,.25);
-      background:linear-gradient(180deg,#3d72ff,#2148e6)}
-    .hero-cta .btn-ghost{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);
-      border:1px solid var(--tx-line-2);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+      padding:.9rem .55rem;font-size:.82rem;line-height:1.1;letter-spacing:-.01em;border-radius:15px}
   }
   .herostats{display:flex;gap:0;margin-top:2.6rem;flex-wrap:wrap}
   .herostats .st{padding-right:clamp(1.3rem,3.5vw,2.6rem)}
@@ -622,11 +630,12 @@ composer.setSize(innerWidth,innerHeight);
 let mobile = matchMedia('(max-width:760px)').matches;
 function applyMode(){
   mobile = matchMedia('(max-width:760px)').matches;
-  bloomPass.strength = mobile ? 0.30 : 0.70;
-  renderer.toneMappingExposure = mobile ? 0.95 : 1.15;
-  mat.emissiveIntensity = mobile ? 0.16 : 0.32;
-  cyan.intensity = mobile ? 15 : 40;
-  blue.intensity = mobile ? 11 : 30;
+  // full brightness on both — the mark now floats low in the gap, away from text.
+  bloomPass.strength = 0.70;
+  renderer.toneMappingExposure = 1.15;
+  mat.emissiveIntensity = 0.32;
+  cyan.intensity = 40;
+  blue.intensity = 30;
 }
 applyMode();
 
@@ -643,7 +652,7 @@ function tick(){
     emblem.rotation.y += (0.22 - emblem.rotation.y)*0.06;
     emblem.rotation.x += (Math.sin(t*0.6)*0.06 - emblem.rotation.x)*0.06;
     emblem.position.x = Math.sin(t*0.5)*0.04;
-    emblem.position.y = -0.52 + Math.sin(t*0.8)*0.08 - scroll*1.6;
+    emblem.position.y = -0.68 + Math.sin(t*0.8)*0.08 - scroll*1.6;
     emblem.rotation.z = scroll*-0.4;
     emblem.scale.setScalar(0.42 - scroll*0.1);
   } else {
