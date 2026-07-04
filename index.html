@@ -298,7 +298,7 @@
 
   /* MOBILE hero: copy top · floating T in the middle gap · CTAs pinned bottom */
   @media(max-width:760px){
-    .hero{justify-content:space-between;min-height:88vh;padding-block:1.4rem 4.6rem}
+    .hero{justify-content:space-between;min-height:86vh;padding-block:1.4rem 6rem}
     .hero-copy{margin-top:.5rem}
     .hero-cta{flex-direction:row;gap:.55rem;width:100%;margin:0}
     .hero-cta .btn{flex:1;min-width:0;justify-content:center;text-align:center;
@@ -643,7 +643,7 @@ function tick(){
     emblem.rotation.y += (0.22 - emblem.rotation.y)*0.06;
     emblem.rotation.x += (Math.sin(t*0.6)*0.06 - emblem.rotation.x)*0.06;
     emblem.position.x = Math.sin(t*0.5)*0.04;
-    emblem.position.y = -0.35 + Math.sin(t*0.8)*0.09 - scroll*1.6;
+    emblem.position.y = -0.52 + Math.sin(t*0.8)*0.08 - scroll*1.6;
     emblem.rotation.z = scroll*-0.4;
     emblem.scale.setScalar(0.42 - scroll*0.1);
   } else {
