@@ -649,11 +649,12 @@ function tick(){
   const t=clock.getElapsedTime();
   if(mobile){
     // centered, front-ish so the mark reads, low in the hero (below the copy), drifts out on scroll
-    emblem.rotation.y += (0.22 - emblem.rotation.y)*0.06;
-    emblem.rotation.x += (Math.sin(t*0.6)*0.06 - emblem.rotation.x)*0.06;
-    emblem.position.x = Math.sin(t*0.5)*0.04;
-    emblem.position.y = -0.78 + Math.sin(t*0.8)*0.07 - scroll*1.6;
-    emblem.rotation.z = scroll*-0.4;
+    // cartoon spin: rotate on its own Y axis, float + bounce, stay centered
+    emblem.rotation.y = t*0.9;
+    emblem.rotation.x = Math.sin(t*0.8)*0.14;
+    emblem.rotation.z = Math.sin(t*0.6)*0.05 + scroll*-0.4;
+    emblem.position.x = 0;
+    emblem.position.y = -0.78 + Math.sin(t*1.7)*0.11 - scroll*1.6;
     emblem.scale.setScalar(0.52 - scroll*0.12);
   } else {
     emblem.rotation.y += (mx*0.6+0.3 - emblem.rotation.y)*0.06;
