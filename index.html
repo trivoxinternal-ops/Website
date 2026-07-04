@@ -295,6 +295,19 @@
   /* ===== HERO 2-col + live console + stat row ===== */
   .hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(2rem,5vw,4.5rem);align-items:center;width:100%}
   @media(max-width:920px){.hero-grid{grid-template-columns:1fr;gap:2.6rem}}
+
+  /* MOBILE hero: copy top · floating T in the middle gap · CTAs pinned bottom */
+  @media(max-width:760px){
+    .hero{justify-content:space-between;min-height:88vh;padding-block:1.4rem 4.6rem}
+    .hero-copy{margin-top:.5rem}
+    .hero-cta{flex-direction:row;gap:.55rem;width:100%;margin:0}
+    .hero-cta .btn{flex:1;min-width:0;justify-content:center;text-align:center;
+      padding:.85rem .55rem;font-size:.82rem;line-height:1.1;letter-spacing:-.01em;border-radius:15px}
+    .hero-cta .btn-primary{box-shadow:0 10px 34px -8px rgba(46,97,254,.7),inset 0 1px 0 rgba(255,255,255,.25);
+      background:linear-gradient(180deg,#3d72ff,#2148e6)}
+    .hero-cta .btn-ghost{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);
+      border:1px solid var(--tx-line-2);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+  }
   .herostats{display:flex;gap:0;margin-top:2.6rem;flex-wrap:wrap}
   .herostats .st{padding-right:clamp(1.3rem,3.5vw,2.6rem)}
   .herostats .st + .st{border-left:1px solid var(--tx-line);padding-left:clamp(1.3rem,3.5vw,2.6rem)}
@@ -368,9 +381,11 @@
   </div></nav>
 
   <header class="hero wrap">
-    <div class="tag"><span class="pulse"></span>AI Systems &amp; Automation · Toronto</div>
-    <h1 class="hero-h">The AI systems your business <span class="it">runs on</span>.</h1>
-    <p class="lede">We design and build custom AI systems: automation platforms, internal software, data and reporting engines. The complex operations behind a business that runs itself. Not another chatbot.</p>
+    <div class="hero-copy">
+      <div class="tag"><span class="pulse"></span>AI Systems &amp; Automation · Toronto</div>
+      <h1 class="hero-h">The AI systems your business <span class="it">runs on</span>.</h1>
+      <p class="lede">We design and build custom AI systems: automation platforms, internal software, data and reporting engines. The complex operations behind a business that runs itself. Not another chatbot.</p>
+    </div>
     <div class="hero-cta">
       <a href="https://calendly.com/trivoxinternal/intro-call" class="btn btn-primary">Book a free diagnostic</a>
       <a href="https://demos.trivox.ca" target="_blank" rel="noopener" class="btn btn-ghost">See the work ↗</a>
@@ -627,10 +642,10 @@ function tick(){
     // centered, front-ish so the mark reads, low in the hero (below the copy), drifts out on scroll
     emblem.rotation.y += (0.22 - emblem.rotation.y)*0.06;
     emblem.rotation.x += (Math.sin(t*0.6)*0.06 - emblem.rotation.x)*0.06;
-    emblem.position.x = Math.sin(t*0.5)*0.05;
-    emblem.position.y = -0.95 + Math.sin(t*0.8)*0.10 - scroll*1.5;
+    emblem.position.x = Math.sin(t*0.5)*0.04;
+    emblem.position.y = -0.35 + Math.sin(t*0.8)*0.09 - scroll*1.6;
     emblem.rotation.z = scroll*-0.4;
-    emblem.scale.setScalar(0.62 - scroll*0.14);
+    emblem.scale.setScalar(0.42 - scroll*0.1);
   } else {
     emblem.rotation.y += (mx*0.6+0.3 - emblem.rotation.y)*0.06;
     emblem.rotation.x += (my*0.4+Math.sin(t*0.6)*0.08 - emblem.rotation.x)*0.06;
