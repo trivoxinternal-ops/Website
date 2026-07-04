@@ -295,10 +295,13 @@
     stroke-dasharray:340 780;stroke-dashoffset:0;animation:fmrun 4.5s linear infinite}
   @keyframes fmrun{to{stroke-dashoffset:-1120}}
   @media(prefers-reduced-motion:reduce){.fm-run{animation:none;opacity:.55}}
-  footer{border-top:1px solid var(--tx-line);padding-block:2.4rem}
-  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.2rem;font-size:var(--tx-small);color:var(--tx-text-faint)}
-  .foot a{color:var(--tx-text-dim);text-decoration:none;margin-left:1.2rem}
-  .foot a:hover{color:#fff}
+  footer{border-top:1px solid var(--tx-line);padding-block:2.6rem}
+  .foot{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center}
+  .foot-links{display:flex;gap:1.7rem;flex-wrap:wrap;justify-content:center;align-items:center}
+  .foot-links a{position:relative;color:var(--tx-text-dim);text-decoration:none;font-size:var(--tx-small);font-weight:600;letter-spacing:.01em;transition:color var(--tx-fast)}
+  .foot-links a:hover{color:#fff}
+  .foot-links a:not(:last-child)::after{content:"";position:absolute;right:-.86rem;top:50%;transform:translateY(-50%);width:3px;height:3px;border-radius:50%;background:var(--tx-line-2)}
+  .foot-copy{font-size:var(--tx-label);letter-spacing:.16em;text-transform:uppercase;color:var(--tx-text-faint);font-weight:600}
 
   .scrollhint{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);z-index:6;font-size:var(--tx-label);
     letter-spacing:.2em;text-transform:uppercase;color:var(--tx-text-faint);display:flex;flex-direction:column;align-items:center;gap:.5rem}
@@ -516,14 +519,14 @@
       </svg>
     </div></div>
     <div class="wrap foot">
-    <div class="wm" style="font-size:1.05rem"><img src="ds/trivox-icon.png" alt="TRIVOX AI" style="width:26px;height:26px;object-fit:contain;vertical-align:middle;margin-right:.45rem">Trivox</div>
-    <div>© 2026 TRIVOX · Toronto
-      <a href="https://www.linkedin.com/in/trivoxai" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://www.instagram.com/trivoxai/" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://x.com/trivoxai" target="_blank" rel="noopener">X</a>
-      <a href="privacy.html">Privacy</a>
-    </div>
-  </div></footer>
+      <nav class="foot-links">
+        <a href="https://www.linkedin.com/in/trivoxai" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/trivoxai/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://x.com/trivoxai" target="_blank" rel="noopener">X</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+      <div class="foot-copy">© 2026 TRIVOX · Toronto</div>
+    </div></footer>
 </main>
 
 <div class="scrollhint"><span>Scroll</span><span class="ln"></span></div>
