@@ -630,12 +630,12 @@ composer.setSize(innerWidth,innerHeight);
 let mobile = matchMedia('(max-width:760px)').matches;
 function applyMode(){
   mobile = matchMedia('(max-width:760px)').matches;
-  // full brightness on both — the mark now floats low in the gap, away from text.
-  bloomPass.strength = 0.70;
-  renderer.toneMappingExposure = 1.15;
-  mat.emissiveIntensity = 0.32;
-  cyan.intensity = 40;
-  blue.intensity = 30;
+  // mobile mark floats low + solo in the gap → push glow harder than desktop.
+  bloomPass.strength = mobile ? 0.98 : 0.70;
+  renderer.toneMappingExposure = mobile ? 1.28 : 1.15;
+  mat.emissiveIntensity = mobile ? 0.46 : 0.32;
+  cyan.intensity = mobile ? 56 : 40;
+  blue.intensity = mobile ? 40 : 30;
 }
 applyMode();
 
@@ -652,7 +652,7 @@ function tick(){
     emblem.rotation.y += (0.22 - emblem.rotation.y)*0.06;
     emblem.rotation.x += (Math.sin(t*0.6)*0.06 - emblem.rotation.x)*0.06;
     emblem.position.x = Math.sin(t*0.5)*0.04;
-    emblem.position.y = -0.5 + Math.sin(t*0.8)*0.08 - scroll*1.6;
+    emblem.position.y = -0.78 + Math.sin(t*0.8)*0.07 - scroll*1.6;
     emblem.rotation.z = scroll*-0.4;
     emblem.scale.setScalar(0.52 - scroll*0.12);
   } else {
