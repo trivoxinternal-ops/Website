@@ -283,6 +283,7 @@
   .store .p-buy .amt{font-family:var(--tx-font-display);font-weight:600;font-size:clamp(2.4rem,4vw,3.2rem);
     color:#fff;letter-spacing:-.03em;line-height:1}
   .store .p-buy .cur{font-size:1rem;font-weight:700;color:var(--tx-text-dim);letter-spacing:.04em}
+  .store .p-buy .price.is-free .amt{color:var(--tx-cyan)}
   .store .p-buy .once{font-size:var(--tx-label);letter-spacing:.14em;text-transform:uppercase;
     color:var(--tx-text-faint);font-weight:600;margin-top:.5rem}
   .store .p-buy .btn{width:100%;margin-top:1.2rem}
