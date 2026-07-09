@@ -1,6 +1,6 @@
 # TRIVOX AI
 
-> TRIVOX AI is an AI automation agency based in Toronto, Canada, serving businesses across the Greater Toronto Area and remotely Canada-wide. TRIVOX designs and deploys complete, custom AI automation systems — AI voice agents, AI chatbots, CRM automation, and workflow automation — that help growing businesses respond to leads instantly, qualify prospects, and eliminate repetitive manual work, operating 24/7.
+> TRIVOX AI is an AI systems and software company based in Toronto, Canada, serving the Greater Toronto Area and clients Canada-wide and remotely. TRIVOX designs and builds custom AI systems — automation platforms, custom software and marketplaces, operations and workflow automation, and data and financial reporting engines — the complex operations behind a business that runs itself. Not another chatbot. AI voice and chat agents are only the entry layer, not the product.
 
 ## What TRIVOX does
 
@@ -8,11 +8,11 @@ TRIVOX builds done-for-you automation infrastructure tailored to each business, 
 
 ## Core services
 
-- **AI Voice Agents**: Human-like AI receptionists that answer calls 24/7, handle inquiries, qualify leads, and book appointments (built on VAPI).
-- **AI Chatbots**: Custom website and messaging chatbots that answer questions, collect information, and route qualified prospects into the sales pipeline.
-- **AI Lead Handling Systems**: Capture inbound leads from forms, ads, websites, WhatsApp and SMS, respond instantly, and guide prospects to book a call.
-- **CRM Automation**: Automated workflows that organize leads, track activity, trigger follow-ups, and manage the full sales pipeline so no lead is lost.
-- **Workflow Automation**: Automate repetitive internal tasks — data entry, notifications, reporting, and cross-system syncing (n8n, Make.com).
+- **Custom AI Software & Platforms**: Bespoke software, marketplaces, internal platforms and client tools engineered around a single business, built and deployed end to end.
+- **Operations & Workflow Automation**: Connect CRM, finance, email and ERP so data moves, tasks fire, and reports write themselves (n8n, Make.com, custom code).
+- **Data, Finance & Reporting Systems**: Turn raw data into structured reports, dashboards and financial summaries automatically.
+- **CRM & Database Automation**: Client databases and CRMs that organize, track and follow up automatically so nothing slips.
+- **AI Voice & Chat Agents**: The entry layer — human-like agents that answer, qualify leads and book appointments 24/7 before handing off (built on VAPI).
 
 ## Who it is for
 
@@ -21,6 +21,15 @@ Lead-driven and communication-heavy businesses: real estate agents and brokerage
 ## Service area
 
 Based in Toronto, Ontario, Canada. Serves the Greater Toronto Area (GTA) in-person and the rest of Canada remotely.
+
+## Key pages
+
+- Homepage: https://trivox.ca/
+- AI Automation Agency in Toronto: https://trivox.ca/ai-automation-toronto.html
+- AI Voice Agents & AI Receptionist: https://trivox.ca/ai-voice-agents.html
+- Workflow & Business Process Automation: https://trivox.ca/workflow-automation.html
+- Case study — Car Deals Direct lead funnel: https://trivox.ca/case-car-deals-direct.html
+- Case study — Clinic AI Receptionist: https://trivox.ca/case-clinic-receptionist.html
 
 ## How TRIVOX prices
 

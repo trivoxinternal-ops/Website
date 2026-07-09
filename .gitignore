@@ -1,2 +1,7 @@
 # Local Netlify folder
 .netlify
+
+# Scratch/backups (not for repo)
+index-v1-backup.html
+index-v2.html
+assets/og-image-OLD-backup.png

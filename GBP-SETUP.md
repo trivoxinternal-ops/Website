@@ -23,7 +23,7 @@ GBP verification needs a **business phone number**. The site has none. Get one b
 | **Business name** | `TRIVOX AI` (exactly — do NOT add keywords like "Toronto AI Automation". Google suspends keyword-stuffed names.) |
 | **Business type** | **Service-area business** (no storefront — choose "I deliver goods and services to my customers" and **hide the address**) |
 | **Primary category** | `Software company` |
-| **Additional categories** | `Business to business service`, `Marketing agency`, `Business management consultant`, `Telephone answering service` |
+| **Additional categories** | `Software developer`, `Business to business service`, `Business management consultant` (NOT "Telephone answering service" — TRIVOX is a software company, not a call/answering service) |
 | **Phone** | _(your new business number)_ |
 | **Website** | `https://trivox.ca/` |
 | **Appointment link** | `https://calendly.com/trivoxinternal/intro-call` |
@@ -34,19 +34,21 @@ Toronto, Mississauga, Brampton, Vaughan, Markham, Richmond Hill, Scarborough, No
 
 > GBP local pack is **local** — Canada-wide remote won't rank nationally here. The website + content handles the rest-of-Canada reach; GBP wins you the GTA.
 
-## 3. Description (paste — 740 chars, under the 750 limit)
+## 3. Description (paste — 675 chars, under the 750 limit)
+
+> POSITIONING: TRIVOX is an AI **systems & software** company, NOT a chatbot/voice/answering shop. Lead with software/automation/data; voice-chat is only the entry layer. (See memory `trivox-positioning-not-chatbot-shop`.)
 
 ```
-TRIVOX AI is a Toronto-based AI automation agency that builds custom, done-for-you systems for growing businesses across the GTA and Canada. We design and deploy AI voice agents, AI chatbots, CRM automation, and workflow automation that respond to leads instantly, qualify prospects, book appointments, and eliminate repetitive manual work — running 24/7. Instead of juggling disconnected AI tools, you get one complete system built for your business. We serve real estate, dental and healthcare clinics, service businesses, agencies, and high-ticket providers. Every system delivers a measurable outcome: faster lead response, better lead tracking, automated qualification, or higher booking rates. Book a free intro call to scope yours.
+TRIVOX AI is a Toronto-based AI systems and software company. We design and build custom AI systems for growing businesses across the GTA and Canada: automation platforms, custom software and marketplaces, operations and workflow automation, data and financial reporting engines, and CRM and database systems. Not another chatbot. We engineer software around how your business actually works, deploy it, and run it 24/7, so growth stops depending on headcount and manual work. AI voice and chat agents are only the entry layer, not the product. Every system ships a measurable outcome: faster operations, cleaner data, less manual work. Book a free diagnostic to scope yours.
 ```
 
-## 4. Services (add each with its blurb)
+## 4. Services (add each with its blurb — software/systems first, voice-chat last)
 
-- **AI Voice Agents** — Human-like AI receptionist answering calls 24/7, qualifying leads, booking appointments.
-- **AI Chatbots** — Custom website/messaging chatbots that answer questions and route qualified prospects.
-- **CRM Automation** — Automated workflows that organize leads, trigger follow-ups, manage the pipeline.
-- **Workflow Automation** — Automate data entry, notifications, reporting, and cross-tool syncing.
-- **AI Lead Handling** — Instant response to inbound leads from forms, ads, WhatsApp, and SMS.
+- **Custom AI Software & Platforms** — Bespoke software, marketplaces, internal tools and client platforms built around one business.
+- **Operations & Workflow Automation** — Connect CRM, finance, email and ERP so data moves, tasks fire, reports write themselves.
+- **Data, Finance & Reporting Systems** — Turn raw data into structured reports, dashboards and financial summaries automatically.
+- **CRM & Database Automation** — Client databases and CRMs that organize, track and follow up on their own.
+- **AI Voice & Chat Agents** — The entry layer: agents that reply and qualify 24/7 before handing off.
 
 ## 5. Attributes / hours
 
